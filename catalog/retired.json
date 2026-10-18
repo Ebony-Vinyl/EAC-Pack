@@ -138,6 +138,76 @@
       "reason": "EAC 侧契约不一致：Pack 仍分发该插件，而 Desktop 已退役其桥面与向导页 → 永久不可用控件 + 误导文案。2026-10-08 裁决「抛弃插件」，从 catalog 与 dist 移除，并同步从 full 预置层剔除。",
       "titleZh": "插件选择向导",
       "titleEn": "Plugin Wizard"
+    },
+    {
+      "id": "dafeiyu",
+      "name": "dsh-dafeiyu",
+      "version": "0.1.14",
+      "retiredFrom": "eac-full-pack",
+      "evidence": "体积测算（2026-10-17，解包后逐目录实测）：单包 160.05 MiB tgz / 205.46 MiB 解包，占整合包 289.14 MiB 的 55.4%，为最大单项。构成 = runtime/bin 三平台 PyInstaller helper 162.61 MiB（win32-x64 46.42 + linux-x64 73.54 + darwin 42.66）+ assets/pet 2600 帧 webp 41.13 MiB。tgz 压缩比仅 1.28:1：helper 是已压缩二进制、webp 是有损格式，内容本身无压缩空间。Lite 侧早已不随包：companion-sync.ts RETIRED_BUILTIN_PLUGINS 登记 { id: dsh-dafeiyu } 并由退役清理兜底（install-profile.ts 注释：自 v6 Task 3.1 起已不随包，.sync 分级为 external）。在役状态下仅 Windows 可用（platform.ts: darwin 无 helper 产物、linux 无通过烟测的 helper 载荷），却让三平台全部承担 116.19 MiB 不可达载荷。",
+      "reason": "用户裁决（2026-10-17）：桌宠占全包 55.4% 体积而功能属视觉类可选，删除。与 plugin-wizard 同路径处理 —— 从 catalog 与 dist 移除，并同步从 full 预置层剔除；老 profile 的行/包副本由 Lite 侧 RETIRED 清单兜底清理。",
+      "titleZh": "大肥鱼桌面伴侣",
+      "titleEn": "BigFish Companion"
+    },
+    {
+      "id": "dsh-better-sidebar",
+      "name": "dsh-better-sidebar",
+      "version": "0.15.3-eac.1",
+      "retiredFrom": "eac",
+      "evidence": "内核 @deepseek-ai 0.2.0-rc.2 实物逐包比对（2026-10-18）：官方已提供 dsh-client-ui-sidebar-right / -files / -terminal / -browser / -documentpreview，与本地实现功能位重叠且官方版本随内核交付、无需额外分发。本地包为 EAC 随包 private 构建（npm 无发布），保留只会重复占位。",
+      "reason": "用户裁决（2026-10-18）：官方内核已有等效能力，退役本地副本。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除；老 profile 中残留的行/包副本由 Lite 侧 ghost sweep 兜底清理。",
+      "titleZh": "VSCode 风格右侧边栏",
+      "titleEn": "Better Sidebar"
+    },
+    {
+      "id": "dsh-client-file-changes",
+      "name": "@deepseek-ai/dsh-client-file-changes",
+      "version": "0.1.0",
+      "retiredFrom": "eac",
+      "evidence": "内核 @deepseek-ai 0.2.0-rc.2 实物逐包比对（2026-10-18）：官方已提供 dsh-client-ui-deliverables（Changed-files card with per-file comparison tabs），与本地实现功能位重叠且官方版本随内核交付、无需额外分发。本地包为 EAC 随包 private 构建（npm 无发布），保留只会重复占位。",
+      "reason": "用户裁决（2026-10-18）：官方内核已有等效能力，退役本地副本。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除；老 profile 中残留的行/包副本由 Lite 侧 ghost sweep 兜底清理。",
+      "titleZh": "文件视图与一键还原",
+      "titleEn": "Files View & Revert"
+    },
+    {
+      "id": "dsh-change-review",
+      "name": "dsh-change-review",
+      "version": "0.1.0",
+      "retiredFrom": "eac",
+      "evidence": "内核 @deepseek-ai 0.2.0-rc.2 实物逐包比对（2026-10-18）：官方已提供 dsh-client-ui-deliverables + dsh-workspace-changes，与本地实现功能位重叠且官方版本随内核交付、无需额外分发。本地包为 EAC 随包 private 构建（npm 无发布），保留只会重复占位。",
+      "reason": "用户裁决（2026-10-18）：官方内核已有等效能力，退役本地副本。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除；老 profile 中残留的行/包副本由 Lite 侧 ghost sweep 兜底清理。",
+      "titleZh": "AI 变更审核",
+      "titleEn": "Change Review"
+    },
+    {
+      "id": "dsh-plugin-manager",
+      "name": "@deepseek-ai/dsh-plugin-manager",
+      "version": "0.1.0",
+      "retiredFrom": "eac",
+      "evidence": "内核 @deepseek-ai 0.2.0-rc.2 实物逐包比对（2026-10-18）：官方已提供 dsh-plugin-manager + dsh-client-ui-plugin-manager + dsh-client-ui-settings-plugins，与本地实现功能位重叠且官方版本随内核交付、无需额外分发。本地包为 EAC 随包 private 构建（npm 无发布），保留只会重复占位。",
+      "reason": "用户裁决（2026-10-18）：官方内核已有等效能力，退役本地副本。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除；老 profile 中残留的行/包副本由 Lite 侧 ghost sweep 兜底清理。",
+      "titleZh": "插件启停管理",
+      "titleEn": "Plugin Manager"
+    },
+    {
+      "id": "dsh-terminal",
+      "name": "@deepseek-ai/dsh-terminal",
+      "version": "0.1.0",
+      "retiredFrom": "eac",
+      "evidence": "内核 @deepseek-ai 0.2.0-rc.2 实物逐包比对（2026-10-18）：官方已提供 dsh-terminal + dsh-api-terminal-controller + dsh-client-ui-sidebar-terminal，与本地实现功能位重叠且官方版本随内核交付、无需额外分发。本地包为 EAC 随包 private 构建（npm 无发布），保留只会重复占位。",
+      "reason": "用户裁决（2026-10-18）：官方内核已有等效能力，退役本地副本。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除；老 profile 中残留的行/包副本由 Lite 侧 ghost sweep 兜底清理。",
+      "titleZh": "会话内终端",
+      "titleEn": "In-session Terminal"
+    },
+    {
+      "id": "dsh-conversation-tweaks",
+      "name": "@deepseek-ai/dsh-conversation-tweaks",
+      "version": "0.1.0",
+      "retiredFrom": "eac",
+      "evidence": "内核 @deepseek-ai 0.2.0-rc.2 实物逐包比对（2026-10-18）：官方已提供 dsh-compaction-tool-result-pruner + dsh-client-ui-plan，与本地实现功能位重叠且官方版本随内核交付、无需额外分发。本地包为 EAC 随包 private 构建（npm 无发布），保留只会重复占位。",
+      "reason": "用户裁决（2026-10-18）：官方内核已有等效能力，退役本地副本。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除；老 profile 中残留的行/包副本由 Lite 侧 ghost sweep 兜底清理。",
+      "titleZh": "对话界面微调",
+      "titleEn": "Conversation Tweaks"
     }
   ]
 }

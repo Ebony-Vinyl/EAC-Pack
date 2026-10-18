@@ -1,7 +1,7 @@
 {
-  "channelVersion": 13,
+  "channelVersion": 15,
   "suiteVersion": "0.2.1",
-  "generatedAt": "2026-10-02T03:25:57.289Z",
+  "generatedAt": "2026-10-18T09:30:42.609Z",
   "notesZh": "v0.2.1（issue #1 修复版）：修复官方内核上 2 处致命与 2 处一般缺陷。\n致命1：easy-setup / side-session / client-ui-custom（需 EAC 分叉版 settingsScope 服务）安装被跳过、启用被拒绝，UI 红徽章「仅 EAC 内核」锁定；即使被手工加回 bundles 也不再阻塞启动（重打包内含 disabled 硬钉）。\n致命2：内核自带包（dsh-plugin-manager / dsh-terminal 0.2.0-rc.2）不再被重打包副本遮蔽：安装跳过 + 启动自动清扫幽灵残留 + 已声明副本自动退役；重打包 plugin-manager 补 ./tools exports 兜底。受影响机器升级后首次启动即自愈。\n缺陷3：dsh-compact 1.0.1 修复补丁形态（insert 双行：主行 + agent 引擎行），请求路径自动压缩真正挂载。\n注意：dsh-compact 的 status/compact-now 端点与设置卡片依赖 EAC 分叉版服务，官方内核上不可用（无害）；skin-switch remote face 为上游已知问题。",
   "notesEn": "v0.2.1 (issue #1 fixes): repairs 2 fatal and 2 moderate defects on the official kernel.\nFatal 1: easy-setup / side-session / client-ui-custom (EAC-fork-only settingsScope) are skipped at install and refused at enable, with a locked \"EAC fork only\" badge; hand-adding them back to bundles can no longer block boot (hard-disabled rows in the repacks).\nFatal 2: kernel-built-in packages (dsh-plugin-manager / dsh-terminal, 0.2.0-rc.2) are no longer shadowed: install skips, boot-time ghost sweep, offline retire of declared copies, and ./tools exports on the repack. Affected hosts self-heal on the first start after upgrading.\nDefect 3: dsh-compact 1.0.1 fixes the patch form (two insert rows: main + agent engine), so request-path compaction actually mounts.\nNote: dsh-compact status/compact-now endpoints and its settings card need EAC-fork services and stay unavailable (harmless) on the official kernel; skin-switch remote face mount remains a known upstream issue.",
   "items": [
@@ -14,32 +14,8 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-balance-0.1.0.tgz",
-      "sha256": "8dc8ead167a5572478126b694d697183072b39ba3b063aa9a3521ff65ce1a0e8",
-      "bytes": 7232,
-      "source": "eac-tag"
-    },
-    {
-      "id": "client-file-changes",
-      "name": "@deepseek-ai/dsh-client-file-changes",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "@deepseek-ai_dsh-client-file-changes-0.1.0.tgz",
-      "sha256": "f1a48bd60528fb54fb257ffbdc06fef7715bcf530c35f6eda68b7ad632b489cb",
-      "bytes": 11329,
-      "source": "eac-tag"
-    },
-    {
-      "id": "conversation-tweaks",
-      "name": "@deepseek-ai/dsh-conversation-tweaks",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "@deepseek-ai_dsh-conversation-tweaks-0.1.0.tgz",
-      "sha256": "a8e9064019231863f1b32ba1a40e1f18d71c928594085000abaa111e92902481",
-      "bytes": 4584,
+      "sha256": "55ab2f12bbf06ab71ce56ecfe247ba244e5544d8ce294606105c2058cd7bda40",
+      "bytes": 5344,
       "source": "eac-tag"
     },
     {
@@ -62,8 +38,8 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-file-changes-0.1.0.tgz",
-      "sha256": "736daa2801ca2714b48fa39d46bd002b4b84ce440ba0c5735b17f86af25e70ff",
-      "bytes": 6757,
+      "sha256": "2501b40d04bec08fb0e0fd21724bb263c430734c7a2b17050d71c3a3d76e2a4c",
+      "bytes": 7797,
       "source": "eac-tag"
     },
     {
@@ -74,8 +50,8 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-float-window-0.1.0.tgz",
-      "sha256": "5a3eed4f61c638dee8efa9bf36bdaabf9839661dcbf3a085bb3ec9a9c846c4ea",
-      "bytes": 6166,
+      "sha256": "48679db7c9193718cf33c07c8970ecfd639fa2468a61d49baa1664a49ea9e90c",
+      "bytes": 6376,
       "source": "eac-tag"
     },
     {
@@ -86,33 +62,8 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-openclaw-bridge-0.7.0.tgz",
-      "sha256": "fb7073d74d833ce5684dcdff89c7e39c8e3c8dab99914e395c63b56ae283cd89",
-      "bytes": 43365,
-      "source": "eac-tag"
-    },
-    {
-      "id": "plugin-manager",
-      "name": "@deepseek-ai/dsh-plugin-manager",
-      "version": "0.1.0",
-      "packs": [
-        "aio",
-        "eac"
-      ],
-      "file": "@deepseek-ai_dsh-plugin-manager-0.1.0.tgz",
-      "sha256": "92b4da4ce87b01ab67638f0c187f032f570a811a7a8bcf402be5b814c3794c74",
-      "bytes": 7870,
-      "source": "eac-tag"
-    },
-    {
-      "id": "prompt-custom",
-      "name": "@deepseek-ai/dsh-prompt-custom",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "@deepseek-ai_dsh-prompt-custom-0.1.0.tgz",
-      "sha256": "49c14580cb1341c93473f322af9b7870c073ed433be983f6e00f70c7f5b41570",
-      "bytes": 6220,
+      "sha256": "e27ffe1f64a4c1b4d5638b581bb552a8c101b826c533997e3f0be8fd9c495aef",
+      "bytes": 43561,
       "source": "eac-tag"
     },
     {
@@ -124,20 +75,8 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-skin-switch-0.1.0.tgz",
-      "sha256": "7066570df9ec7823c2dbf175f4bc1cef08dc49a9bed109b19616c7b03c012c2a",
-      "bytes": 12576,
-      "source": "eac-tag"
-    },
-    {
-      "id": "terminal",
-      "name": "@deepseek-ai/dsh-terminal",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "@deepseek-ai_dsh-terminal-0.1.0.tgz",
-      "sha256": "959f761d3ddcaddf4d6fd3aa27740b797c8a9499e599f213b1a7fed966b8ab10",
-      "bytes": 11813,
+      "sha256": "d0a6755ba5803ab19e8117af6dd8a8a5ca6a61a33a0113e09254543653471178",
+      "bytes": 12757,
       "source": "eac-tag"
     },
     {
@@ -184,8 +123,8 @@
         "skins"
       ],
       "file": "@linxin666_dsh-client-ui-skin-blue-fantasy-0.2.0.tgz",
-      "sha256": "0afdea4d6c49bba4c0ab9b6629c68203951a931e21ce3909321d3f145dad4d3a",
-      "bytes": 5312244,
+      "sha256": "44236cfd09daaa3a00999bcbfcdf081c2a21db015671ad75eee161ab1de690da",
+      "bytes": 5312560,
       "source": "npm"
     },
     {
@@ -381,43 +320,6 @@
       "source": "eac-tag"
     },
     {
-      "id": "auto-compact",
-      "name": "dsh-auto-compact",
-      "version": "0.1.0",
-      "packs": [
-        "aio"
-      ],
-      "file": "dsh-auto-compact-0.1.0.tgz",
-      "sha256": "0581c7a7d21cd6394c46b3636cd36d95f1f1b2d6d28217e5c5aa066c701df908",
-      "bytes": 5795,
-      "source": "eac-tag"
-    },
-    {
-      "id": "better-sidebar",
-      "name": "dsh-better-sidebar",
-      "version": "0.15.3-eac.1",
-      "packs": [
-        "aio",
-        "eac"
-      ],
-      "file": "dsh-better-sidebar-0.15.3-eac.1.tgz",
-      "sha256": "95e5fc933189765088dca83bd6589e22eaa494a9c9d25277ca43355856197fad",
-      "bytes": 2473554,
-      "source": "eac-tag"
-    },
-    {
-      "id": "change-review",
-      "name": "dsh-change-review",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "dsh-change-review-0.1.0.tgz",
-      "sha256": "7c6ec83135aa7088db4cfad3e77768ba1ded64fc22f9f40b1c22ac4cd0205dd5",
-      "bytes": 6414,
-      "source": "eac-tag"
-    },
-    {
       "id": "liang",
       "name": "dsh-client-liang-intensity-skin",
       "version": "0.1.7",
@@ -455,18 +357,6 @@
       "source": "eac-tag"
     },
     {
-      "id": "dafeiyu",
-      "name": "dsh-dafeiyu",
-      "version": "0.1.14",
-      "packs": [
-        "eac"
-      ],
-      "file": "dsh-dafeiyu-0.1.14.tgz",
-      "sha256": "e9f506542488b6cc0aad5999315af54551b182214d6cfcce0d284e912d2489e2",
-      "bytes": 167827628,
-      "source": "npm"
-    },
-    {
       "id": "dock-settings",
       "name": "dsh-dock-settings",
       "version": "0.1.0",
@@ -498,8 +388,8 @@
         "eac"
       ],
       "file": "dsh-eac-core-bridge-1.0.0.tgz",
-      "sha256": "24a4ad26a959f3c92101cb2da1ae0d2429760ea18213cdbaa92ed256b199b027",
-      "bytes": 4404,
+      "sha256": "abdd2bf93a5f19da8c2837ece38fb89f29c25fc7d6024b869c346b7c8dcf974d",
+      "bytes": 4608,
       "source": "eac-tag"
     },
     {
@@ -510,20 +400,8 @@
         "eac"
       ],
       "file": "dsh-eac-locale-compat-1.0.0.tgz",
-      "sha256": "8b85c1e699d1ffbd90a804164cfeb7d789377b9ef5960bc811f3f06a500c69b3",
-      "bytes": 16527,
-      "source": "eac-tag"
-    },
-    {
-      "id": "feature-toggles",
-      "name": "dsh-feature-toggles",
-      "version": "0.1.1",
-      "packs": [
-        "eac"
-      ],
-      "file": "dsh-feature-toggles-0.1.1.tgz",
-      "sha256": "8194fdc2140c997afe131e9ebed0a9054ca8aa0f407bdf2295d00c43dfc8cfde",
-      "bytes": 3928,
+      "sha256": "83b0202784b5b1cd775f63d110d690a49d7dc37572b766a6a47c216a113f07a3",
+      "bytes": 16720,
       "source": "eac-tag"
     },
     {
@@ -534,8 +412,8 @@
         "eac"
       ],
       "file": "dsh-file-drop-eac-0.1.0.tgz",
-      "sha256": "6af9b1dc9452d85728882edf29504560b54dda7c065d329cd00cf7a5ee8e78a4",
-      "bytes": 8065,
+      "sha256": "2131d2adc3a150c78934904b4ccc4825c7d5d5d5e1fc4f913fee9788797bb188",
+      "bytes": 8267,
       "source": "eac-tag"
     },
     {
@@ -558,20 +436,8 @@
         "eac"
       ],
       "file": "dsh-font-custom-0.1.0.tgz",
-      "sha256": "633c8cc8432cf192fc71f659e2b4dc03be22ec143ebad9976ec375539c78df11",
-      "bytes": 8756,
-      "source": "eac-tag"
-    },
-    {
-      "id": "image-paste",
-      "name": "dsh-image-paste",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "dsh-image-paste-0.1.0.tgz",
-      "sha256": "b9937894813a83ff288fead6d3a7c4dd76a2e0b49c07925ef64ae88ab3bf921a",
-      "bytes": 4415,
+      "sha256": "b81f785f829adea4f438eaaa1331602279531f2c08c15a753aaaee7603d1286c",
+      "bytes": 8957,
       "source": "eac-tag"
     },
     {
@@ -606,9 +472,21 @@
         "eac"
       ],
       "file": "dsh-offpeak-9.9.9.tgz",
-      "sha256": "28768bec26b0fa76719507354c6595089c2eb14a6e996745a73b3b35914c4a14",
-      "bytes": 23196,
+      "sha256": "f8e4b495d6679ad32b93402d76ac60d439d0a2260fc33efc6b2342ddc7c064ed",
+      "bytes": 22825,
       "source": "eac-tag"
+    },
+    {
+      "id": "our-free-model",
+      "name": "dsh-our-free-model",
+      "version": "2.5.6",
+      "packs": [
+        "eac"
+      ],
+      "file": "dsh-our-free-model-2.5.6.tgz",
+      "sha256": "65483fe67b42a38a94da70775af799ff36c4e955da1b0f0e8e928b557a75604a",
+      "bytes": 1336558,
+      "source": "github-tgz"
     },
     {
       "id": "pet",
@@ -630,8 +508,8 @@
         "eac"
       ],
       "file": "dsh-pet-settings-0.1.0.tgz",
-      "sha256": "9f78d9af7f804057d196731d0e98ab1773d7343bc4809fcccec769b65d3c2721",
-      "bytes": 4150,
+      "sha256": "d556c6300489e98e1ed6870262cbabe1bbb56dc3a136e86c0d882764bb2301c9",
+      "bytes": 4344,
       "source": "eac-tag"
     },
     {
@@ -655,8 +533,8 @@
         "eac"
       ],
       "file": "dsh-plugin-shield-0.1.0.tgz",
-      "sha256": "8865f6564c9e17957ce02d323d635b32921dcea19337542c20ba23d1fa0bd667",
-      "bytes": 5749,
+      "sha256": "8172c09d72aaa069db49bd9f8522630575e3be969b5d10c2f63881ad9bd534f9",
+      "bytes": 5929,
       "source": "eac-tag"
     },
     {
@@ -667,21 +545,9 @@
         "aio"
       ],
       "file": "dsh-plugin-wallpaper-engine-1.3.3.tgz",
-      "sha256": "52d7ababdccf0bfa289196914493af8d61a8802f253c9f6ceefe079e70421c67",
-      "bytes": 3529468,
+      "sha256": "581d75a69634e82469988da798df1713470cd6eb673be77ace4b0e4df77278b3",
+      "bytes": 3529607,
       "source": "npm"
-    },
-    {
-      "id": "plugin-wizard",
-      "name": "dsh-plugin-wizard",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "dsh-plugin-wizard-0.1.0.tgz",
-      "sha256": "3a629c28eb7669fae58878654b857dc0d793fd9fb08d3f1e5733d9fa133d38f7",
-      "bytes": 2706,
-      "source": "eac-tag"
     },
     {
       "id": "raw-html",
@@ -715,8 +581,8 @@
         "eac"
       ],
       "file": "dsh-settings-groups-0.1.0.tgz",
-      "sha256": "84a603eb0baa28a604d932bc7474be763ee75cb6b00962c00a1f79aff32feb61",
-      "bytes": 5001,
+      "sha256": "75b56ccd2e1d5f27fd4d0e9b734318116d97e769a08432e6b5e8750974cd652c",
+      "bytes": 5894,
       "source": "eac-tag"
     },
     {
@@ -812,8 +678,8 @@
         "eac"
       ],
       "file": "dsh-viewport-lock-1.0.1.tgz",
-      "sha256": "9191e83dcf8a8eae7fbad5a3eb04fb0057887273b987b709c7c3e27fc9e47901",
-      "bytes": 4800,
+      "sha256": "b523935cd0fb85444441a8995743b2e9fa3fe52e9fc8c287637817fcc3638a05",
+      "bytes": 5001,
       "source": "eac-tag"
     },
     {

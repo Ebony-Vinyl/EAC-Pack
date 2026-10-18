@@ -6,9 +6,9 @@
 
 **交接状态（2026-10-05）：本次推送仅交接源码，资源依赖尚未公开发布，暂不可作为正式 Git 安装入口。接手步骤及必须另行移交的资源见 `docs/HANDOFF-CASCADE-INSTALL-2026-10-05.md`。**
 
-## 0.2.4：安装阶段级联取得完整资源
+## 0.2.3：安装阶段级联取得完整资源
 
-Git 仅保留组合包入口、host/client、目录与固定摘要清单。必选依赖 **`eac-plugin-suite-assets@0.2.4`** 提供全部 72 个基线子插件 tarball、30 张皮肤预览和 10 组 Prompt；不是 optional/peer，也不是启用后下载。
+Git 仅保留组合包入口、host/client、目录与固定摘要清单。必选依赖 **`eac-plugin-suite-assets@0.2.3`** 提供全部 61 个基线子插件 tarball、30 张皮肤预览和 10 组 Prompt；不是 optional/peer，也不是启用后下载。
 
 正常安装事务会同时安装入口和资源依赖。启用后仅在本地校验与拼接；没有 prepare/install/postinstall 下载器，不需要关闭 pnpm 安全策略。资源包是纯数据，不能单独作为 Desktop 插件添加。
 
@@ -26,13 +26,13 @@ github:DSH-EAC/EAC-Pack
 
 ## 完整 Release
 
-完整单文件 `eac-plugin-suite-0.2.4.tgz` 使用 npm 标准 `bundleDependencies` 内置同一资源依赖，可在没有 registry 连接时安装整合包本身。正式 Release 或本地构建的 **release/** 产物才是完整包；**git/** 下的小 tarball 是轻入口，不可混用。
+完整单文件 `eac-plugin-suite-0.2.3.tgz` 使用 npm 标准 `bundleDependencies` 内置同一资源依赖，可在没有 registry 连接时安装整合包本身。正式 Release 或本地构建的 **release/** 产物才是完整包；**git/** 下的小 tarball 是轻入口，不可混用。
 
 `dist-artifacts-*.tar.gz` 是构建归档，不是 Desktop 插件安装包。历史 v0.2.1 及更早版本仍使用旧包名，不应只替换下载 URL 文件名。
 
 ## 完整性与故障处理
 
-`suite/assets/bootstrap.json` 固定资源包身份与版本，以及 72 个 tarball、分块、gallery/preview/Prompt 的大小和 SHA256。通过 Node 标准依赖解析找到资源包，不依赖 `.pnpm` 路径。缺依赖、错版本、清单不匹配或摘要失败会明确报错；不回退上游/latest、不用旧缓存掩盖不完整安装、不在启动后补下载。
+`suite/assets/bootstrap.json` 固定资源包身份与版本，以及 61 个 tarball、分块、gallery/preview/Prompt 的大小和 SHA256。通过 Node 标准依赖解析找到资源包，不依赖 `.pnpm` 路径。缺依赖、错版本、清单不匹配或摘要失败会明确报错；不回退上游/latest、不用旧缓存掩盖不完整安装、不在启动后补下载。
 
 失败时重新安装整合包及其必选依赖，检查 registry、代理与发布同步；不要关闭供应链安全策略。完整 Release 可作为单文件备用入口。
 
@@ -46,7 +46,7 @@ github:DSH-EAC/EAC-Pack
 
 ## 构建与验收
 
-需要完整、合法的 `dist/index.json`、72 个 canonical tarball，以及 `.cache/asset-input/` 中的 gallery、previews、prompts。这些输入不是 Git 安装时的构建步骤，也不入 Git。
+需要完整、合法的 `dist/index.json`、61 个 canonical tarball，以及 `.cache/asset-input/` 中的 gallery、previews、prompts。这些输入不是 Git 安装时的构建步骤，也不入 Git。
 
 ```powershell
 node scripts/repack/repack.mjs

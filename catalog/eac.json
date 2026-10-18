@@ -39,66 +39,6 @@
     "notes": "EAC 随包 private 包，npm 无发布；HEAD 树仍保留。peer 依赖 zod。"
   },
   {
-    "id": "client-file-changes",
-    "name": "@deepseek-ai/dsh-client-file-changes",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/@deepseek-ai_dsh-client-file-changes-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": true,
-    "titleZh": "文件视图与一键还原",
-    "titleEn": "Files View & Revert",
-    "descZh": "「文件」视图：会话文件更改追踪 + 一键还原（数据来自 dsh-file-changes 投影，还原由桌面壳执行）。",
-    "descEn": "Files view: session file-change tracking with one-click revert (data from dsh-file-changes projection).",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 随包 private 包，npm 无发布；在 HEAD 树。"
-  },
-  {
-    "id": "terminal",
-    "name": "@deepseek-ai/dsh-terminal",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/@deepseek-ai_dsh-terminal-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": false,
-    "kernelProvided": true,
-    "titleZh": "会话内终端",
-    "titleEn": "In-session Terminal",
-    "descZh": "与对话/轨迹/文件并列的会话内交互式命令行（SSE 流式，非 PTY）。",
-    "descEn": "In-session interactive terminal alongside chat/trajectory/files (SSE streaming, not PTY).",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "RC2 内核已内置官方 dsh-terminal 0.2.0-rc.2（比 EAC 0.1.0 新）。整合包安装时自动跳过（kernelProvided）：重打包副本会遮蔽内核官方包（issue #1 缺陷2）。"
-  },
-  {
-    "id": "plugin-manager",
-    "name": "@deepseek-ai/dsh-plugin-manager",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/@deepseek-ai_dsh-plugin-manager-0.1.0.tgz",
-    "packs": [
-      "eac",
-      "aio"
-    ],
-    "tier": "core",
-    "defaultEnabled": false,
-    "kernelProvided": true,
-    "titleZh": "插件启停管理",
-    "titleEn": "Plugin Manager",
-    "descZh": "设置页「插件」栏：列出全部内置插件及其作用，配套插件可一键关闭（写 cordis.patch.yml disabled 条目，重启生效）。",
-    "descEn": "Settings plugins tab: list all bundled plugins and toggle companion plugins off via cordis.patch.yml disabled rows.",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "RC2 内核已内置官方 dsh-plugin-manager 0.2.0-rc.2（此前 notes 误记 npm 0.1.6-alpha.2）。整合包安装时自动跳过（kernelProvided）；重打包 0.1.0 的 exports 缺 ./tools，一旦残留会遮蔽官方包导致全部会话无法恢复（issue #1 缺陷2，0.2.1 起加 ghost sweep 自愈 + ./tools 纵深修复）。"
-  },
-  {
     "id": "float-window",
     "name": "@deepseek-ai/dsh-float-window",
     "version": "0.1.0",
@@ -116,44 +56,6 @@
     "license": "MIT",
     "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
     "notes": "EAC 随包 private 包，npm 无发布。离开 EAC 桌面壳时浮窗 IPC 不可用，网页端无浮窗能力（插件不致崩溃）。"
-  },
-  {
-    "id": "conversation-tweaks",
-    "name": "@deepseek-ai/dsh-conversation-tweaks",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/@deepseek-ai_dsh-conversation-tweaks-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": true,
-    "titleZh": "对话界面微调",
-    "titleEn": "Conversation Tweaks",
-    "descZh": "设置-通用里隐藏长篇工具调用/思考输出（保留每轮最终总结）+ 会话右侧导航滑轨。",
-    "descEn": "Hide verbose tool/thinking output (keep per-turn summary) and add a right-edge conversation slider.",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 随包 private 包，npm 无发布。"
-  },
-  {
-    "id": "prompt-custom",
-    "name": "@deepseek-ai/dsh-prompt-custom",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/@deepseek-ai_dsh-prompt-custom-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": true,
-    "titleZh": "自定义注入提示词",
-    "titleEn": "Prompt Custom",
-    "descZh": "在设置页自定义官方内核注入的提示词（替换整体/追加，应用到 standard 预设）。",
-    "descEn": "Customize the official injected persona/system prompt from settings (replace or append, applied to the standard preset).",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 随包 private 包，npm 无发布。"
   },
   {
     "id": "openclaw-bridge",
@@ -255,9 +157,9 @@
   {
     "id": "picturereader",
     "name": "picturereader",
-    "version": "3.5.0",
-    "source": "github",
-    "spec": "git+https://github.com/jing-hy/picturereader.git#ebbb2f098ecf3fe18a47eaaa361ae157d31272cc",
+    "version": "3.3.1",
+    "source": "npm",
+    "spec": "picturereader@3.3.1",
     "packs": [
       "eac"
     ],
@@ -269,14 +171,14 @@
     "descEn": "Unified image understanding: visual twin adapter for native thumbnails, auto-analysis on text-only models, local tools (scan/OCR x4/crop/palette/compare/batch), document-to-image, local photo editing, optional external VLM bridge.",
     "license": "MIT",
     "upstream": "https://github.com/jing-hy/picturereader",
-    "notes": "目录名 picturereader。升至 3.5.0（钉上游 commit ebbb2f098ecf3fe18a47eaaa361ae157d31272cc）—— 目前唯一两端都适配 0.2.x 内核的版本：客户端不再 inject 已移除的 settingsScope，改为运行时探测后走 configForms，并带自建 loopback 路由兜底；宿主半不再 import 已删除的 settingsNamespace，且 settings.register 缺失时降级到自有配置覆盖层而非抛 TypeError。3.5.0 既无 npm 发布也无 git tag（npm 最新仅 3.3.3），故 source 由 npm 改为 github 并在 repack.mjs 的 GH_SOURCES 里钉 ref。此前「3.3.1 在 RC2 稳定」的记录有误：npm 上的 3.3.1 真实状态是坏的 —— 宿主半 import 不存在的导出，ESM 链接期即崩，那条结论只验了浏览器侧没验宿主半。"
+    "notes": "目录名 picturereader。D10 实测：3.3.3 在官方 RC2 上等待 EAC 分叉版专有 settingsScope 服务 → web boot 门禁拒绝启动（1 entry did not activate）；3.3.1 在 RC2 稳定（D9/D10 验证）。锁定 3.3.1，等上游出 RC2 版再直升。"
   },
   {
     "id": "computer-user",
     "name": "computer-user",
-    "version": "0.3.7",
+    "version": "0.3.6",
     "source": "npm",
-    "spec": "computer-user@0.3.7",
+    "spec": "computer-user@0.3.6",
     "packs": [
       "eac"
     ],
@@ -288,7 +190,7 @@
     "descEn": "Codex-style computer use: read the screen and drive mouse & keyboard, pairing with picturereader for the look-act-verify loop (Windows).",
     "license": "MIT",
     "upstream": "https://github.com/jing-hy/computer-user",
-    "notes": "npm 锁定 0.3.7（上游仍在维护，0.3.7 发布于 2026-10-01，npm 未弃用）。重资源/系统级自动化（Windows）。0.3.7 相对 0.3.6 修复了宿主半的 settingsNamespace 导入（改走内嵌 src/settings-compat.js 垫片，内核 0.1.3 起 dsh-settings 不再导出该品牌函数）、scope 写回改用 update、手动批准判定改为会话标识集合，并对 settings 注册失败做降级 —— 但该版仍针对 0.1.x 设定；EAC 内核已到 0.2.0-rc.2，0.2.x 上还有两处面未适配：① 宿主入口未 re-export Config schema，而 0.2.x 的 configForms 表单由 entry.fiber.runtime.Config 派生 → 设置卡拿不到表单；② 客户端 client.js 仍 inject 'settingsScope' 并调用 ctx.settingsScope.bind()，该服务在 0.1.7-rc.2 已移除 → 客户端 fiber 永久停在 waitingFor。本仓以 patches/ 三处补丁补齐 0.2.x 适配（见 patches/source-patches.json），后续上游发布 0.2.x 适配版时可撤补丁直升。"
+    "notes": "npm 锁定 EAC 随包版本 0.3.6（上游 npm latest 0.3.7）。重资源/系统级自动化。 D10 上游普查直升（见 reports/D10-final-test-report.md）。 D10：0.3.7 与 picturereader 3.3.3 同日发布（EAC 分叉线），存在同款 settingsScope 陷阱风险，回退锁定 0.3.6（RC2 验证版）。"
   },
   {
     "id": "soul-md",
@@ -365,26 +267,6 @@
     "license": "MIT",
     "upstream": "https://github.com/Phant0Meow/dsh-meow-smooth",
     "notes": "npm 锁定 EAC 随包版本 0.5.0（上游 npm latest 0.8.1）。EAC 注册表 config: {\"enabled\":true}。 D10 上游普查直升（见 reports/D10-final-test-report.md）。"
-  },
-  {
-    "id": "better-sidebar",
-    "name": "dsh-better-sidebar",
-    "version": "0.15.3-eac.1",
-    "source": "eac-tag",
-    "spec": "file:dist/dsh-better-sidebar-0.15.3-eac.1.tgz",
-    "packs": [
-      "eac",
-      "aio"
-    ],
-    "tier": "visual",
-    "defaultEnabled": true,
-    "titleZh": "VSCode 风格右侧边栏",
-    "titleEn": "Better Sidebar",
-    "descZh": "VSCode 式右侧边栏（文件树/编辑器/终端/Git/浏览器），按会话隔离；lib/ 预编译自包含。",
-    "descEn": "VSCode-like right sidebar (explorer/editor/terminal/git/browser) isolated per conversation; lib/ is prebuilt and self-contained.",
-    "license": "MIT",
-    "upstream": "https://github.com/omdsh-dev/DSH-better-sidebar",
-    "notes": "锁定 EAC 适配版 0.15.3-eac.1（背景清单写 eac.2，实测 v5.3.6 为 eac.1）；npm 无该预发布版（上游 npm latest 0.24.1 未含 EAC 适配）。AIO(aio-v1) 随包 0.12.2 —— 两包共享时版本以 EAC 包为准。"
   },
   {
     "id": "raw-html",
@@ -521,25 +403,6 @@
     "notes": "EAC 自研，在 HEAD 树。AIO(aio-v1) 同版本 0.1.0 共享，版本以 EAC 包为准。独立 profile 无壳 IPC 时 UI 可见但引擎操作不可用。"
   },
   {
-    "id": "change-review",
-    "name": "dsh-change-review",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/dsh-change-review-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": true,
-    "titleZh": "AI 变更审核",
-    "titleEn": "Change Review",
-    "descZh": "监控 fileChanges 投影，手动/自动向当前对话发送审核请求，让模型复查自己刚做的改动，配合「文件」页一键还原。",
-    "descEn": "Watches the fileChanges projection and asks the model to review its own recent edits (correctness/safety/consistency).",
-    "license": "MIT",
-    "upstream": "https://github.com/myYangyunfan/dsh_desktop",
-    "notes": "自 myYangyunfan/dsh_desktop 移植，EAC 随包 private，npm 无发布。"
-  },
-  {
     "id": "navbar",
     "name": "@vlln/dsh-navbar",
     "version": "0.4.0",
@@ -615,25 +478,6 @@
     "license": "MIT",
     "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
     "notes": "EAC 自研（private），npm 无发布。重外部集成：无 EAC 壳 sidecar 时配对/代理不可用。"
-  },
-  {
-    "id": "feature-toggles",
-    "name": "dsh-feature-toggles",
-    "version": "0.1.1",
-    "source": "eac-tag",
-    "spec": "file:dist/dsh-feature-toggles-0.1.1.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": true,
-    "titleZh": "增强功能开关",
-    "titleEn": "Feature Toggles",
-    "descZh": "设置页「增强功能」分区：为默认关闭的内置插件（余额小鲸鱼/AgentTeams 等）提供一键启用/停用开关。",
-    "descEn": "Settings section providing one-click toggles for bundled plugins that ship disabled (whale widget, agent teams, etc.).",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 自研，npm 无发布。EAC 注册表行 id: dsh-feature-toggles。"
   },
   {
     "id": "whale-widget",
@@ -715,26 +559,6 @@
     "notes": "GitHub 分发锁定拷贝（npm 未发布，EAC 注册表 PLUGIN_UPDATE_SOURCES 以 github 登记）。AIO(aio-v1) 随包 0.3.3-1 —— 共享时版本以 EAC 0.3.4 为准。EAC 注册表行 id: dsh-undo。"
   },
   {
-    "id": "dafeiyu",
-    "name": "dsh-dafeiyu",
-    "version": "0.1.14",
-    "source": "npm",
-    "spec": "dsh-dafeiyu@0.1.14",
-    "packs": [
-      "eac"
-    ],
-    "tier": "visual",
-    "defaultEnabled": false,
-    "distExclude": true,
-    "titleZh": "大肥鱼桌面伴侣",
-    "titleEn": "BigFish Companion",
-    "descZh": "真实会话状态驱动的原生置顶桌宠（空闲/思考/工作/等待/完成/错误六态 + 项目状态卡）。",
-    "descEn": "Native always-on-top desktop pet driven by real session states (idle/thinking/working/waiting/done/error) with a project status card.",
-    "license": "SEE LICENSE IN ASSET_LICENSE.md",
-    "upstream": "https://github.com/QCYTSN/dsh-dafeiyu",
-    "notes": "npm 锁定 EAC 随包版本 0.1.0-alpha.6（上游 npm latest 0.1.14）。代码 MIT、角色素材按 ASSET_LICENSE.md 随包分发保留署名；含 ~49MB PyInstaller helper。EAC 注册表行 id: dsh-dafeiyu。 D10 上游普查直升（见 reports/D10-final-test-report.md）。"
-  },
-  {
     "id": "pet-settings",
     "name": "dsh-pet-settings",
     "version": "0.1.0",
@@ -747,11 +571,11 @@
     "defaultEnabled": true,
     "titleZh": "桌宠设置分区",
     "titleEn": "Pet Settings",
-    "descZh": "设置页「桌宠」分区：集中管理页面桌宠（dsh-pet）与大肥鱼桌面伴侣（dsh-dafeiyu config 端点即时生效）。",
-    "descEn": "Settings pets section managing the web pet (dsh-pet) and the BigFish companion via dsh-dafeiyu config endpoints.",
+    "descZh": "设置页「桌宠」分区：集中管理页面桌宠（dsh-pet）；大肥鱼桌面伴侣（dsh-dafeiyu）已退役，其鱼形卡片仅在市场另行安装该插件时可用。",
+    "descEn": "Settings pets section for the web pet (dsh-pet); the BigFish companion (dsh-dafeiyu) is retired, so its fish card only works if that plugin is installed separately from the market.",
     "license": "MIT",
     "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 自研，npm 无发布。EAC 注册表行 id: dsh-pet-settings。"
+    "notes": "EAC 自研，npm 无发布。EAC 注册表行 id: dsh-pet-settings。大肥鱼（dsh-dafeiyu）退役后，本包 FishCard 走 /plugins/dsh-dafeiyu/config 的路径在未装该插件时会显示「未启用」——属预期，非缺陷。"
   },
   {
     "id": "offpeak",
@@ -830,25 +654,6 @@
     "notes": "EAC 自研（private），npm 无发布；在 HEAD 树。"
   },
   {
-    "id": "image-paste",
-    "name": "dsh-image-paste",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/dsh-image-paste-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": false,
-    "titleZh": "图片粘贴发送",
-    "titleEn": "Image Paste",
-    "descZh": "Ctrl/Cmd+V 粘贴剪贴板图片 → 保存临时目录 → 注入完整路径提示（配合 inspect_image 视觉工具），多图合并提示。",
-    "descEn": "Paste clipboard images (Ctrl/Cmd+V): save to temp dir and inject full-path hints for the inspect_image vision tool.",
-    "license": "MIT",
-    "upstream": "https://github.com/myYangyunfan/dsh_desktop",
-    "notes": "EAC 注册表默认 disabled:true —— 与内置 picturereader「粘贴即用/图片桥自动分析」语义重叠，避免重复/竞争注入。npm 无发布。"
-  },
-  {
     "id": "webui-prompt-optimizer",
     "name": "dsh-webui-prompt-optimizer",
     "version": "0.1.0",
@@ -918,8 +723,8 @@
     "defaultEnabled": true,
     "titleZh": "免费模型（Our Free Model）",
     "titleEn": "Our Free Model",
-    "descZh": "免登录、免注册、免 API Key 直接使用前沿模型（含 DeepSeek V4.1 Flash、Kimi K3）；2.0 起集成 Jet Hub 十三个账号渠道（CodeArts、CodeBuddy、WorkBuddy、LobsterAI、Qoder、TRAE、Cline、Loomy、Raccoon、MiniMax、ZCode、Gemini），提供账号池、积分领取、本地 OpenAI 网关与局域网转发、数据看板与运行日志，并保留匿名免费通道。",
-    "descEn": "Use frontier models (including DeepSeek V4.1 Flash and Kimi K3) without login, signup or API keys; 2.0 folds in Jet Hub with thirteen account channels (CodeArts, CodeBuddy, WorkBuddy, LobsterAI, Qoder, TRAE, Cline, Loomy, Raccoon, MiniMax, ZCode, Gemini) plus an account pool, quota claiming, a local OpenAI gateway with LAN forwarding, dashboard and runtime logs, while keeping the anonymous free channel.",
+    "descZh": "免登录、免注册、免 API Key 直接使用前沿模型（含 DeepSeek V4.1 Flash、Kimi K3）；集成 Jet Hub 十三个账号渠道（CodeArts、CodeBuddy、WorkBuddy、LobsterAI、Qoder、TRAE、Cline、Loomy、Raccoon、MiniMax、ZCode、Gemini），提供账号池、积分领取、本地 OpenAI 网关与局域网转发、数据看板与运行日志，并保留匿名免费通道。",
+    "descEn": "Use frontier models (including DeepSeek V4.1 Flash and Kimi K3) without login, signup or API keys; folds in Jet Hub with thirteen account channels (CodeArts, CodeBuddy, WorkBuddy, LobsterAI, Qoder, TRAE, Cline, Loomy, Raccoon, MiniMax, ZCode, Gemini) plus an account pool, quota claiming, a local OpenAI gateway with LAN forwarding, dashboard and runtime logs, while keeping the anonymous free channel.",
     "license": "MIT",
     "upstream": "https://github.com/Ebony-Vinyl/dsh-our-free-model",
     "notes": "npm 精确版 2.5.6（2026-10-19 发布，GitHub Release 资产 dsh-our-free-model-2.5.6.tgz，1336573 B，sha256 2d7e8bc2…6cb18，已核对 release digest）。从 2.0.0 升到 2.5.6 跨 5 个小版本：免费模型与 EAC 模型页统一展示北辰 API 赞助卡片、优惠文案更新、移除赞助商广告导航与详情路由（保留卡片与查看链接）、修复部分路径下热重载依赖未刷新导致旧模块继续运行。零 dependencies；peer 要求 @deepseek-ai/dsh-commands / dsh-credentials / dsh-llm ^0.1.2-rc.1 || ^0.1.7-rc.2 || ^0.2.0-rc.1 与 @deepseek-ai/cordis ^4.0.2，EAC 内核 0.2.0-rc.2 + cordis 4.0.4 实测全部满足。source 由 github-repo 改为 github-tgz：原配置依赖 GH_SOURCES 映射但 repack 里并无该包，materializeGithub 会直接 die；改锁 release 资产 URL 后重打包可复现。"
