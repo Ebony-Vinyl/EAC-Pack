@@ -5,8 +5,9 @@
  *
  *   node suite/dev/gen-entries.mjs
  *
- * Output layout (matches the task spec): 41 EAC entries + 15 AIO/skin entries,
- * with installed / enabled / updateAvailable / defaultEnabled state coverage.
+ * Output layout (matches the task spec): the EAC catalog minus DROP, plus
+ * AIO/skin entries, with installed / enabled / updateAvailable / defaultEnabled
+ * state coverage.
  */
 import fs from 'node:fs'
 import path from 'node:path'
@@ -54,8 +55,10 @@ const pick = (entry) => ({
 })
 
 const eac = list.filter((e) => !DROP.has(e.id)).map(pick)
-if (eac.length !== 41) {
-  console.error(`[gen-entries] expected 41 EAC entries, got ${eac.length} — adjust DROP`)
+// 期望值不再硬编码。此前写死 41，catalog 收敛后实际只剩 34，生成器直接
+// exit(1)，dev 预览无法再生成；改为只做空集保护。
+if (!eac.length) {
+  console.error('[gen-entries] catalog 过滤后为空，检查 catalog/eac.json 与 DROP')
   process.exit(1)
 }
 
@@ -110,18 +113,36 @@ const skins = SKINS.map(([id, zh, en, descZh], i) => ({
 }))
 
 // State projection seeds. ids not listed here are "not installed".
-const INSTALLED = [
+// 这些 id 会与实际条目求交后过滤：catalog 收敛/退役后，指向已删插件的
+// 悬空 id 自动掉落，不会在预览里制造「已安装但不存在」的假状态。
+const INSTALLED_SEED = [
   'balance', 'file-changes', 'client-file-changes', 'terminal', 'plugin-manager',
   'conversation-tweaks', 'prompt-custom', 'skin-switch', 'easy-setup', 'eac-locale-compat',
   'eac-core-bridge', 'picturereader', 'soul-md', 'compact', 'dock-settings',
   'session-manager', 'plugin-wizard', 'aio-runtime', 'skin-aurora',
 ]
-const DISABLED = ['pet', 'whale-widget', 'float-window', 'image-paste', 'skin-aurora']
-const INSTALLED_VERSIONS = {
+const DISABLED_SEED = ['pet', 'whale-widget', 'float-window', 'image-paste', 'skin-aurora']
+const INSTALLED_VERSIONS_SEED = {
   terminal: '0.1.0',
   'skin-switch': '0.9.8',
   'better-sidebar': '1.2.0',
   'message-rewind': '0.3.1',
+}
+
+const validIds = new Set([...eac, ...aio, ...skins].map((e) => e.id))
+const onlyKnown = (ids) => ids.filter((id) => validIds.has(id))
+const INSTALLED = onlyKnown(INSTALLED_SEED)
+const DISABLED = onlyKnown(DISABLED_SEED)
+const INSTALLED_VERSIONS = Object.fromEntries(
+  Object.entries(INSTALLED_VERSIONS_SEED).filter(([id]) => validIds.has(id)),
+)
+const droppedSeeds = [
+  ...INSTALLED_SEED.filter((id) => !validIds.has(id)),
+  ...DISABLED_SEED.filter((id) => !validIds.has(id)),
+  ...Object.keys(INSTALLED_VERSIONS_SEED).filter((id) => !validIds.has(id)),
+]
+if (droppedSeeds.length) {
+  console.log(`[gen-entries] 已剔除悬空 seed id（不在当前条目中）: ${[...new Set(droppedSeeds)].join(', ')}`)
 }
 
 const body = `/**
