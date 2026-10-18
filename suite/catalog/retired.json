@@ -208,6 +208,16 @@
       "reason": "用户裁决（2026-10-18）：官方内核已有等效能力，退役本地副本。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除；老 profile 中残留的行/包副本由 Lite 侧 ghost sweep 兜底清理。",
       "titleZh": "对话界面微调",
       "titleEn": "Conversation Tweaks"
+    },
+    {
+      "id": "dsh-feature-toggles",
+      "name": "dsh-feature-toggles",
+      "version": "0.1.1",
+      "retiredFrom": "eac",
+      "evidence": "Desktop 侧实物核验（2026-10-18）：.sync/plugin-distribution.json 中该条目 migration.target=\"retired\"，是当前唯一 target=retired 却仍被 Pack 分发的插件；docs/PLUGIN-DISTRIBUTION-MIGRATION.md 的迁移台账原文写明 \"retirement pending merge into plugin-manager\"（EAC-original 0.1.1，no-upstream，source-pending）。另据 docs/PLUGIN-CONFLICT-AUDIT.md:273，其面板是 dsh-whale-widget 与 dsh-agent-teams 的启停入口，而这两个插件在该账本中均归 external/market（delivery=market），不在 Pack 交付渠道规划内。",
+      "reason": "用户裁决（2026-10-18）：按 Desktop 立账的迁移目标退役 —— 功能并入官方 plugin-manager 体系（内核 dsh-plugin-manager + dsh-client-ui-plugin-manager 已提供完整启停能力）。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除。",
+      "titleZh": "增强功能开关",
+      "titleEn": "Feature Toggles"
     }
   ]
 }
