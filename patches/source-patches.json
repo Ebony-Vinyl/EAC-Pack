@@ -327,6 +327,36 @@
           "note": ".meme-picker .mp-tag.on 的 color 由 bg-layer-1 改为 label-primary-foreground；该处背景是 brand-primary 品牌色，需要的是“品牌色之上的前景色”。"
         }
       ]
+    },
+    {
+      "name": "dsh-feature-toggles",
+      "version": "0.1.1",
+      "source": "eac-tag",
+      "summary": "增强功能分区：插件管理桥（window.dshDesktop.pluginManager）在当前 Desktop 架构下不存在，卡片无条件显示红字「插件管理桥不可用（请在 Tauri 桌面壳中使用）」。实测 window.dshDesktop 为 undefined，且 Desktop 侧无任何注入实现；Tauri/ipc/webview 全局也均不存在。按产品决定，文案改为说明内测限制，避免误导。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-feature-toggles/lib/client.js.diff",
+          "inputSha256": "cff330d8dfc77887074aa26cf68ae58a72441e2db8dfa5b68df036a1c9e077e3",
+          "outputSha256": "2392f06e0b7e8dd4e571c240aec9f2a8e395dd01f34da923978d37dfaa25e051",
+          "note": "该桥为 EAC 桌面壳的 IPC 能力，当前未实现（实测 window.dshDesktop === undefined）。原文案还宣称“请在 Tauri 桌面壳中使用”，但本项目早已不是 Tauri。改为「内测版本本功能暂不可用，请待后续更新」，让用户理解这是阶段性缺失而非配置错误。"
+        }
+      ]
+    },
+    {
+      "name": "dsh-pet-settings",
+      "version": "0.1.0",
+      "source": "eac-tag",
+      "summary": "桌宠图标设置：同样依赖不存在的 window.dshDesktop.pluginManager，红字「插件管理桥不可用」。文案同步改为内测限制说明。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-pet-settings/lib/client.js.diff",
+          "inputSha256": "f962fb86850219ca16cb16b18755d67a2e137dff65e2a1ab576beab82bcc045c",
+          "outputSha256": "220fe6fc465ce29b88cc1e19fb105792c4c809e67447ecc59a1d977a0804fa7c",
+          "note": "与 dsh-feature-toggles 同因同改。"
+        }
+      ]
     }
   ]
 }

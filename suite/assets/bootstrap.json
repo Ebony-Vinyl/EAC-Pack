@@ -1073,16 +1073,18 @@
         "eac"
       ],
       "file": "dsh-feature-toggles-0.1.1.tgz",
-      "sha256": "78ef7d00b4180907bfdc64c26aa45dc995f0cb7c8f5eea3df585e9aa9756d06b",
-      "bytes": 4020,
+      "sha256": "202b5bdbeff328d68b6d01b1e079b701e3cb2e58af7c65fa7df34e1bb55a24a7",
+      "bytes": 3930,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-feature-toggles-0.1.1.tgz",
-          "bytes": 4020,
-          "sha256": "78ef7d00b4180907bfdc64c26aa45dc995f0cb7c8f5eea3df585e9aa9756d06b"
+          "bytes": 3930,
+          "sha256": "202b5bdbeff328d68b6d01b1e079b701e3cb2e58af7c65fa7df34e1bb55a24a7"
         }
-      ]
+      ],
+      "locallyRepacked": true,
+      "repackNote": "增强功能分区：插件管理桥（window.dshDesktop.pluginManager）在当前 Desktop 架构下不存在，卡片无条件显示红字「插件管理桥不可用（请在 Tauri 桌面壳中使用）」。实测 window.dshDesktop 为 undefined，且 Desktop 侧无任何注入实现；Tauri/ipc/webview 全局也均不存在。按产品决定，文案改为说明内测限制，避免误导。"
     },
     {
       "id": "file-drop-eac",
@@ -1270,16 +1272,18 @@
         "eac"
       ],
       "file": "dsh-pet-settings-0.1.0.tgz",
-      "sha256": "8622b0661570f4a78ac1c81240cd00b8b724949636a93b21ff30b12197d1ddbc",
-      "bytes": 4237,
+      "sha256": "8f7afd3dc322f50fcad527f25d21cc2c19e36efa28ed047f0f572dfdcd97813d",
+      "bytes": 4187,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-pet-settings-0.1.0.tgz",
-          "bytes": 4237,
-          "sha256": "8622b0661570f4a78ac1c81240cd00b8b724949636a93b21ff30b12197d1ddbc"
+          "bytes": 4187,
+          "sha256": "8f7afd3dc322f50fcad527f25d21cc2c19e36efa28ed047f0f572dfdcd97813d"
         }
-      ]
+      ],
+      "locallyRepacked": true,
+      "repackNote": "桌宠图标设置：同样依赖不存在的 window.dshDesktop.pluginManager，红字「插件管理桥不可用」。文案同步改为内测限制说明。"
     },
     {
       "id": "phone",
