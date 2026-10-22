@@ -1,5 +1,5 @@
 diff --git a/lib/index.js b/lib/index.js
-index ef72794..8c8abdf 100644
+index ef72794..48f3579 100644
 --- a/lib/index.js
 +++ b/lib/index.js
 @@ -1,26 +1,40 @@
@@ -14,8 +14,9 @@ index ef72794..8c8abdf 100644
  const name = "@deepseek-ai/dsh-conversation-tweaks";
  const inject = ["settings"];
  
- const NS = settingsNamespace("dsh-conversation-tweaks");
+-const NS = settingsNamespace("dsh-conversation-tweaks");
 -const Config = z.object({
++const NS = settingsNamespace("conversation-tweaks");
 +// 0.2.x 的设置表单由导出的 Config schema 派生，volatileForm() 只保留「最近的
 +// volatile 祖先被标记」的字段；未标记的 schema 投影为 undefined → 表单不生成 →
 +// 客户端 configForms.get() 回 unavailable、卡片空白。根 schema 标 volatile 即可

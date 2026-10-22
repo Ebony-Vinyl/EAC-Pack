@@ -104,8 +104,8 @@
           "path": "lib/index.js",
           "diff": "files/dsh-conversation-tweaks/lib/index.js.diff",
           "inputSha256": "e5265e00d503bdbddf14749243af1d36f803ba656383eee229c2abad70fecae4",
-          "outputSha256": "e9ef9323dad40beddb36d24c36212f771f4996feeded1121d5687495d8097f94",
-          "note": "Host side stops importing the retired settingsNamespace/installSettingsSection (ESM link-time SyntaxError on 0.2.x kills the whole plugin tree), stops calling the also-retired ctx.settings.register (0.2.x derives forms from the exported Config schema instead), and marks the schema volatile() so volatileForm() actually projects a card."
+          "outputSha256": "88b02a5083e8c42f19509e51b77da83b96da80b9bb40d123a1d90ab65ecb5794",
+          "note": "Host side stops importing the retired settingsNamespace/installSettingsSection (ESM link-time SyntaxError on 0.2.x kills the whole plugin tree), stops calling the also-retired ctx.settings.register (0.2.x derives forms from the exported Config schema instead), and marks the schema volatile() so volatileForm() actually projects a card. Namespace string realigned to the cordis.patch.yml insert id: the kernel derives a settings namespace from `entry.options.id` (`conversation-tweaks`), but the plugin looked it up as `dsh-conversation-tweaks`, so the kernel mirror never found it -> the client configForm reported status \"unavailable\" -> the settings row rendered but its switch was permanently disabled (`disabled = !ready || !snap.writable`). Changing the constant restores the existing surface; no behavioural logic is touched."
         },
         {
           "path": "lib/client.js",
@@ -133,8 +133,8 @@
           "path": "lib/index.js",
           "diff": "files/dsh-prompt-custom/lib/index.js.diff",
           "inputSha256": "65fd41d532635502cc3eda2a78c727b52549440a023aec3d523f19318d15faae",
-          "outputSha256": "9a91d0962189dc4aaff211e60df3ada9757721539ff26cae3f8c19caaefa9142",
-          "note": "Host side stops importing the retired settings userland (link-time SyntaxError kills the plugin tree), replaces ctx.settings.register with the shim scope, marks the schema volatile() for 0.2.x form derivation, and tracks the PERSONA_SECTION/PERSONA_ORDER rename to PERSONA_PREFIX_SECTION/PERSONA_SUFFIX_SECTION while preserving section ordering."
+          "outputSha256": "91a5a64421ef9693c1d1d2b89e07a956773ee8d877fb0e9070e40a46b13a0351",
+          "note": "Host side stops importing the retired settings userland (link-time SyntaxError kills the plugin tree), replaces ctx.settings.register with the shim scope, marks the schema volatile() for 0.2.x form derivation, and tracks the PERSONA_SECTION/PERSONA_ORDER rename to PERSONA_PREFIX_SECTION/PERSONA_SUFFIX_SECTION while preserving section ordering. Namespace string realigned to the cordis.patch.yml insert id: the kernel derives a settings namespace from `entry.options.id` (`conversation-tweaks`), but the plugin looked it up as `dsh-conversation-tweaks`, so the kernel mirror never found it -> the client configForm reported status \"unavailable\" -> the settings row rendered but its switch was permanently disabled (`disabled = !ready || !snap.writable`). Changing the constant restores the existing surface; no behavioural logic is touched."
         },
         {
           "path": "lib/client.js",

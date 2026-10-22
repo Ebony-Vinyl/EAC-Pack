@@ -1,5 +1,5 @@
 diff --git a/lib/index.js b/lib/index.js
-index 806b3bc..db58279 100644
+index 806b3bc..4f12f63 100644
 --- a/lib/index.js
 +++ b/lib/index.js
 @@ -14,18 +14,28 @@
@@ -18,8 +18,9 @@ index 806b3bc..db58279 100644
  const name = "@deepseek-ai/dsh-prompt-custom";
  const inject = ["settings", "systemPrompt", "webServer"];
  
- const NS = settingsNamespace("dsh-prompt");
+-const NS = settingsNamespace("dsh-prompt");
 -const Config = z.object({
++const NS = settingsNamespace("prompt-custom");
 +// 0.2.x 的设置表单由导出的 Config schema 派生，volatileForm() 只保留「最近的
 +// volatile 祖先被标记」的字段；未标记的 schema 投影为 undefined → 表单不生成 →
 +// 客户端 configForms.get() 回 unavailable、卡片空白。根 schema 标 volatile 即可
