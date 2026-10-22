@@ -312,7 +312,7 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-conversation-tweaks-0.1.0.tgz",
-      "sha256": "3c074367791536797809c88b8709658b5962a6f2e075ccd1e6087d15e5190c2c",
+      "sha256": "ad1fd6aabe505925ce778429d3b32c5f4053897ed2b24132d3ad6522828a04ee",
       "bytes": 8742,
       "source": "eac-tag",
       "locallyRepacked": true,
@@ -321,7 +321,7 @@
         {
           "file": "@deepseek-ai_dsh-conversation-tweaks-0.1.0.tgz",
           "bytes": 8742,
-          "sha256": "3c074367791536797809c88b8709658b5962a6f2e075ccd1e6087d15e5190c2c"
+          "sha256": "ad1fd6aabe505925ce778429d3b32c5f4053897ed2b24132d3ad6522828a04ee"
         }
       ]
     },
@@ -431,16 +431,16 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-prompt-custom-0.1.0.tgz",
-      "sha256": "5ecd5e30016003c072443d725d1f8c6ae7f499ee16fc38a2c52aae5798267668",
-      "bytes": 10273,
+      "sha256": "d302a3eb9efbc44075a935774c6aa2aad71f9d51a6bc06d24e77f6afd4a55583",
+      "bytes": 10271,
       "source": "eac-tag",
       "locallyRepacked": true,
       "repackNote": "prompt-custom: 同族的 settingsNamespace/installSettingsSection/settingsScope 退役，外加 PERSONA_SECTION/PERSONA_ORDER 改名为 PREFIX/SUFFIX。本补丁四类改动一并适配，保持原有分段顺序。",
       "parts": [
         {
           "file": "@deepseek-ai_dsh-prompt-custom-0.1.0.tgz",
-          "bytes": 10273,
-          "sha256": "5ecd5e30016003c072443d725d1f8c6ae7f499ee16fc38a2c52aae5798267668"
+          "bytes": 10271,
+          "sha256": "d302a3eb9efbc44075a935774c6aa2aad71f9d51a6bc06d24e77f6afd4a55583"
         }
       ]
     },

@@ -111,8 +111,8 @@
           "path": "lib/client.js",
           "diff": "files/dsh-conversation-tweaks/lib/client.js.diff",
           "inputSha256": "77f4f08fd66ed7be5c7ccd6c3ed2cf90dad57e28a95465fceaae3c32086eef7a",
-          "outputSha256": "acb1a982018d5bc3a3579e2c667c5d51bb1a300da7950f64cccfc9141b9ff9e5",
-          "note": "Client fiber no longer injects the retired settingsScope service (it parked forever in waitingFor and the settings row silently vanished). Runtime probe prefers configForms (0.2.x) and falls back to settingsScope (0.1.x)."
+          "outputSha256": "30997b108b8529e8ecb0236198fb14b73807041d847759536599316b6ea79ae5",
+          "note": "Client fiber no longer injects the retired settingsScope service (it parked forever in waitingFor and the settings row silently vanished). Runtime probe prefers configForms (0.2.x) and falls back to settingsScope (0.1.x). The client-side namespace constant is realigned too: the settings row reads its config form through configForms.get(NS), so fixing only the host-side constant left the client asking the kernel for a namespace that does not exist and the form stayed \"unavailable\"."
         },
         {
           "path": "lib/settings-compat.js",
@@ -140,8 +140,8 @@
           "path": "lib/client.js",
           "diff": "files/dsh-prompt-custom/lib/client.js.diff",
           "inputSha256": "cb504d63f6d8de877fd967f819972f4a9aae3064e4ffea210b17f1e0e40e39eb",
-          "outputSha256": "ea4f6fb0049da01f8dbca6447ad08f402b256108ce52dd3e320a9903f0c65d94",
-          "note": "Client fiber no longer injects the retired settingsScope service (permanent waitingFor, section silently vanished). Runtime probe prefers configForms (0.2.x) and falls back to settingsScope (0.1.x)."
+          "outputSha256": "946bfcfc2aa2f500fb0fe12b3a199342ccfe85c419cdfdead302c968e8184e13",
+          "note": "Client fiber no longer injects the retired settingsScope service (permanent waitingFor, section silently vanished). Runtime probe prefers configForms (0.2.x) and falls back to settingsScope (0.1.x). The client-side namespace constant is realigned too: the settings row reads its config form through configForms.get(NS), so fixing only the host-side constant left the client asking the kernel for a namespace that does not exist and the form stayed \"unavailable\"."
         },
         {
           "path": "lib/settings-compat.js",

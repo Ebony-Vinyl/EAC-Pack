@@ -1,7 +1,16 @@
 diff --git a/lib/client.js b/lib/client.js
-index 1b6a007..54d773d 100644
+index 1b6a007..8bf635d 100644
 --- a/lib/client.js
 +++ b/lib/client.js
+@@ -75,7 +75,7 @@ window.__ModuleLoader__.load({
+ 		};
+ 		const { Button } = require("@deepseek-ai/dsh-client-ui-primitives");
+ 
+-		const NS = "dsh-prompt";
++		const NS = "prompt-custom";
+ 
+ 		const L = {
+ 			nav: "自定义提示词",
 @@ -255,8 +255,61 @@ window.__ModuleLoader__.load({
  			});
  		}
