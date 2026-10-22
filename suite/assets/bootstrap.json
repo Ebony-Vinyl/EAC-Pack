@@ -759,18 +759,18 @@
         "skins"
       ],
       "file": "@smalltailqwq_dsh-client-ui-skin-deep-whale-manager-0.1.6.tgz",
-      "sha256": "291b6a28ac4e7633464e6e5656fea5a39593b6a010951251bfa3c469bfad53ef",
-      "bytes": 63287,
+      "sha256": "147420897134f045a151b74196dbb04802274479cf6232cfb145369caa8fb138",
+      "bytes": 63312,
       "source": "npm",
       "parts": [
         {
           "file": "@smalltailqwq_dsh-client-ui-skin-deep-whale-manager-0.1.6.tgz",
-          "bytes": 63287,
-          "sha256": "291b6a28ac4e7633464e6e5656fea5a39593b6a010951251bfa3c469bfad53ef"
+          "bytes": 63312,
+          "sha256": "147420897134f045a151b74196dbb04802274479cf6232cfb145369caa8fb138"
         }
       ],
       "locallyRepacked": true,
-      "repackNote": "Settings panel gained a second, page-level scrollbar on the Skins section. Cause: the visually-hidden import file input (.orL4ja_fileInput) is position:absolute with no left/top and its container .orL4ja_backupActions is not positioned, so its containing block resolves all the way up to the settings dialog (JPxlLa_panel, position:relative, overflow:auto). The 1px input then lands below the panel and inflates the panel scrollHeight by 104px; scrolling the panel drags the whole nav rail out of view. Fix: give .orL4ja_backupActions position:relative so the input is contained by its own button row. Verified by three independent probes (hiding the input / adding relative to the options scroller / adding relative to the parent all drop the panel overflow 104px -> 0), and the hidden input still fires clicks so import keeps working."
+      "repackNote": "Settings panel gained a second, page-level scrollbar on the Skins section. Cause: the visually-hidden import file input (.orL4ja_fileInput) is position:absolute with no left/top and its container .orL4ja_backupActions is not positioned, so its containing block resolves all the way up to the settings dialog (JPxlLa_panel, position:relative, overflow:auto). The 1px input then lands below the panel and inflates the panel scrollHeight by 104px; scrolling the panel drags the whole nav rail out of view. Fix: give .orL4ja_backupActions position:relative so the input is contained by its own button row. Verified by three independent probes (hiding the input / adding relative to the options scroller / adding relative to the parent all drop the panel overflow 104px -> 0), and the hidden input still fires clicks so import keeps working. 另修：皮肤卡片高度参差 —— .orL4ja_skinTile 的 versionRow 可换行导致同一行卡片底部错位（112/134/114.5px 三种），视觉上互相压边。统一 tile min-height:132px 并让 versionRow 不换行+省略；实测 12 个 tile 高度全部一致、零裁字。"
     },
     {
       "id": "maid-atelier",
