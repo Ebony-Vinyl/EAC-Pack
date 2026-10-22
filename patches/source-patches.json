@@ -198,8 +198,8 @@
           "path": "lib/client.js",
           "diff": "files/dsh-better-sidebar/lib/client.js.diff",
           "inputSha256": "3b571e884de8de83b004f821aa80bcb2e43927f2f625483b0dec50c314324419",
-          "outputSha256": "0a4c57ad428efca166a16d8b86c25ba737f2bce30292111f0a30e5323b25959c",
-          "note": "conversation.chat.turnTail is a list slot: 0.2.x slot validation throws \"requires options.id\" when id is missing, and that entry then crashes as React #130 so the whole sidebar \"produced files\" seat disappears from the UI. Upstream omits the field; add a stable id following the same convention visualize uses (id: \"dsh-visualize-cards\")."
+          "outputSha256": "92ad1c2e6d271fbeccb9f9e4b4613ea8d4324da04c408964371842c1acd3d123",
+          "note": "conversation.chat.turnTail is a list slot: 0.2.x slot validation throws \"requires options.id\" when id is missing, and that entry then crashes as React #130 so the whole sidebar \"produced files\" seat disappears from the UI. Upstream omits the field; add a stable id following the same convention visualize uses (id: \"dsh-visualize-cards\"). 另：._2vuxea_done / _2vuxea_pluginCopyBtn 的 color 由 bg-layer-3（浅色背景变量）改为 label-primary-foreground；bg-layer-3 作为 background 的用法保持不变。"
         },
         {
           "path": "lib/settings-compat.js",
@@ -226,8 +226,8 @@
           "path": "lib/client-registry.js",
           "diff": "files/dsh-better-sidebar/lib/client-registry.js.diff",
           "inputSha256": "b98b82dc09e3ac6d093a7a06d8f97b82f9a8a41533b38a153360f026efb40ca1",
-          "outputSha256": "4818b8771f6d78d7769b4c71c5a440883bd9b5b976698d90b8a0eb02a74970e1",
-          "note": "Old size-suffixed primitives icon names (…16 / …14) were removed in 0.2.x, which exports only <Name>Medium / <Name>Regular. As written, jsx(undefined) throws React #130 and this surface renders as an empty div."
+          "outputSha256": "f386ad48ebc516aa918fc241a51e0491b67789e6b83195833cb3e928865f43ea",
+          "note": "Old size-suffixed primitives icon names (…16 / …14) were removed in 0.2.x, which exports only <Name>Medium / <Name>Regular. As written, jsx(undefined) throws React #130 and this surface renders as an empty div. 另：内联 CSS 里两处 color: var(--dsw-alias-bg-layer-3) 改为 label-primary-foreground。"
         }
       ]
     },
@@ -280,6 +280,51 @@
           "inputSha256": "625959c94347884af6dde6a16a2cad05c13b6ff60984a3ee1de4d5ff91632bc2",
           "outputSha256": "927b586bd812af94070f452d1686bc4187d5286c041c9796505235840c8ce851",
           "note": "Old size-suffixed primitives icon names (…16 / …14) were removed in 0.2.x, which exports only <Name>Medium / <Name>Regular. As written, jsx(undefined) throws React #130 and this surface renders as an empty div."
+        }
+      ]
+    },
+    {
+      "name": "dsh-dock-settings",
+      "version": "0.1.0",
+      "source": "eac-tag",
+      "summary": "Skills 与 MCP：选中页签 / 主按钮把“背景层色变量”当“文字色变量”用（color: var(--dsw-alias-bg-layer-3)），在亮色与深色主题下文字对比度仅 1.0~1.1，呈现为纯黑块看不见字。改用配对的 label-primary-foreground，并把 hover 的 opacity 从 .85 提到 .9。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-dock-settings/lib/client.js.diff",
+          "inputSha256": "0f08daae3c2aee5173a4ffb174e82e58c30d1a407cb27341740b31547d243a1e",
+          "outputSha256": "0dacf90d8e3516d0c83fa4b2f6f910163fa7492ada3ac5e9137acd74cfe65186",
+          "note": ".dkd-tab-on / .dkd-primary 的 color 由 bg-layer-3（浅色背景变量）改为 label-primary-foreground（与 label-primary 配对的前景色）；.dkd-primary:hover 同步修正并放宽 opacity。bg-layer-3 用作 background 的其余规则（.dkd-skill/.dkd-mcp/.dkd-input）是正确的，未改动。"
+        }
+      ]
+    },
+    {
+      "name": "dsh-unified-market",
+      "version": "0.4.1",
+      "source": "npm",
+      "summary": "内置插件页：「安装」主按钮、精选/来源选中胶囊、排序选中项、插件头像把背景层色变量当文字色用（color: var(--dsw-alias-bg-layer-3)），亮色与深色下对比度仅 1.0~1.1，呈纯黑块。统一改用与 label-primary 配对的 label-primary-foreground；头像底色为蓝紫渐变，同样改用该前景色。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-unified-market/lib/client.js.diff",
+          "inputSha256": "c13dc12528c73281328b0efe58835116c96d3c2ca35a0acb8cb4abf094f77e57",
+          "outputSha256": "2232fbee1ef8ca294b7d37a74a3cb516b1744fc3d7d527e08e66e37200549878",
+          "note": ".mkts-chip-on / .mkts-sort button.on / .mkts-cmdbtn-primary / .mkts-avatar 的 color 由 bg-layer-3（浅色背景变量）改为 label-primary-foreground；.mkts-cmdbtn-primary:hover 同步修正并把 opacity 由 .85 提到 .9。bg-layer-3 作为 background 的用法（.mkts-item 等）正确，未改动。注意：该包不在 profile package.json 依赖内，由市场运行时自行落盘到 node_modules，此补丁只覆盖重打包产物。"
+        }
+      ]
+    },
+    {
+      "name": "dsh-meme",
+      "version": "0.1.44",
+      "source": "npm",
+      "summary": "表情包选择器：选中标签 .mp-tag.on 以品牌色为底、却把背景层色变量当文字色用（color: var(--dsw-alias-bg-layer-1)），文字与底几乎无对比。改用 label-primary-foreground。",
+      "files": [
+        {
+          "path": "client.js",
+          "diff": "files/dsh-meme/client.js.diff",
+          "inputSha256": "cdf59f28b44f64483b5515b60b0ff3e4e9065121e4f63eded5bbd8598c13f444",
+          "outputSha256": "07b3c61488fdbb2c6b235acde135706a42a80720366611e39f0372547a47e390",
+          "note": ".meme-picker .mp-tag.on 的 color 由 bg-layer-1 改为 label-primary-foreground；该处背景是 brand-primary 品牌色，需要的是“品牌色之上的前景色”。"
         }
       ]
     }
