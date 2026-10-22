@@ -2,9 +2,9 @@
   <img src="docs/assets/EAC-Pack.svg" alt="eac-plugin-suite — EAC/AIO 插件整合包" width="808" />
 </h1>
 
-为官方 DeepSeek Harness Desktop 提供目录、批量安装、更新与移除管理，以及皮肤预览和 Prompt。包名、API 与数据目录统一为 `eac-plugin-suite`；Git 仓库仍为 `DSH-EAC/EAC-Pack`。
+为官方 DeepSeek Harness Desktop 提供目录、批量安装、更新与移除管理，以及皮肤预览和 Prompt。包名、API 与数据目录统一为 `eac-plugin-suite`；Git 仓库现为 `Ebony-Vinyl/EAC-Pack`（旧 `DSH-EAC/EAC-Pack` 自动跳转）。
 
-**交接状态（2026-10-05）：本次推送仅交接源码，资源依赖尚未公开发布，暂不可作为正式 Git 安装入口。接手步骤及必须另行移交的资源见 `docs/HANDOFF-CASCADE-INSTALL-2026-10-05.md`。**
+**0.2.4 状态（2026-10-23 接管复验）：资源基线与仓库固定摘要逐字节一致（72/72 tarball、51/51 额外文件），本地构建、全部单测与三件产物打包验证通过。资源数据包尚未发布到 npm（等待发布账号），因此 `github:` 安装入口暂不可用；当前可用的安装入口是「完整 Release」单文件。详见 `docs/RELEASE-0.2.4-STATUS.md`。**
 
 ## 0.2.4：安装阶段级联取得完整资源
 
@@ -12,7 +12,7 @@ Git 仅保留组合包入口、host/client、目录与固定摘要清单。必�
 
 正常安装事务会同时安装入口和资源依赖。启用后仅在本地校验与拼接；没有 prepare/install/postinstall 下载器，不需要关闭 pnpm 安全策略。资源包是纯数据，不能单独作为 Desktop 插件添加。
 
-**发布前提：资源包必须先公开发布到 npm，并能由使用者的 registry 解析。当前本地改造不代表该版本已公开可安装，发布与验收状态见 `docs/CASCADE-INSTALL-TEST-2026-10-05.md`。**
+**发布前提：资源包必须先公开发布到 npm，并能由使用者的 registry 解析。在 npm 数据包发布前，Git 轻入口不可安装；请使用完整 Release。发布与验收状态见 `docs/RELEASE-0.2.4-STATUS.md`。**
 
 ## Git 安装
 
@@ -26,9 +26,10 @@ github:DSH-EAC/EAC-Pack
 
 ## 完整 Release
 
-完整单文件 `eac-plugin-suite-0.2.4.tgz` 使用 npm 标准 `bundleDependencies` 内置同一资源依赖，可在没有 registry 连接时安装整合包本身。正式 Release 或本地构建的 **release/** 产物才是完整包；**git/** 下的小 tarball 是轻入口，不可混用。
+完整单文件 `eac-plugin-suite-0.2.4.tgz` 使用 npm 标准 `bundleDependencies` 内置同一资源依赖，可在没有 registry 连接时安装整合包本身（Desktop「添加插件」可直接使用其下载链接或本地路径）。正式 Release 或本地构建的 **release/** 产物才是完整包；**git/** 下的小 tarball 是轻入口，不可混用。
 
 `dist-artifacts-*.tar.gz` 是构建归档，不是 Desktop 插件安装包。历史 v0.2.1 及更早版本仍使用旧包名，不应只替换下载 URL 文件名。
+
 
 ## 完整性与故障处理
 
