@@ -1,6 +1,6 @@
 {
   "name": "eac-plugin-suite",
-  "version": "0.2.4",
+  "version": "0.3.0-beta.0",
   "private": true,
   "type": "module",
   "description": "EAC/AIO 插件整合包 — one-click install and update for the full EAC and AIO plugin suites on DeepSeek Harness desktop.",
@@ -60,6 +60,6 @@
     "react-dom": "^19.3.0"
   },
   "dependencies": {
-    "eac-plugin-suite-assets": "0.2.4"
+    "eac-plugin-suite-assets": "0.3.0-beta.0"
   }
 }

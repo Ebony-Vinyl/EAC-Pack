@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "resourceVersion": "0.2.4",
+  "resourceVersion": "0.3.0-beta.0",
   "assetPackage": {
     "name": "eac-plugin-suite-assets",
-    "version": "0.2.4"
+    "version": "0.3.0-beta.0"
   },
   "extraFiles": [
     {
