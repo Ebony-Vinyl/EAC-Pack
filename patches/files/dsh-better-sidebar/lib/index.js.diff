@@ -1,0 +1,61 @@
+diff --git a/lib/index.js b/lib/index.js
+index 5cc368e..acc3db2 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -8,7 +8,11 @@ import { once } from "node:events";
+ import { chmodSync, createWriteStream, existsSync, readFileSync, realpathSync } from "node:fs";
+ import { fileURLToPath } from "node:url";
+ import { spawn } from "node:child_process";
+-import { SettingsConflictError, settingsNamespace } from "@deepseek-ai/dsh-settings";
++// 0.2.x 移除了 settingsNamespace 具名导出（SettingsConflictError 仍在），且
++// ctx.settings.register 已不存在。具名 import 在 ESM 链接期解析，缺失导出会让
++// 整棵插件树 SyntaxError —— 故前两个符号改指自包含垫片。
++import { SettingsConflictError } from "@deepseek-ai/dsh-settings";
++import { settingsNamespace, createSettingsScope } from "./settings-compat.js";
+ import { homedir, userInfo } from "node:os";
+ import { defineTool } from "@deepseek-ai/dsh-tools";
+ import { createUserMessage } from "@deepseek-ai/dsh-llm";
+@@ -32,7 +36,7 @@ const SIDEBAR_PREFS_NS = "dsh-better-sidebar";
+ * @module dsh-better-sidebar/config
+ */
+ /** Schemastery schema for the plugin configuration. */
+-const Config = z.object({
++const BaseConfig = z.object({
+ 	readLimit: z.number().step(1).min(1).default(524288),
+ 	mediaLimit: z.number().step(1).min(1).default(20971520),
+ 	uploadLimit: z.number().step(1).min(1).default(134217728),
+@@ -42,6 +46,23 @@ const Config = z.object({
+ 	shell: z.string().default(""),
+ 	shellArgs: z.array(z.string()).default([])
+ });
++
++// 0.2.x：让根 schema 带 meta.volatile 标记。dsh-settings 的 volatileForm()
++//   第一行就是 if (schema.meta.volatile) return plainSchema(schema)，
++//   根标记直接返回整张表单；不标则投影为 undefined、设置卡不生成。
++//
++// 这里**不能**沿用其它补丁的 `typeof BaseConfig.volatile === "function" ? ... : ...` 写法：
++// 本插件 import 的是**裸名** `schemastery`，解析到 3.18.0 —— 那一版的实例上**没有**
++// volatile() 方法（实测 base.volatile === undefined），三元会永远走 else 分支、静默无效。
++// 而 import "@deepseek-ai/schemastery" 的那几个插件拿到的是 3.18.4，有 volatile()，
++// 所以同一个三元在它们那里是有效的。**specifier 不同，行为就不同**。
++// 直接写 meta 在 3.18.0 上同样有效 —— 实测 base.meta.volatile = true 会让 toJSON() 输出
++//   {"type":"object","meta":{"default":{},"volatile":true},...}
++// 正是内核 volatileForm 要读的字段。
++if (BaseConfig.meta && typeof BaseConfig.meta === "object") {
++	BaseConfig.meta.volatile = true;
++}
++const Config = BaseConfig;
+ /**
+ * Apply direct-call defaults after Loader schema validation has normally run.
+ *
+@@ -3558,7 +3579,9 @@ function apply(ctx, config) {
+ 	};
+ 	ctx.inject(["settings"], (sctx) => {
+ 		const ns = settingsNamespace(SIDEBAR_PREFS_NS);
+-		const scope = sctx.settings.register(ns, PrefsSchema);
++		// 0.2.x 没有 register；用垫片重建同形 scope（describe 读 + update 写）。
++		const scope = createSettingsScope(sctx, ns, PrefsSchema, {});
++		if (scope === null) { console.warn("[dsh-better-sidebar] no settings transport on this kernel — prefs card not registered"); return; }
+ 		const viewOf = () => {
+ 			const descriptor = sctx.settings.describe({ redactSecrets: true }).find((candidate) => candidate.ns === ns);
+ 			return descriptor === void 0 ? {

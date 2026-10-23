@@ -1,0 +1,76 @@
+diff --git a/lib/client.js b/lib/client.js
+index 720ec76..ec4d798 100644
+--- a/lib/client.js
++++ b/lib/client.js
+@@ -2677,8 +2677,61 @@ window.__ModuleLoader__.load({
+ 			});
+ 		}
+ 
++
++		// settingsScope 已在 0.2.x 移除，故不得再进 inject 列表：声明一个永不到达
++		// 的服务会让整个客户端 fiber 停在 waitingFor（entry 留在图里、工厂永不执行
++		// → 设置卡静默消失且无任何报错）。改为运行时探测后分叉：
++		//   0.1.x  → ctx.settingsScope.bind()（命名空间式，内核管读写）
++		//   0.2.x+ → ctx.configForms.get(entryId)（ConfigFormController 具备同构的
++		//            getSnapshot/subscribe/set/unset/load 面，Section 组件无需分叉）
++		function getConfigForms(ctx) {
++			try {
++				if (ctx.configForms !== undefined && ctx.configForms !== null
++					&& typeof ctx.configForms.get === "function") return ctx.configForms;
++			} catch (_e) { /* 属性访问受 inject 保护，可能抛 */ }
++			try {
++				const forms = typeof ctx.get === "function" ? ctx.get("configForms") : void 0;
++				if (forms !== undefined && forms !== null && typeof forms.get === "function") return forms;
++			} catch (_e2) { /* 可选服务探测 */ }
++			return void 0;
++		}
++
++		function getSettingsScopeBinder(ctx) {
++			try {
++				if (ctx.settingsScope !== undefined && ctx.settingsScope !== null
++					&& typeof ctx.settingsScope.bind === "function") return ctx.settingsScope;
++			} catch (_e) { /* 属性访问受 inject 保护，可能抛 */ }
++			try { return typeof ctx.get === "function" ? ctx.get("settingsScope") : void 0; } catch (_e2) { return void 0; }
++		}
++
++		// configForms 以 profile entry id 取值；覆盖 loader 树路径等拼写差异。
++		const ENTRY_CANDIDATES = [NS, "include:" + NS];
++
++		// 按内核代际选出 Section 用的 scope；两代都不可用则返回 null —— 此时干脆
++		// 不注册分区，避免把一张永远显示「设置命名空间不可用」的死卡片摆进设置页。
++		function selectScope(ctx) {
++			const forms = getConfigForms(ctx);
++			if (forms !== void 0) {
++				for (const entryId of ENTRY_CANDIDATES) {
++					try {
++						const form = forms.get(entryId);
++						if (form && typeof form.getSnapshot === "function") return form;
++					} catch (_e) { /* 该拼写不可用，试下一个 */ }
++				}
++			}
++			const binder = getSettingsScopeBinder(ctx);
++			if (binder !== void 0) {
++				try { return binder.bind({ namespace: NS }); } catch (_e) { /* 落到 null */ }
++			}
++			return null;
++		}
++
+ 		function apply(ctx) {
+-			const scope = ctx.settingsScope.bind({ namespace: NS });
++			const scope = selectScope(ctx);
++			if (scope === null) {
++				console.warn("[dsh-openclaw-bridge] no settings transport (settingsScope / configForms) — settings section not registered");
++				return;
++			}
+ 			const useScope = bindSnapshotSelector(scope);
+ 			const injected = () => ({ useScope, scope });
+ 			ctx.slots.inject("settings.section", () => ctx.slots.register({
+@@ -2690,7 +2743,7 @@ window.__ModuleLoader__.load({
+ 			}, ClawBotCard), "dsh-openclaw-bridge: settings section entry");
+ 		}
+ 
+-		const inject = ["slots", "settingsScope"];
++		const inject = ["slots"];
+ 		exports.apply = apply;
+ 		exports.inject = inject;
+ 		return module.exports;

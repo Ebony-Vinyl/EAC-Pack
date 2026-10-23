@@ -1,0 +1,88 @@
+diff --git a/client.js b/client.js
+index 1491515..8688299 100644
+--- a/client.js
++++ b/client.js
+@@ -72,7 +72,39 @@ window.__ModuleLoader__.load({
+     }
+ 
+     var NS = "computer-user";
+-    var inject = ["slots", "locale", "settingsScope"];
++    // settingsScope 已在 DSH 0.1.7-rc.2 移除，故不得再进 inject 列表：声明一个
++    // 永不到达的服务会让整个客户端 fiber 停在 waitingFor（entry 留在图里、工厂
++    // 永不执行 → 设置卡静默消失且无任何报错）。改为运行时探测后分叉：
++    //   0.1.x  → ctx.settingsScope.bind()（命名空间式，内核管读写）
++    //   0.2.x+ → ctx.configForms.get(entryId)（ConfigFormController 具备同构的
++    //            getSnapshot/subscribe/set/unset 面，Section 组件无需分叉）
++    var inject = ["slots", "locale"];
++
++    // 探测 configForms：cordis 的 ctx 属性访问受 inject 保护，未声明的服务一读
++    // 就抛 `cannot get property "x" without inject`，故必须 try/catch + ctx.get()。
++    function getConfigForms(ctx) {
++      try {
++        if (ctx.configForms !== undefined && ctx.configForms !== null
++          && typeof ctx.configForms.get === "function") return ctx.configForms;
++      } catch (_e) { /* 属性可能抛 */ }
++      try {
++        var forms = typeof ctx.get === "function" ? ctx.get("configForms") : void 0;
++        if (forms !== undefined && forms !== null && typeof forms.get === "function") return forms;
++      } catch (_e2) { /* 可选服务探测 */ }
++      return void 0;
++    }
++
++    function getSettingsScopeBinder(ctx) {
++      try {
++        if (ctx.settingsScope !== undefined && ctx.settingsScope !== null
++          && typeof ctx.settingsScope.bind === "function") return ctx.settingsScope;
++      } catch (_e) { /* 属性可能抛 */ }
++      try { return typeof ctx.get === "function" ? ctx.get("settingsScope") : void 0; } catch (_e2) { return void 0; }
++    }
++
++    // configForms 以 profile entry id 取值；bundle patch 行的 id 即包名。
++    // 候选列表覆盖 loader 树路径（include:）等拼写差异，逐个探到可用快照为止。
++    var ENTRY_CANDIDATES = [NS, "include:" + NS];
+ 
+     var MODE_OPTS = [
+       { value: "disabled", labelKey: "modeDisabled" },
+@@ -322,10 +354,41 @@ window.__ModuleLoader__.load({
+       return out;
+     }
+ 
++    // 按内核代际选出 Section 用的 scope 对象。两代传输面在 Section 实际用到的
++    // 五个方法（getSnapshot / subscribe / set / unset / load）上同构，故组件无分支。
++    // 返回 null 表示两代都不可用 —— 此时干脆不注册分区，避免把一张永远显示
++    // 「设置命名空间不可用」的死卡片摆进设置页。
++    function selectScope(ctx) {
++      var forms = getConfigForms(ctx);
++      if (forms !== void 0) {
++        for (var i = 0; i < ENTRY_CANDIDATES.length; i++) {
++          var entryId = ENTRY_CANDIDATES[i];
++          try {
++            var form = forms.get(entryId);
++            if (form && typeof form.getSnapshot === "function") {
++              // 已就绪则直接用；否则仍绑定 —— 内核镜像会异步到达，绑定早于数据是
++              // 正常态（form 自带 subscribe，卡片会在镜像到位后自行刷新）。
++              return form;
++            }
++          } catch (_e) { /* 该拼写不可用，试下一个 */ }
++        }
++      }
++      var binder = getSettingsScopeBinder(ctx);
++      if (binder !== void 0 && typeof binder.bind === "function") {
++        try { return binder.bind({ namespace: NS }); } catch (_e2) { /* 落到 self-built */ }
++      }
++      return null;
++    }
++
+     function apply(ctx) {
+       var t = ctx.locale.bind(NS);
+       ctx.effect(function () { return ctx.locale.register(NS, { zh: zh, en: en }); }, "computer-user: dictionaries");
+-      var scope = ctx.settingsScope.bind({ namespace: NS });
++      var scope = selectScope(ctx);
++      if (scope === null) {
++        // 两代设置传输都缺失：保留语言包注册（上面已 effect），但不装死卡片。
++        console.warn("[computer-user] no settings transport (settingsScope / configForms) — card not registered");
++        return;
++      }
+       ctx.slots.inject("settings.section", function () {
+         return ctx.slots.register({
+           name: "settings.section",

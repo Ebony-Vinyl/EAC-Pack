@@ -1,0 +1,51 @@
+diff --git a/lib/index.js b/lib/index.js
+index ef72794..48f3579 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -1,26 +1,40 @@
+ // Host-side entry for dsh-conversation-tweaks:
+ // registers the durable settings namespace used by the General-settings row.
+ import z from "@deepseek-ai/schemastery";
+-import { installSettingsSection, settingsNamespace } from "@deepseek-ai/dsh-settings";
++// 0.2.x 移除了这两个具名导出（具名 import 在 ESM 链接期解析，缺失导出会让整棵
++// 插件树 SyntaxError）；且 ctx.settings.register 这个方法也不再存在。改指自包含垫片。
++import { settingsNamespace, createSettingsScope } from "./settings-compat.js";
+ 
+ const name = "@deepseek-ai/dsh-conversation-tweaks";
+ const inject = ["settings"];
+ 
+-const NS = settingsNamespace("dsh-conversation-tweaks");
+-const Config = z.object({
++const NS = settingsNamespace("conversation-tweaks");
++// 0.2.x 的设置表单由导出的 Config schema 派生，volatileForm() 只保留「最近的
++// volatile 祖先被标记」的字段；未标记的 schema 投影为 undefined → 表单不生成 →
++// 客户端 configForms.get() 回 unavailable、卡片空白。根 schema 标 volatile 即可
++// 让 volatileForm() 直接返回整张表单（见 dsh-settings 的 volatileForm 实现）。
++const BaseConfig = z.object({
+   quietOutput: z.boolean().default(false)
+ });
++// 根 schema 标 volatile：volatileForm() 见到就返回整张表单。
++// 用 typeof 探测，避免 schemastery 无此方法时在导入期就抛。
++const Config = typeof BaseConfig.volatile === 'function' ? BaseConfig.volatile() : BaseConfig;
+ 
+ function apply(ctx, config) {
+   // settings 已在本插件 inject 中声明，apply 时服务必在；直接同步注册并
+   // try/catch：存储的 dsh-conversation-tweaks 配置节非法会让 register()
+   // 抛异常 → 插件 fiber 失败 → dsh fail-loud 启动崩溃。降级运行（不阻断启动）。
++  // 0.2.x 没有 ctx.settings.register（命名空间注册模型已退役，表单改由 Config
++  // schema 派生）；用垫片在 describe()/update() 之上重建同形的 scope。
+   try {
+-    const scope = ctx.settings.register(NS, Config, { base: config || {} });
+-    // 客户端通过 settingsScope 订阅热更新，这里无需额外缓存。
++    const scope = createSettingsScope(ctx, NS, Config, config || {});
++    if (scope === null) {
++      console.warn("[dsh-conversation-tweaks] no settings transport on this kernel — row not registered");
++      return;
++    }
+     return () => { void scope; };
+   } catch (error) {
+-    console.warn("[dsh-conversation-tweaks] settings section unavailable (invalid stored config): " + ((error && error.message) || error));
++    console.warn("[dsh-conversation-tweaks] settings section unavailable: " + ((error && error.message) || error));
+   }
+ }
+ 

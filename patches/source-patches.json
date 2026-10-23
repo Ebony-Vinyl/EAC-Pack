@@ -50,6 +50,313 @@
           "note": "Update-notice button contrast: pin light values (outline 1.10:1 -> 3.11:1, label 1.06:1 -> 4.95:1) on the dark glass card."
         }
       ]
+    },
+    {
+      "name": "@smalltailqwq/dsh-client-ui-skin-deep-whale-manager",
+      "version": "0.1.6",
+      "source": "npm",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/skin-manager/lib/client.js.diff",
+          "inputSha256": "0625d61e06dea9a710e4357eea01828624b17e3d8bdae4c8cd289483e99e0855",
+          "outputSha256": "9be6038b8c5a5203d6db39623e84ee1d634a6d377fa88870322a53e8ae01559f",
+          "note": "Settings panel gained a second, page-level scrollbar on the Skins section. Cause: the visually-hidden import file input (.orL4ja_fileInput) is position:absolute with no left/top and its container .orL4ja_backupActions is not positioned, so its containing block resolves all the way up to the settings dialog (JPxlLa_panel, position:relative, overflow:auto). The 1px input then lands below the panel and inflates the panel scrollHeight by 104px; scrolling the panel drags the whole nav rail out of view. Fix: give .orL4ja_backupActions position:relative so the input is contained by its own button row. Verified by three independent probes (hiding the input / adding relative to the options scroller / adding relative to the parent all drop the panel overflow 104px -> 0), and the hidden input still fires clicks so import keeps working. 另修：皮肤卡片高度参差 —— .orL4ja_skinTile 的 versionRow 可换行导致同一行卡片底部错位（112/134/114.5px 三种），视觉上互相压边。统一 tile min-height:132px 并让 versionRow 不换行+省略；实测 12 个 tile 高度全部一致、零裁字。"
+        }
+      ]
+    },
+    {
+      "name": "computer-user",
+      "version": "0.3.7",
+      "source": "npm",
+      "files": [
+        {
+          "path": "src/index.js",
+          "diff": "files/computer-user/src/index.js.diff",
+          "inputSha256": "40a7e7f1b2694076155b7122debf74e85ce84d454e2e35722d357b1f1f44f896",
+          "outputSha256": "aea2598bc627ab7a4a14e089430c0752825644ec0024a11117109e6896eeb0e4",
+          "note": "Export the settings schema AND keep it on the default export. On a 0.2.x kernel SettingsForms.schema(entry) reads entry.fiber.runtime.Config (the namespace-registration model was retired and replaced by schema-derived configForms forms). Two separate gates then apply, and a named export alone fails the first: cordis-plugin-loader unwrapExports() collapses the module to its default export before cordis reads plugin.Config (\u001bxports = exports.default ?? exports), so with both a named Config and a default object the schema is discarded and describe() omits the namespace. Adding Config to the default object is what actually restores the form; the named binding is kept for tooling."
+        },
+        {
+          "path": "src/config.js",
+          "diff": "files/computer-user/src/config.js.diff",
+          "inputSha256": "fbbb6a7df7701723c49a777534edbe7963f07b4bfcb10793d9fff3052fb97005",
+          "outputSha256": "b16b49805948052cb240b8b7b989eda62f0b24d8ee4a090c2e6412357bdcb6db",
+          "note": "Mark every Config field volatile(). volatileForm() keeps only fields under a volatile ancestor, so the unmarked upstream schema still projects to undefined and no form is produced even once Config is exported. The live() helper degrades to the plain schema when a schemastery build has no volatile()."
+        },
+        {
+          "path": "client.js",
+          "diff": "files/computer-user/client.js.diff",
+          "inputSha256": "7f6b6988cbb230a1515dbbe2d212411df60374fa77fcbcc7a26c9d3a9dd4527a",
+          "outputSha256": "ca51b6665351668ec452f1ba08150ed9058224f22cc17b057ec74a00880e88c9",
+          "note": "Drop the retired settingsScope inject and probe both transport generations instead. Declaring a service no kernel provides parks the client fiber forever in waitingFor, so the whole card vanishes with no error. Now: configForms.get(entryId) on 0.2.x (ConfigFormController already carries the same getSnapshot/subscribe/set/unset surface the Section component uses), settingsScope.bind() on 0.1.x, and no section registered at all when neither exists. Upstream 0.3.7 targets the 0.1.3 kernel, so its browser half still carries this 0.1.x-only inject; this patch supplies the 0.2.x adaptation locally and can be dropped once upstream ships a 0.2.x-compatible client."
+        }
+      ],
+      "summary": "Expose Config on the default export (the loader unwraps to default, so a named export alone is dropped), mark its fields volatile, and swap the retired settingsScope inject for a dual-generation configForms probe. Upstream 0.3.7 is maintained but targets the 0.1.3 kernel; drop these patches once it ships a 0.2.x release."
+    },
+    {
+      "name": "@deepseek-ai/dsh-conversation-tweaks",
+      "version": "0.1.0",
+      "source": "eac-tag",
+      "summary": "conversation-tweaks: 0.2.x 退役了 dsh-settings 的 settingsNamespace/installSettingsSection 具名导出与 settingsScope 服务，并把设置表单改为由导出的 Config schema 派生（需 volatile() 标记）。本补丁补齐三处：自包含垫片、createSettingsScope 重建读写面、客户端运行时探测。",
+      "files": [
+        {
+          "path": "lib/index.js",
+          "diff": "files/dsh-conversation-tweaks/lib/index.js.diff",
+          "inputSha256": "e5265e00d503bdbddf14749243af1d36f803ba656383eee229c2abad70fecae4",
+          "outputSha256": "88b02a5083e8c42f19509e51b77da83b96da80b9bb40d123a1d90ab65ecb5794",
+          "note": "Host side stops importing the retired settingsNamespace/installSettingsSection (ESM link-time SyntaxError on 0.2.x kills the whole plugin tree), stops calling the also-retired ctx.settings.register (0.2.x derives forms from the exported Config schema instead), and marks the schema volatile() so volatileForm() actually projects a card. Namespace string realigned to the cordis.patch.yml insert id: the kernel derives a settings namespace from `entry.options.id` (`conversation-tweaks`), but the plugin looked it up as `dsh-conversation-tweaks`, so the kernel mirror never found it -> the client configForm reported status \"unavailable\" -> the settings row rendered but its switch was permanently disabled (`disabled = !ready || !snap.writable`). Changing the constant restores the existing surface; no behavioural logic is touched."
+        },
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-conversation-tweaks/lib/client.js.diff",
+          "inputSha256": "77f4f08fd66ed7be5c7ccd6c3ed2cf90dad57e28a95465fceaae3c32086eef7a",
+          "outputSha256": "30997b108b8529e8ecb0236198fb14b73807041d847759536599316b6ea79ae5",
+          "note": "Client fiber no longer injects the retired settingsScope service (it parked forever in waitingFor and the settings row silently vanished). Runtime probe prefers configForms (0.2.x) and falls back to settingsScope (0.1.x). The client-side namespace constant is realigned too: the settings row reads its config form through configForms.get(NS), so fixing only the host-side constant left the client asking the kernel for a namespace that does not exist and the form stayed \"unavailable\"."
+        },
+        {
+          "path": "lib/settings-compat.js",
+          "diff": "files/dsh-conversation-tweaks/lib/settings-compat.js.diff",
+          "create": true,
+          "outputSha256": "7903a52199ebaeafb8599709c214800e5bbcdc2e8cf963fb87bd486309faece8",
+          "note": "Self-contained 0.1.x-compatible shim for the retired @deepseek-ai/dsh-settings userland (settingsNamespace / installSettingsSection) plus a createSettingsScope helper that rebuilds the retired ctx.settings.register() surface on top of the 0.2.x describe()/update() API. EAC plugins ship self-contained and do not resolve through the kernel package graph, so this file travels with the plugin."
+        }
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-prompt-custom",
+      "version": "0.1.0",
+      "source": "eac-tag",
+      "summary": "prompt-custom: 同族的 settingsNamespace/installSettingsSection/settingsScope 退役，外加 PERSONA_SECTION/PERSONA_ORDER 改名为 PREFIX/SUFFIX。本补丁四类改动一并适配，保持原有分段顺序。",
+      "files": [
+        {
+          "path": "lib/index.js",
+          "diff": "files/dsh-prompt-custom/lib/index.js.diff",
+          "inputSha256": "65fd41d532635502cc3eda2a78c727b52549440a023aec3d523f19318d15faae",
+          "outputSha256": "91a5a64421ef9693c1d1d2b89e07a956773ee8d877fb0e9070e40a46b13a0351",
+          "note": "Host side stops importing the retired settings userland (link-time SyntaxError kills the plugin tree), replaces ctx.settings.register with the shim scope, marks the schema volatile() for 0.2.x form derivation, and tracks the PERSONA_SECTION/PERSONA_ORDER rename to PERSONA_PREFIX_SECTION/PERSONA_SUFFIX_SECTION while preserving section ordering. Namespace string realigned to the cordis.patch.yml insert id: the kernel derives a settings namespace from `entry.options.id` (`conversation-tweaks`), but the plugin looked it up as `dsh-conversation-tweaks`, so the kernel mirror never found it -> the client configForm reported status \"unavailable\" -> the settings row rendered but its switch was permanently disabled (`disabled = !ready || !snap.writable`). Changing the constant restores the existing surface; no behavioural logic is touched."
+        },
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-prompt-custom/lib/client.js.diff",
+          "inputSha256": "cb504d63f6d8de877fd967f819972f4a9aae3064e4ffea210b17f1e0e40e39eb",
+          "outputSha256": "946bfcfc2aa2f500fb0fe12b3a199342ccfe85c419cdfdead302c968e8184e13",
+          "note": "Client fiber no longer injects the retired settingsScope service (permanent waitingFor, section silently vanished). Runtime probe prefers configForms (0.2.x) and falls back to settingsScope (0.1.x). The client-side namespace constant is realigned too: the settings row reads its config form through configForms.get(NS), so fixing only the host-side constant left the client asking the kernel for a namespace that does not exist and the form stayed \"unavailable\"."
+        },
+        {
+          "path": "lib/settings-compat.js",
+          "diff": "files/dsh-prompt-custom/lib/settings-compat.js.diff",
+          "create": true,
+          "outputSha256": "7903a52199ebaeafb8599709c214800e5bbcdc2e8cf963fb87bd486309faece8",
+          "note": "Self-contained 0.1.x-compatible shim for the retired @deepseek-ai/dsh-settings userland (settingsNamespace / installSettingsSection) plus a createSettingsScope helper that rebuilds the retired ctx.settings.register() surface on top of the 0.2.x describe()/update() API. EAC plugins ship self-contained and do not resolve through the kernel package graph, so this file travels with the plugin."
+        }
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-openclaw-bridge",
+      "version": "0.7.0",
+      "source": "eac-tag",
+      "summary": "openclaw-bridge: settingsNamespace/installSettingsSection 具名导出与 settingsScope 服务在 0.2.x 均退役，且设置表单改由 Config schema 派生。本补丁补齐三处；桥接路由与微信区块不受影响。",
+      "files": [
+        {
+          "path": "lib/index.js",
+          "diff": "files/dsh-openclaw-bridge/lib/index.js.diff",
+          "inputSha256": "ac2ae2c664c6c5112d0e7c7312a2766dd45710d312041c8e16096a827fd5cb36",
+          "outputSha256": "52100ddb6e8c29ecb234e800d0e62f9860750d6a4a31b8cc15a72646ea97c877",
+          "note": "Host side stops importing the retired settingsNamespace/installSettingsSection (link-time SyntaxError takes down the whole plugin tree including the bridge routes) and marks the schema volatile() so 0.2.x derives a settings form at all."
+        },
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-openclaw-bridge/lib/client.js.diff",
+          "inputSha256": "8490527cc6454244f83287d26bc1a7f70f6ae98dad32489ce6527f14b0519a39",
+          "outputSha256": "647c0c58b50ad6bab63f772a15145ea859087e9b3e40d03e3a0e3e8da0be5449",
+          "note": "Client fiber no longer injects the retired settingsScope service (permanent waitingFor). Runtime probe prefers configForms (0.2.x) and falls back to settingsScope (0.1.x)."
+        },
+        {
+          "path": "lib/settings-compat.js",
+          "diff": "files/dsh-openclaw-bridge/lib/settings-compat.js.diff",
+          "create": true,
+          "outputSha256": "7903a52199ebaeafb8599709c214800e5bbcdc2e8cf963fb87bd486309faece8",
+          "note": "Self-contained 0.1.x-compatible shim for the retired @deepseek-ai/dsh-settings userland (settingsNamespace / installSettingsSection) plus a createSettingsScope helper that rebuilds the retired ctx.settings.register() surface on top of the 0.2.x describe()/update() API. EAC plugins ship self-contained and do not resolve through the kernel package graph, so this file travels with the plugin."
+        }
+      ]
+    },
+    {
+      "name": "dsh-better-sidebar",
+      "version": "0.15.3-eac.1",
+      "source": "eac-tag",
+      "summary": "better-sidebar: 0.2.x 移除了 settingsNamespace 具名导出与 ctx.settings.register（改指自包含垫片重建 scope）；给根 Config 标 volatile()（0.2.x 的 volatileForm() 需要，否则设置卡不生成）；另补 conversation.chat.turnTail 的 options.id —— 它是 list slot，0.2.x 缺 id 直接 throw，该槽位在界面上整体消失。",
+      "files": [
+        {
+          "path": "lib/index.js",
+          "diff": "files/dsh-better-sidebar/lib/index.js.diff",
+          "inputSha256": "91095b98550ea0989604ed1aae6cc2b5f4c83e9f979e280b0444d4d5dc0510d1",
+          "outputSha256": "3e02fb4b2ee10cf52fdb7515c43809139f42b8a06352740aca8df6c79d9cf543",
+          "note": "Host side stops importing the retired settingsNamespace and replaces ctx.settings.register (absent on 0.2.x) with the shim scope; SettingsConflictError is still exported there and stays."
+        },
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-better-sidebar/lib/client.js.diff",
+          "inputSha256": "3b571e884de8de83b004f821aa80bcb2e43927f2f625483b0dec50c314324419",
+          "outputSha256": "92ad1c2e6d271fbeccb9f9e4b4613ea8d4324da04c408964371842c1acd3d123",
+          "note": "conversation.chat.turnTail is a list slot: 0.2.x slot validation throws \"requires options.id\" when id is missing, and that entry then crashes as React #130 so the whole sidebar \"produced files\" seat disappears from the UI. Upstream omits the field; add a stable id following the same convention visualize uses (id: \"dsh-visualize-cards\"). 另：._2vuxea_done / _2vuxea_pluginCopyBtn 的 color 由 bg-layer-3（浅色背景变量）改为 label-primary-foreground；bg-layer-3 作为 background 的用法保持不变。"
+        },
+        {
+          "path": "lib/settings-compat.js",
+          "diff": "files/dsh-better-sidebar/lib/settings-compat.js.diff",
+          "create": true,
+          "outputSha256": "7903a52199ebaeafb8599709c214800e5bbcdc2e8cf963fb87bd486309faece8",
+          "note": "Self-contained 0.1.x-compatible shim for the retired @deepseek-ai/dsh-settings userland (settingsNamespace / installSettingsSection) plus a createSettingsScope helper that rebuilds the retired ctx.settings.register() surface on top of the 0.2.x describe()/update() API. EAC plugins ship self-contained and do not resolve through the kernel package graph, so this file travels with the plugin."
+        },
+        {
+          "path": "lib/client-editor.js",
+          "diff": "files/dsh-better-sidebar/lib/client-editor.js.diff",
+          "inputSha256": "c7d88aed8f81574ee76fccd5a3952965d4e008cb8d807514cd2a5ca544646261",
+          "outputSha256": "cf646b873714920df9de9437736ae1f010e44cc10e12a50e2bb1ea39ffee6aa4",
+          "note": "Old size-suffixed primitives icon names (…16 / …14) were removed in 0.2.x, which exports only <Name>Medium / <Name>Regular. As written, jsx(undefined) throws React #130 and this surface renders as an empty div."
+        },
+        {
+          "path": "lib/client-mermaid.js",
+          "diff": "files/dsh-better-sidebar/lib/client-mermaid.js.diff",
+          "inputSha256": "d2a77f0b7af231f2baf31442994e170dcb789d1c43d5510ad37c377f70562905",
+          "outputSha256": "e8b040487258c4e4ccd0eaa31bf0a9c9778c7627144e549f709169bab966f558",
+          "note": "Old size-suffixed primitives icon names (…16 / …14) were removed in 0.2.x, which exports only <Name>Medium / <Name>Regular. As written, jsx(undefined) throws React #130 and this surface renders as an empty div."
+        },
+        {
+          "path": "lib/client-registry.js",
+          "diff": "files/dsh-better-sidebar/lib/client-registry.js.diff",
+          "inputSha256": "b98b82dc09e3ac6d093a7a06d8f97b82f9a8a41533b38a153360f026efb40ca1",
+          "outputSha256": "f386ad48ebc516aa918fc241a51e0491b67789e6b83195833cb3e928865f43ea",
+          "note": "Old size-suffixed primitives icon names (…16 / …14) were removed in 0.2.x, which exports only <Name>Medium / <Name>Regular. As written, jsx(undefined) throws React #130 and this surface renders as an empty div. 另：内联 CSS 里两处 color: var(--dsw-alias-bg-layer-3) 改为 label-primary-foreground。"
+        }
+      ]
+    },
+    {
+      "name": "dsh-session-manager",
+      "version": "0.1.0",
+      "source": "npm",
+      "summary": "session-manager 的客户端引用了 primitives 的两个图标旧名 IconArchiveOutline20 / IconWarningOutline16；0.2.x 已改名为去后缀的 IconArchiveOutline / IconWarningOutline（尺寸由 size prop 控制，本就传了）。不改则 h(undefined) → React #130，sidebar.footer.action 槽位整个消失。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-session-manager/lib/client.js.diff",
+          "inputSha256": "02c03c8249922c2e416647dd6d3cf14e5f192ec061201dcbbf7b3c078bfbcefb",
+          "outputSha256": "be7bf154a69dc81d62e7de298c81cee31bfde5c7dce484fed8818736e91c61d1",
+          "note": "The client referenced two primitives icons by their old size-suffixed names (IconArchiveOutline20, IconWarningOutline16). 0.2.x renamed them to IconArchiveOutline / IconWarningOutline and drives size via the size prop (already passed). With the old names P.<icon> is undefined, so h(undefined) throws React #130 and the whole sidebar.footer.action seat disappears."
+        }
+      ]
+    },
+    {
+      "name": "dsh-webui-prompt-optimizer",
+      "version": "0.1.0",
+      "source": "eac-tag",
+      "summary": "Two client fixes: primitives icon names updated to the 0.2.x <Name>Medium variants (old names were undefined → React #130), and an unguarded modelDirectories.directoryFor() call during early boot no longer throws \"remote.session without inject\" and blanks the input row.",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-webui-prompt-optimizer/lib/client.js.diff",
+          "inputSha256": "e912eda5758853362b0ccd05f072aa2c2b0e832d73a48561dff9ecdc606005c7",
+          "outputSha256": "9a91f6a3c54aa2c01c0d3bae080654ed7730905f819ae2c41409ee161deb2804",
+          "note": "Two fixes. (1) The client referenced two primitives icons by old size-suffixed names (IconLoadingOutline16 / IconSparkle16); 0.2.x exports only <Name>Regular / <Name>Medium, so those lookups are undefined and jsx(undefined) throws React #130, crashing the conversation.input.right seat. (2) The seat\"s inject called modelDirectories.directoryFor() unguarded; during early boot the remote.session namespace is not mounted yet, so it throws \"cannot get property \"remote.session\" without inject\" (measured once, ~2.2s after navigation, never again) and takes down the whole input row for that frame. Now caught and degraded to available:false with an inert placeholder store, because the component subscribes to directory before its available:false early-return."
+        }
+      ]
+    },
+    {
+      "name": "@nanmicoder/dsh-agent-teams",
+      "version": "0.1.13-eac.3",
+      "source": "eac-tag",
+      "summary": "agent-teams 在 0.2.x 上因 ctx.subagents.registerContinuableSetup 被退役（改 provider 模式）而在 apply 期抛 TypeError，整个插件不激活、8 个 agent_teams_* 工具全丢。本补丁改为存在性探测 + 降级：缺该钩子时成员模型选择的持久化/冷恢复降级，建队/任务 DAG/派活/消息/状态照常可用。",
+      "files": [
+        {
+          "path": "lib/members.js",
+          "diff": "files/dsh-agent-teams/lib/members.js.diff",
+          "inputSha256": "e12365bfdcc58f694aa55ad8208cf3d6c91e784623c215a9bc934c16198064bc",
+          "outputSha256": "dc655c2edba97d9e9fc8770c979e603ff90ad10cbf60335bd4f7d59f375fe367",
+          "note": "0.2.x SubagentRuntime retired registerContinuableSetup (replaced by the provider model: registerProvider + observeActivation). Calling it unconditionally threw during apply(), so the fiber failed and none of the 8 agent_teams_* tools registered. Detect its absence and degrade that one enhancement (member model-route persistence on cold resume) while team creation, task DAG, dispatch, messaging and status keep working."
+        },
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-agent-teams/lib/client.js.diff",
+          "inputSha256": "625959c94347884af6dde6a16a2cad05c13b6ff60984a3ee1de4d5ff91632bc2",
+          "outputSha256": "927b586bd812af94070f452d1686bc4187d5286c041c9796505235840c8ce851",
+          "note": "Old size-suffixed primitives icon names (…16 / …14) were removed in 0.2.x, which exports only <Name>Medium / <Name>Regular. As written, jsx(undefined) throws React #130 and this surface renders as an empty div."
+        }
+      ]
+    },
+    {
+      "name": "dsh-dock-settings",
+      "version": "0.1.0",
+      "source": "eac-tag",
+      "summary": "Skills 与 MCP：选中页签 / 主按钮把“背景层色变量”当“文字色变量”用（color: var(--dsw-alias-bg-layer-3)），在亮色与深色主题下文字对比度仅 1.0~1.1，呈现为纯黑块看不见字。改用配对的 label-primary-foreground，并把 hover 的 opacity 从 .85 提到 .9。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-dock-settings/lib/client.js.diff",
+          "inputSha256": "0f08daae3c2aee5173a4ffb174e82e58c30d1a407cb27341740b31547d243a1e",
+          "outputSha256": "0dacf90d8e3516d0c83fa4b2f6f910163fa7492ada3ac5e9137acd74cfe65186",
+          "note": ".dkd-tab-on / .dkd-primary 的 color 由 bg-layer-3（浅色背景变量）改为 label-primary-foreground（与 label-primary 配对的前景色）；.dkd-primary:hover 同步修正并放宽 opacity。bg-layer-3 用作 background 的其余规则（.dkd-skill/.dkd-mcp/.dkd-input）是正确的，未改动。"
+        }
+      ]
+    },
+    {
+      "name": "dsh-unified-market",
+      "version": "0.4.1",
+      "source": "npm",
+      "summary": "内置插件页：「安装」主按钮、精选/来源选中胶囊、排序选中项、插件头像把背景层色变量当文字色用（color: var(--dsw-alias-bg-layer-3)），亮色与深色下对比度仅 1.0~1.1，呈纯黑块。统一改用与 label-primary 配对的 label-primary-foreground；头像底色为蓝紫渐变，同样改用该前景色。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-unified-market/lib/client.js.diff",
+          "inputSha256": "c13dc12528c73281328b0efe58835116c96d3c2ca35a0acb8cb4abf094f77e57",
+          "outputSha256": "2232fbee1ef8ca294b7d37a74a3cb516b1744fc3d7d527e08e66e37200549878",
+          "note": ".mkts-chip-on / .mkts-sort button.on / .mkts-cmdbtn-primary / .mkts-avatar 的 color 由 bg-layer-3（浅色背景变量）改为 label-primary-foreground；.mkts-cmdbtn-primary:hover 同步修正并把 opacity 由 .85 提到 .9。bg-layer-3 作为 background 的用法（.mkts-item 等）正确，未改动。注意：该包不在 profile package.json 依赖内，由市场运行时自行落盘到 node_modules，此补丁只覆盖重打包产物。"
+        }
+      ]
+    },
+    {
+      "name": "dsh-meme",
+      "version": "0.1.44",
+      "source": "npm",
+      "summary": "表情包选择器：选中标签 .mp-tag.on 以品牌色为底、却把背景层色变量当文字色用（color: var(--dsw-alias-bg-layer-1)），文字与底几乎无对比。改用 label-primary-foreground。",
+      "files": [
+        {
+          "path": "client.js",
+          "diff": "files/dsh-meme/client.js.diff",
+          "inputSha256": "cdf59f28b44f64483b5515b60b0ff3e4e9065121e4f63eded5bbd8598c13f444",
+          "outputSha256": "07b3c61488fdbb2c6b235acde135706a42a80720366611e39f0372547a47e390",
+          "note": ".meme-picker .mp-tag.on 的 color 由 bg-layer-1 改为 label-primary-foreground；该处背景是 brand-primary 品牌色，需要的是“品牌色之上的前景色”。"
+        }
+      ]
+    },
+    {
+      "name": "dsh-feature-toggles",
+      "version": "0.1.1",
+      "source": "eac-tag",
+      "summary": "增强功能分区：插件管理桥（window.dshDesktop.pluginManager）在当前 Desktop 架构下不存在，卡片无条件显示红字「插件管理桥不可用（请在 Tauri 桌面壳中使用）」。实测 window.dshDesktop 为 undefined，且 Desktop 侧无任何注入实现；Tauri/ipc/webview 全局也均不存在。按产品决定，文案改为说明内测限制，避免误导。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-feature-toggles/lib/client.js.diff",
+          "inputSha256": "cff330d8dfc77887074aa26cf68ae58a72441e2db8dfa5b68df036a1c9e077e3",
+          "outputSha256": "2392f06e0b7e8dd4e571c240aec9f2a8e395dd01f34da923978d37dfaa25e051",
+          "note": "该桥为 EAC 桌面壳的 IPC 能力，当前未实现（实测 window.dshDesktop === undefined）。原文案还宣称“请在 Tauri 桌面壳中使用”，但本项目早已不是 Tauri。改为「内测版本本功能暂不可用，请待后续更新」，让用户理解这是阶段性缺失而非配置错误。"
+        }
+      ]
+    },
+    {
+      "name": "dsh-pet-settings",
+      "version": "0.1.0",
+      "source": "eac-tag",
+      "summary": "桌宠图标设置：同样依赖不存在的 window.dshDesktop.pluginManager，红字「插件管理桥不可用」。文案同步改为内测限制说明。",
+      "files": [
+        {
+          "path": "lib/client.js",
+          "diff": "files/dsh-pet-settings/lib/client.js.diff",
+          "inputSha256": "f962fb86850219ca16cb16b18755d67a2e137dff65e2a1ab576beab82bcc045c",
+          "outputSha256": "220fe6fc465ce29b88cc1e19fb105792c4c809e67447ecc59a1d977a0804fa7c",
+          "note": "与 dsh-feature-toggles 同因同改。"
+        }
+      ]
     }
   ]
 }

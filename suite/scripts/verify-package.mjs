@@ -12,7 +12,13 @@ export async function verifyPackage(pkgDir = path.resolve(import.meta.dirname, '
   if (Object.keys(pkg.dependencies).length !== 1 || pkg.optionalDependencies || pkg.peerDependencies || ['prepare', 'install', 'postinstall'].some(s => pkg.scripts?.[s])) throw new Error('unexpected dependencies or install lifecycle scripts')
   for (const pack of ['eac', 'aio', 'skins', 'community']) {
     const catalog = JSON.parse(fs.readFileSync(path.join(pkgDir, 'catalog', pack + '.json')))
-    for (const entry of Array.isArray(catalog) ? catalog : catalog.plugins ?? []) if (!manifest.items.some(i => i.name === entry.name && i.version === entry.version)) throw new Error('missing catalog resource: ' + entry.name)
+    for (const entry of Array.isArray(catalog) ? catalog : catalog.plugins ?? []) {
+      // catalog 标 `distExclude: true` 的条目**有意不进安装包** —— 保留市场元数据，
+      // 但不出现在 bootstrap/items 里（如已退役的 dsh-dafeiyu，tgz 占 160MB）。
+      // 这类条目不参与「catalog 必须被 bootstrap 覆盖」的闭包断言。
+      if (entry.distExclude === true) continue
+      if (!manifest.items.some(i => i.name === entry.name && i.version === entry.version)) throw new Error('missing catalog resource: ' + entry.name)
+    }
   }
   for (const item of manifest.items) if (!item.parts?.length) throw new Error('missing pinned resource parts: ' + item.file)
   for (const file of pkg.files ?? []) if (/assets\/(payload|previews|prompts|gallery\.json)/.test(file)) throw new Error('Git package must not include heavyweight assets')

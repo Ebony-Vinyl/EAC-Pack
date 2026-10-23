@@ -1,0 +1,31 @@
+diff --git a/lib/client.js b/lib/client.js
+index 456ca69..e638f3e 100644
+--- a/lib/client.js
++++ b/lib/client.js
+@@ -228,7 +228,7 @@ window.__ModuleLoader__.load({
+         closeLabel: cancelLabel,
+         children: h("div", { className: "sm-panel" },
+           warning ? h("div", { className: "sm-warn" },
+-            h(P.IconWarningOutline16, {}),
++            h(P.IconWarningOutlineMedium, {}),
+             h("span", null, warning)
+           ) : null
+         ),
+@@ -280,7 +280,7 @@ window.__ModuleLoader__.load({
+             run(() => isArchived ? onUnarchive(sessionId) : onArchive(sessionId));
+           }
+         },
+-          h(P.IconArchiveOutline20, { size: 14 }),
++          h(P.IconArchiveOutlineRegular, { size: 14 }),
+           h("span", null, t(isArchived ? "menu.unarchive" : "menu.archive"))
+         ),
+         h("button", {
+@@ -451,7 +451,7 @@ window.__ModuleLoader__.load({
+           "aria-label": t("footer.aria"),
+           onClick: () => onOpenPanel()
+         },
+-          h(P.IconArchiveOutline20, { size: 14 }),
++          h(P.IconArchiveOutlineRegular, { size: 14 }),
+           wide ? h("span", null, t("footer.label")) : null
+         ),
+         h(SessionManagerPanel, {

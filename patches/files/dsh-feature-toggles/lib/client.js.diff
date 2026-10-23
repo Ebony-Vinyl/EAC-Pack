@@ -1,0 +1,13 @@
+diff --git a/lib/client.js b/lib/client.js
+index d952b67..940e133 100644
+--- a/lib/client.js
++++ b/lib/client.js
+@@ -84,7 +84,7 @@ window.__ModuleLoader__.load({
+         var active = true;
+         var b = window.dshDesktop && window.dshDesktop.pluginManager;
+         if (!b) {
+-          if (active) setState(function (s) { return Object.assign({}, s, { loaded: true, err: "插件管理桥不可用（请在 Tauri 桌面壳中使用）" }); });
++          if (active) setState(function (s) { return Object.assign({}, s, { loaded: true, err: "内测版本本功能暂不可用，请待后续更新" }); });
+           return;
+         }
+         b.list().then(function (res) {

@@ -1,0 +1,31 @@
+diff --git a/lib/client.js b/lib/client.js
+index 0652768..02e7959 100644
+--- a/lib/client.js
++++ b/lib/client.js
+@@ -1075,7 +1075,7 @@ window.__ModuleLoader__.load({
+ 						"aria-expanded": open,
+ 						children: [
+ 							(0, react_jsx_runtime.jsx)(Chevron, { open }),
+-							(0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconBranchOutline16, {}),
++							(0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconBranchOutlineMedium, {}),
+ 							" ",
+ 							t(parallel ? "dependency.parallel" : "dependency.title")
+ 						]
+@@ -1745,7 +1745,7 @@ window.__ModuleLoader__.load({
+ 								onClick: toggleDock,
+ 								"aria-label": t(geometry.mode === "docked" ? "activity.float" : "activity.dockRight"),
+ 								title: t(geometry.mode === "docked" ? "activity.float" : "activity.dockRight"),
+-								children: (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconPanelLeftOutline16, {})
++								children: (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconPanelLeftOutlineMedium, {})
+ 							}), (0, react_jsx_runtime.jsx)("button", {
+ 								type: "button",
+ 								className: ActivityPanel_module_css_default.iconButton,
+@@ -1756,7 +1756,7 @@ window.__ModuleLoader__.load({
+ 								},
+ 								"aria-label": t("activity.collapse"),
+ 								title: t("activity.collapse"),
+-								children: (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconChevronDownOutline14, {})
++								children: (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconChevronDownOutlineRegular, {})
+ 							})]
+ 						})]
+ 					}),

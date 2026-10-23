@@ -22,7 +22,9 @@ export function buildResources(root) {
     const catalog = JSON.parse(fs.readFileSync(path.join(root, 'suite/catalog', `${pack}.json`)))
     const entries = Array.isArray(catalog) ? catalog : catalog.plugins ?? []
     for (const entry of entries) {
-      if (!items.some(i => i.name === entry.name && i.version === entry.version)) throw new Error(`missing catalog resource: ${entry.name}@${entry.version}`)
+      // catalog 标 `distExclude: true` 的条目有意不进安装包（保留市场元数据，
+      // 但不出现在 items 里）—— 不参与闭包断言。
+      if (entry.distExclude !== true && !items.some(i => i.name === entry.name && i.version === entry.version)) throw new Error(`missing catalog resource: ${entry.name}@${entry.version}`)
       if (pack === 'skins' || pack === 'community') catalogs.set(entry.id, entry)
     }
   }

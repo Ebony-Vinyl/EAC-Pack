@@ -255,9 +255,9 @@
   {
     "id": "picturereader",
     "name": "picturereader",
-    "version": "3.3.1",
-    "source": "npm",
-    "spec": "picturereader@3.3.1",
+    "version": "3.5.0",
+    "source": "github",
+    "spec": "git+https://github.com/jing-hy/picturereader.git#ebbb2f098ecf3fe18a47eaaa361ae157d31272cc",
     "packs": [
       "eac"
     ],
@@ -269,14 +269,14 @@
     "descEn": "Unified image understanding: visual twin adapter for native thumbnails, auto-analysis on text-only models, local tools (scan/OCR x4/crop/palette/compare/batch), document-to-image, local photo editing, optional external VLM bridge.",
     "license": "MIT",
     "upstream": "https://github.com/jing-hy/picturereader",
-    "notes": "目录名 picturereader。D10 实测：3.3.3 在官方 RC2 上等待 EAC 分叉版专有 settingsScope 服务 → web boot 门禁拒绝启动（1 entry did not activate）；3.3.1 在 RC2 稳定（D9/D10 验证）。锁定 3.3.1，等上游出 RC2 版再直升。"
+    "notes": "目录名 picturereader。升至 3.5.0（钉上游 commit ebbb2f098ecf3fe18a47eaaa361ae157d31272cc）—— 目前唯一两端都适配 0.2.x 内核的版本：客户端不再 inject 已移除的 settingsScope，改为运行时探测后走 configForms，并带自建 loopback 路由兜底；宿主半不再 import 已删除的 settingsNamespace，且 settings.register 缺失时降级到自有配置覆盖层而非抛 TypeError。3.5.0 既无 npm 发布也无 git tag（npm 最新仅 3.3.3），故 source 由 npm 改为 github 并在 repack.mjs 的 GH_SOURCES 里钉 ref。此前「3.3.1 在 RC2 稳定」的记录有误：npm 上的 3.3.1 真实状态是坏的 —— 宿主半 import 不存在的导出，ESM 链接期即崩，那条结论只验了浏览器侧没验宿主半。"
   },
   {
     "id": "computer-user",
     "name": "computer-user",
-    "version": "0.3.6",
+    "version": "0.3.7",
     "source": "npm",
-    "spec": "computer-user@0.3.6",
+    "spec": "computer-user@0.3.7",
     "packs": [
       "eac"
     ],
@@ -288,7 +288,7 @@
     "descEn": "Codex-style computer use: read the screen and drive mouse & keyboard, pairing with picturereader for the look-act-verify loop (Windows).",
     "license": "MIT",
     "upstream": "https://github.com/jing-hy/computer-user",
-    "notes": "npm 锁定 EAC 随包版本 0.3.6（上游 npm latest 0.3.7）。重资源/系统级自动化。 D10 上游普查直升（见 reports/D10-final-test-report.md）。 D10：0.3.7 与 picturereader 3.3.3 同日发布（EAC 分叉线），存在同款 settingsScope 陷阱风险，回退锁定 0.3.6（RC2 验证版）。"
+    "notes": "npm 锁定 0.3.7（上游仍在维护，0.3.7 发布于 2026-10-01，npm 未弃用）。重资源/系统级自动化（Windows）。0.3.7 相对 0.3.6 修复了宿主半的 settingsNamespace 导入（改走内嵌 src/settings-compat.js 垫片，内核 0.1.3 起 dsh-settings 不再导出该品牌函数）、scope 写回改用 update、手动批准判定改为会话标识集合，并对 settings 注册失败做降级 —— 但该版仍针对 0.1.x 设定；EAC 内核已到 0.2.0-rc.2，0.2.x 上还有两处面未适配：① 宿主入口未 re-export Config schema，而 0.2.x 的 configForms 表单由 entry.fiber.runtime.Config 派生 → 设置卡拿不到表单；② 客户端 client.js 仍 inject 'settingsScope' 并调用 ctx.settingsScope.bind()，该服务在 0.1.7-rc.2 已移除 → 客户端 fiber 永久停在 waitingFor。本仓以 patches/ 三处补丁补齐 0.2.x 适配（见 patches/source-patches.json），后续上游发布 0.2.x 适配版时可撤补丁直升。"
   },
   {
     "id": "soul-md",
@@ -724,7 +724,8 @@
       "eac"
     ],
     "tier": "visual",
-    "defaultEnabled": true,
+    "defaultEnabled": false,
+    "distExclude": true,
     "titleZh": "大肥鱼桌面伴侣",
     "titleEn": "BigFish Companion",
     "descZh": "真实会话状态驱动的原生置顶桌宠（空闲/思考/工作/等待/完成/错误六态 + 项目状态卡）。",
@@ -907,9 +908,9 @@
   {
     "id": "our-free-model",
     "name": "dsh-our-free-model",
-    "version": "2.0.0",
-    "source": "github-repo",
-    "spec": "file:dist/dsh-our-free-model-2.0.0.tgz",
+    "version": "2.5.6",
+    "source": "github-tgz",
+    "spec": "file:dist/dsh-our-free-model-2.5.6.tgz",
     "packs": [
       "eac"
     ],
@@ -921,6 +922,6 @@
     "descEn": "Use frontier models (including DeepSeek V4.1 Flash and Kimi K3) without login, signup or API keys; 2.0 folds in Jet Hub with thirteen account channels (CodeArts, CodeBuddy, WorkBuddy, LobsterAI, Qoder, TRAE, Cline, Loomy, Raccoon, MiniMax, ZCode, Gemini) plus an account pool, quota claiming, a local OpenAI gateway with LAN forwarding, dashboard and runtime logs, while keeping the anonymous free channel.",
     "license": "MIT",
     "upstream": "https://github.com/Ebony-Vinyl/dsh-our-free-model",
-    "notes": "本轮新增第 73 项资源；tgz 由插件仓库 main@012f965 本地 npm pack 产出（私有 ESM 包，npm 无发布），仅登记本地实测 bytes/sha256，不声称与任何既有归档字节等价。2026-10-08 裁决改判：由「预装 + 默认禁用 + config.distribution=managed」改为**默认启用**；同时撤销 config.distribution=managed —— 该字段原先冻结为「整合包接管其更新时机与发布字节」，但 overlay 行只在 defaultEnabled=false 时生成，启用后 config 无处承载，finalize 的 config 透传门禁（work/dist-tooling/patch-rows.mjs assertConfigPassthrough）会直接失败。故本轮按 Lead 裁决「保启用、舍弃 managed」执行：OFM 的应用内自升级与公告源恢复默认行为。分发范围仅 full（Desktop 预置层）与 Pack 套件，lite 不含。"
+    "notes": "npm 精确版 2.5.6（2026-10-19 发布，GitHub Release 资产 dsh-our-free-model-2.5.6.tgz，1336573 B，sha256 2d7e8bc2…6cb18，已核对 release digest）。从 2.0.0 升到 2.5.6 跨 5 个小版本：免费模型与 EAC 模型页统一展示北辰 API 赞助卡片、优惠文案更新、移除赞助商广告导航与详情路由（保留卡片与查看链接）、修复部分路径下热重载依赖未刷新导致旧模块继续运行。零 dependencies；peer 要求 @deepseek-ai/dsh-commands / dsh-credentials / dsh-llm ^0.1.2-rc.1 || ^0.1.7-rc.2 || ^0.2.0-rc.1 与 @deepseek-ai/cordis ^4.0.2，EAC 内核 0.2.0-rc.2 + cordis 4.0.4 实测全部满足。source 由 github-repo 改为 github-tgz：原配置依赖 GH_SOURCES 映射但 repack 里并无该包，materializeGithub 会直接 die；改锁 release 资产 URL 后重打包可复现。"
   }
 ]

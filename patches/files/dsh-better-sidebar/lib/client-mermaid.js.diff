@@ -1,0 +1,13 @@
+diff --git a/lib/client-mermaid.js b/lib/client-mermaid.js
+index 3bec99b..60cef0d 100644
+--- a/lib/client-mermaid.js
++++ b/lib/client-mermaid.js
+@@ -200516,7 +200516,7 @@ ${prefix}${Math.round(value * 100) / 100}${suffix}`;
+ 						onClick: onCopy,
+ 						"aria-label": t("copy"),
+ 						title: t("copy"),
+-						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCopyOutline16, {}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { children: copied ? t("copied") : t("copy") })]
++						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCopyOutlineMedium, {}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { children: copied ? t("copied") : t("copy") })]
+ 					})]
+ 				}),
+ 				error !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {

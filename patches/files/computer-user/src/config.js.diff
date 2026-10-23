@@ -1,0 +1,107 @@
+diff --git a/src/config.js b/src/config.js
+index e2c3f91..4737b3f 100644
+--- a/src/config.js
++++ b/src/config.js
+@@ -3,38 +3,70 @@ import z from '@deepseek-ai/schemastery';
+ /** Settings namespace for this plugin (written to DSH settings.yaml). */
+ export const NS = 'computer-user';
+ 
++/* `volatile()` marks a field as editable without remounting the plugin.
++ *
++ * DSH 0.1.7-rc.2 replaced the namespace-registration settings model with
++ * Config-schema-derived forms: `SettingsForms.describe()` projects the schema
++ * exported as `Config` by the plugin entry through `volatileForm()`, which
++ * keeps ONLY fields whose nearest volatile ancestor is marked. An unmarked
++ * schema projects to `undefined`, so no form is produced, `configForms.get()`
++ * answers `status: 'unavailable'` and the settings card stays blank. Upstream
++ * 0.3.7 declares this schema but never marks a field — one reason its card
++ * cannot work on a 0.2.x kernel even once `Config` is exported (see the
++ * sibling `src/index.js` patch).
++ *
++ * Guarded so a schemastery build without `volatile()` still yields the plain
++ * schema instead of throwing at import time. */
++const live = (leaf) => (typeof leaf?.volatile === 'function' ? leaf.volatile() : leaf);
++
+ /** Runtime settings schema (schemastery). Top fields are the "just-opened" card; the rest go to Advanced. */
+ export const Config = z.object({
+-  mode: z
+-    .union([z.const('disabled'), z.const('readonly'), z.const('manual'), z.const('auto')])
+-    .default('manual')
+-    .description('运行模式：禁用=全部拒绝 | 只读=仅截图/读光标/等待 | 手动批准=需 /computer 批准后可用 | 自动=LLM自由调用'),
+-  ai_can_change_mode: z
+-    .boolean()
+-    .default(false)
+-    .description('AI 是否可自行修改运行模式（computer_set_mode 工具是否可用），默认不可。AI 修改后同步更新设置下拉框'),
+-  screenshot_dir: z
+-    .string()
+-    .default('')
+-    .description('截图输出目录（空 = 系统临时目录）'),
+-  default_scale: z
+-    .number()
+-    .default(1)
+-    .description('截图默认缩放 0.1..1（1=原分辨率整屏）'),
+-  typing_interval_ms: z
+-    .number()
+-    .default(0)
+-    .description('逐字输入间隔（毫秒），越大越稳但越慢'),
+-  scroll_units: z
+-    .number()
+-    .default(1)
+-    .description('滚动刻度：一次 scroll 滚动多少格（每格 120 WHEEL delta）'),
+-  output_guard: z
+-    .boolean()
+-    .default(true)
+-    .description('LLM 输出过滤器：把工具调用/伪XML写成对话文本时打回并提示，第二次同内容放行'),
+-  debug: z
+-    .boolean()
+-    .default(false)
+-    .description('调试日志'),
++  mode: live(
++    z
++      .union([z.const('disabled'), z.const('readonly'), z.const('manual'), z.const('auto')])
++      .default('manual')
++      .description('运行模式：禁用=全部拒绝 | 只读=仅截图/读光标/等待 | 手动批准=需 /computer 批准后可用 | 自动=LLM自由调用'),
++  ),
++  ai_can_change_mode: live(
++    z
++      .boolean()
++      .default(false)
++      .description('AI 是否可自行修改运行模式（computer_set_mode 工具是否可用），默认不可。AI 修改后同步更新设置下拉框'),
++  ),
++  screenshot_dir: live(
++    z
++      .string()
++      .default('')
++      .description('截图输出目录（空 = 系统临时目录）'),
++  ),
++  default_scale: live(
++    z
++      .number()
++      .default(1)
++      .description('截图默认缩放 0.1..1（1=原分辨率整屏）'),
++  ),
++  typing_interval_ms: live(
++    z
++      .number()
++      .default(0)
++      .description('逐字输入间隔（毫秒），越大越稳但越慢'),
++  ),
++  scroll_units: live(
++    z
++      .number()
++      .default(1)
++      .description('滚动刻度：一次 scroll 滚动多少格（每格 120 WHEEL delta）'),
++  ),
++  output_guard: live(
++    z
++      .boolean()
++      .default(true)
++      .description('LLM 输出过滤器：把工具调用/伪XML写成对话文本时打回并提示，第二次同内容放行'),
++  ),
++  debug: live(
++    z
++      .boolean()
++      .default(false)
++      .description('调试日志'),
++  ),
+ });

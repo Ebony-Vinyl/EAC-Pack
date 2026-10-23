@@ -32,7 +32,12 @@ function fixture(t, { count = 2, installed = true } = {}) {
 test('manifest covers current catalog and rejects unsafe filenames, zero hashes and duplicates', t => {
   const current = JSON.parse(fs.readFileSync(new URL('../assets/bootstrap.json', import.meta.url)))
   __test.validateManifest(current)
-  for (const entry of Object.values(host.loadCatalog().packs).flat()) assert.ok(current.items.some(i => i.name === entry.name && i.version === entry.version))
+  // catalog 标 `distExclude: true` 的条目有意不进安装包（保留市场元数据，
+  // 但不出现在 bootstrap/items 里）—— 不参与闭包断言。
+  for (const entry of Object.values(host.loadCatalog().packs).flat()) {
+    if (entry.distExclude === true) continue
+    assert.ok(current.items.some(i => i.name === entry.name && i.version === entry.version))
+  }
   const { manifest } = fixture(t)
   for (const file of ['../escape.tgz', '/escape.tgz', 'C:\\escape.tgz', 'a/escape.tgz', 'a..tgz']) assert.throws(() => __test.validateManifest({ ...manifest, items: [{ ...manifest.items[0], file }] }))
   for (const change of [{ bytes: 0 }, { sha256: '0'.repeat(64) }]) assert.throws(() => __test.validateManifest({ ...manifest, items: [{ ...manifest.items[0], ...change }] }))

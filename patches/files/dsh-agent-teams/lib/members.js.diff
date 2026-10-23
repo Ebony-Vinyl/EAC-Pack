@@ -1,0 +1,27 @@
+diff --git a/lib/members.js b/lib/members.js
+index fd3fe12..7797433 100644
+--- a/lib/members.js
++++ b/lib/members.js
+@@ -135,6 +135,22 @@ export async function resolveMemberLlmSelection(ctx, captain, request, signal) {
+  */
+ export function installMemberSelectionRuntime(ctx, stateDir) {
+     const pending = new Map();
++    // 0.2.x 的 SubagentRuntime 退役了 registerContinuableSetup（改 provider 模式：
++    // registerProvider + observeActivation）。直接调用会 TypeError，让整个插件
++    // fiber 失败 —— 连 agent_teams_* 那 8 个工具都注册不上。
++    // 这里做存在性探测 + 降级：该钩子只服务「子代理冷恢复时还原成员模型选择」
++    // 这一个增强点，主功能（建队 / 任务 DAG / 派活 / 消息 / 状态）不经过它。
++    if (typeof ctx.subagents.registerContinuableSetup !== 'function') {
++        console.warn('[agent-teams] 内核未提供 subagents.registerContinuableSetup（0.2.x 改为 provider 模式）：'
++            + '成员模型选择的持久化/冷恢复已降级，其余功能正常。');
++        return {
++            pending,
++            // 与 0.1.x 同形：不做 pending 簿记，直接执行传入的操作。
++            async withPending(_parentSessionId, _label, _selection, operation) {
++                return await operation();
++            },
++        };
++    }
+     ctx.subagents.registerContinuableSetup((childCtx) => {
+         const child = childCtx.agent;
+         if (child === undefined)

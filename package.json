@@ -42,6 +42,9 @@
   },
   "scripts": {
     "test": "node --test suite/test/*.test.mjs",
+    "repack": "node scripts/repack/repack.mjs",
+    "verify": "node scripts/repack/verify.mjs",
+    "verify:kernel": "node scripts/repack/kernel-compat.mjs",
     "prepack": "node suite/scripts/verify-package.mjs"
   },
   "license": "MIT",

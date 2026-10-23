@@ -1,0 +1,32 @@
+diff --git a/src/index.js b/src/index.js
+index e7f4f99..b03c35c 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -30,6 +30,14 @@ export const version = '0.3.7';
+ /** Services required at runtime. */
+ export const inject = ['tools'];
+ 
++// DSH 0.1.7-rc.2+ derives a settings form per plugin entry from the entry's Config schema:
++// `SettingsForms.schema(entry)` reads `entry.fiber.runtime.Config` and bails out unless it is
++// defined AND exposes `toJSON`. Upstream 0.3.7 keeps Config module-private (imported only to
++// feed the retired `settings.register` call), so without an export the entry exposes no
++// schema, `volatileForm()` projects nothing, `describe()` omits the namespace and the browser
++// `configForms.get('computer-user')` answers `status: 'unavailable'` — a blank settings card.
++export { Config };
++
+ /** In-memory set of session IDs that have been approved via /computer. */
+ const approvedSessions = new Set();
+ 
+@@ -212,4 +220,11 @@ export function apply(ctx, config) {
+   }
+ }
+ 
+-export default { name, version, inject, apply };
++// Keep Config on the default export as well. cordis-plugin-loader's `unwrapExports()`
++// collapses the module to its `default` export before cordis reads `plugin.Config`:
++//
++//     unwrapExports(exports) { exports = exports.default ?? exports; ... }
++//
++// so a top-level named export alone is DISCARDED once a default export exists. Both are
++// required: the named binding for tooling, the default property for the loader.
++export default { name, version, inject, apply, Config };

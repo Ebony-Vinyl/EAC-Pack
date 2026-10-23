@@ -1,0 +1,37 @@
+diff --git a/lib/index.js b/lib/index.js
+index 3958fc1..83c5982 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -35,7 +35,9 @@ const PLUGIN_VERSION = (() => {
+ import { installModelSelection } from "@deepseek-ai/dsh-agent";
+ import { createUserMessage } from "@deepseek-ai/dsh-llm";
+ import { SessionId } from "@deepseek-ai/dsh-session";
+-import { installSettingsSection, settingsNamespace } from "@deepseek-ai/dsh-settings";
++// 0.2.x 移除了这两个具名导出；改指随插件自包含分发的兼容垫片。
++// （具名 import 在 ESM 链接期解析，缺失导出会让整棵插件树 SyntaxError。）
++import { installSettingsSection, settingsNamespace } from "./settings-compat.js";
+ import z from "@deepseek-ai/schemastery";
+ import { createWechatClient } from "./wechat.js";
+ import { OpenAiCompatAdapter, PROVIDER_ID } from "./openai-compat.js";
+@@ -46,7 +48,11 @@ const inject = ["webServer", "agents", "sessions", "agentDefaultModel", "llm"];
+ // ---- 设置节（DSH 设置页的 ClawBot 栏）----
+ // 命名空间 "openclaw-bridge"：用户在设置页保存的配置经 settings 服务热生效。
+ const NS = settingsNamespace("openclaw-bridge");
+-const Config = z.object({
++// 0.2.x 的设置表单由导出的 Config schema 派生，volatileForm() 只保留「最近的
++// volatile 祖先被标记」的字段；未标记的 schema 投影为 undefined → 表单不生成 →
++// 客户端 configForms.get() 回 unavailable、卡片空白。根 schema 标 volatile 即可
++// 让 volatileForm() 直接返回整张表单（见 dsh-settings 的 volatileForm 实现）。
++const BaseConfig = z.object({
+   // "provider/model" 或仅 "model"（provider 缺省时沿用 DSH 默认模型的 provider）；
+   // 留空 = 使用 DSH 设置的默认模型。
+   model: z.string().default(""),
+@@ -65,6 +71,8 @@ const Config = z.object({
+   customApiKey: z.string().default(""),
+   customModel: z.string().default(""),
+ });
++// 根 schema 标 volatile：volatileForm() 见到就返回整张表单。
++const Config = typeof BaseConfig.volatile === 'function' ? BaseConfig.volatile() : BaseConfig;
+ let liveConfig = () => ({}); // 取配置的 getter；setSource 会被替换为 settings scope 读取器
+ 
+ const CHAT_ROUTE = "/openclaw-bridge/v1/chat/completions";

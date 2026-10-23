@@ -1,1 +1,23 @@
 # Baseline binary assets are distributed through the registry, not this Git tree.
+
+# Tracked unified diffs under patches/ must keep their exact bytes.
+# With core.autocrlf=true a normal text checkout rewrites every line to CRLF,
+# which destroys the hunk context and makes `git apply -p1` fail at repack time.
+# `-text` disables all EOL conversion for these files on every platform.
+#
+# 2026-10-20 实测：main 上 dsh-plugin-wallpaper-engine 的补丁是 CRLF（另两个是
+# LF），而 npm 解包出的 lib/client.js 是 LF，于是 repack 报
+# `error: patch failed: lib/client.js:4795 / patch does not apply` 并 fail-closed
+# 中断。补丁内容本身正确 —— 归一化行尾后重建的 0.6.7 产物为 794329 B /
+# f2f25810…，与 bootstrap.json 里登记的摘要逐字节一致。
+patches/**/*.diff -text
+
+# 垫片源文件（patches/files/_shared/*.js）同样是**字节敏感**的：它被
+# scripts/repack 里的一次性生成器读出来做成 `create` diff，manifest 里钉的是
+# 该文件的 sha256。若检出时被转成 CRLF，内容哈希就变了 —— 干净 clone 上
+# `source-patches.test.mjs` 的 create-mode 用例会报
+#   expected 0dca6997… actual 7903a521…
+# 实测 2026-10-21：在干净的合并 worktree 上复现（主工作区是 LF，检出后 167 个 CR）。
+# 与 *.diff 同理，`-text` 关闭 EOL 转换。
+patches/files/_shared/** -text
+

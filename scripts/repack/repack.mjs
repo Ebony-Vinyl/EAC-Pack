@@ -19,11 +19,12 @@
  *
  * 用法：node repack.mjs [--only <name-substring>]
  */
-import { execSync } from 'node:child_process';
+import { execSync, execFileSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { applySourcePatches } from './source-patches.mjs';
+import { ensurePatchedFiles } from './package-files.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..', '..');
 const CATALOG_DIR = path.join(ROOT, 'catalog');
@@ -45,10 +46,45 @@ const DIR_OVERRIDES = { 'meow-smooth': 'dsh-meow-smooth' };
 // github 源（可复现：缓存目录缺 package.json 时自动浅克隆）。
 // 兼容两种 source 取值：'github'（存量 EAC 独立分发）与 'github-repo'（v0.2.0 社区皮肤）。
 const GH_SOURCES = {
-  'dsh-think-zh-expand-eac': { url: 'https://github.com/jing-hy/dsh-think-zh-expand-eac.git', dir: 'think-zh-src' },
-  '@nagi-ovo/dsh-visualize': { url: 'https://github.com/Nagi-ovo/dsh-visualize.git', dir: 'visualize-src' },
-  'dsh-drag-and-drop': { url: 'https://github.com/bill9109/dsh-drag-and-drop.git', dir: 'dragdrop-src' },
-  'dsh-theme-endfield': { url: 'https://github.com/ymh0000123/dsh-theme-endfield.git', dir: 'endfield-src' },
+  // 这几条原本都不钉 ref，浅克隆于是跟随上游默认分支 —— 实测全量 repack 依次在
+  // dsh-visualize(0.1.7≠0.1.4)、dsh-drag-and-drop(0.1.7≠0.1.6) 处「版本漂移」die。
+  // 清空 dist 后重建在此机器上从来跑不通，正是这批未钉 ref 造成的。
+  // 按 picturereader 的既有做法一律钉完整 SHA（取承载 catalog 期望版本的那个 commit）。
+  'dsh-think-zh-expand-eac': {
+    url: 'https://github.com/jing-hy/dsh-think-zh-expand-eac.git',
+    dir: 'think-zh-src',
+    ref: '669ba75d958ae2f65d26b394a90bc506b2cd829e',
+  },
+  '@nagi-ovo/dsh-visualize': {
+    url: 'https://github.com/Nagi-ovo/dsh-visualize.git',
+    dir: 'visualize-src',
+    ref: 'db54992331d98af68390796d0de4b57bc76453ca',
+  },
+  'dsh-drag-and-drop': {
+    url: 'https://github.com/bill9109/dsh-drag-and-drop.git',
+    dir: 'dragdrop-src',
+    // 8ed0f65 = "chore: rename package scope @omdsh-dev -> bare name"，仍是 0.1.6。
+    // 不能钉 3b70ec4（同版本 0.1.6 但包名带 scope @omdsh-dev/...）—— catalog 与
+    // full-pack seed 用的都是**裸名** dsh-drag-and-drop@0.1.6，钉错会报「包名不符」。
+    ref: '8ed0f65e7e81b09e5d7eb17428871c76a16af769',
+  },
+  'dsh-theme-endfield': {
+    url: 'https://github.com/ymh0000123/dsh-theme-endfield.git',
+    dir: 'endfield-src',
+    ref: '533e549239188bc8c2545b14c571bd6c1d141942',
+  },
+  // picturereader 3.5.0：上游 main 已两端适配 0.2.x 内核 —— 客户端不再 inject
+  // 已移除的 settingsScope（改为运行时探测：有旧的内核就走 bind，没有就用插件
+  // 自建的 loopback 路由 createRemoteScope 提供同构快照面），宿主半不再 import
+  // 已删除的 settingsNamespace，且 settings.register 缺失时降级到自有配置覆盖层
+  // 而不是抛 TypeError。但**既没有 npm 发布也没有 tag** —— npm 上最新只到 3.3.3，
+  // 而 3.3.3 的宿主半仍在 settings.register 处无保护地调用、客户端仍 inject
+  // settingsScope。因此只能钉 commit；ref 用完整 SHA，避免上游后续提交让产物漂移。
+  picturereader: {
+    url: 'https://github.com/jing-hy/picturereader.git',
+    dir: 'picturereader-src',
+    ref: 'ebbb2f098ecf3fe18a47eaaa361ae157d31272cc',
+  },
 };
 
 // github-tgz 源：社区作者经 GitHub Release 分发的 npm-pack 形态 tgz。
@@ -61,6 +97,13 @@ const GH_TGZ_SOURCES = {
   // ≠ 仓库名 deep-whale-day-night-theme，以 release tgz 内 package.json 为准）
   '@dsh-external/dsh-client-ui-skin-deep-whale-day-night': {
     url: 'https://github.com/GGBond2424648901/deep-whale-day-night-theme/releases/download/v0.1.12/deep-whale-day-night-theme-0.1.12.tgz',
+  },
+  // dsh-our-free-model：私有 ESM 包（npm 无发布），上游按 GitHub Release 分发官方
+  // 预构建 tgz + SHA256SUMS.txt。锁定 release 资产 URL 而非 git clone --depth 1，
+  // 使重打包可复现（此前 catalog 写 source=github-repo，但 GH_SOURCES 无该包映射，
+  // repack 会在 materializeGithub 里 die）。
+  'dsh-our-free-model': {
+    url: 'https://github.com/Ebony-Vinyl/dsh-our-free-model/releases/download/v2.5.6/dsh-our-free-model-2.5.6.tgz',
   },
 };
 
@@ -167,7 +210,21 @@ for (const [cat, list] of Object.entries(catalogs)) {
 }
 let entries = Array.from(byName.values());
 if (onlyArg) entries = entries.filter((e) => e.name.includes(onlyArg) || e.id.includes(onlyArg));
-log(`catalog 条目合并完成：${byName.size} 唯一包，本轮处理 ${entries.length}`);
+// catalog 条目可以带 `distExclude: true` 表示「保留市场元数据，但不打进 dist」。
+//
+// 为什么需要这个字段而不是直接删 catalog 条目：
+//   · 删条目会同时抹掉插件市场里的「可安装」信息（titleZh/descZh/tier/license 等）；
+//   · 而 `distExclude` 只让它不进安装包，用户仍能从市场按需装。
+//
+// 首个使用者是 `dsh-dafeiyu`：已按 external/market 退役，但它带一个 ~49MB 的
+// PyInstaller helper，tgz 合计 **160 MB**，占全 dist 289 MB 的 55%。
+// 退役前它既不在 seed bundles（不启动）却仍打进 dist —— 纯占体积。
+const distExcluded = entries.filter((e) => e.distExclude === true);
+if (distExcluded.length) {
+  entries = entries.filter((e) => e.distExclude !== true);
+  for (const e of distExcluded) log(`DIST-EXCLUDE ${e.name}（catalog 标 distExclude）`);
+}
+log(`catalog 条目合并完成：${byName.size} 唯一包，本轮处理 ${entries.length}${distExcluded.length ? `（已排除 ${distExcluded.length}）` : ''}`);
 
 // ---- 工具 ----
 // 手写递归复制：Windows 上 fs.cpSync 覆盖复制偶发 errno=0 的 unlink 怪癖
@@ -243,20 +300,69 @@ function materializeEacTag(entry, staging) {
     const eacDir = path.join(EAC_PLUGINS, dir);
     const aioDir = path.join(AIO_PLUGINS, dir);
     // 共享条目版本以 EAC 包为准：优先 v5.3.6，目录缺失再回退 aio-v1
-    src = fs.existsSync(eacDir) ? eacDir : aioDir;
+    if (fs.existsSync(eacDir)) src = eacDir;
+    else if (fs.existsSync(aioDir)) src = aioDir;
+    // 第三级兜底：本机既没有 `.cache/eac-src` 也没有 `.cache/aio-src` 时
+    // （离线/未拉基线源），退回 full-pack 的 profile-seed —— 它装着同一批
+    // AIO 包，且 `AIO_SEED_NM` 已被指向该目录（见上方默认值 / 环境变量）。
+    // 没有这一级，全量 repack 会在第一个 AIO-only 包（dsh-aio-ui-compat）
+    // 直接 die，导致「清空 dist 后重建」在这台机器上永远跑不通。
+    else if (fs.existsSync(path.join(AIO_SEED_NM, ...entry.name.split('/'), 'package.json'))) {
+      src = path.join(AIO_SEED_NM, ...entry.name.split('/'));
+      log(`fallback to AIO seed for ${entry.name}`);
+    } else {
+      src = eacDir; // 让下面的 die 报出原本期望的 eac-src 路径
+    }
   }
   if (!fs.existsSync(path.join(src, 'package.json'))) die(`eac-tag 源目录缺 package.json: ${src}`);
   log(`copy ${path.relative(ROOT, src) || src} -> staging`);
   copyTree(src, staging);
 }
 
+// github / github-repo：浅克隆上游仓库后交给统一规范化。
+//
+// 可复现性：映射里可以写 `ref` 钉住 commit/tag。实测有必要 —— catalog 的期望
+// 版本和仓库 HEAD 会脱钩（例如 @nagi-ovo/dsh-visualize 的 catalog 要 0.1.4，
+// 而 .cache 里的克隆是 0.1.7），此时产物取决于本机缓存的运气。给了 ref 就
+// 按 ref 分桶缓存并校验 HEAD；没给 ref 则保持历史行为（克隆默认分支）并告警。
+//
+// 兼容性取舍：不把 ref 设为必填，否则既有 4 个映射会立刻全部 die —— 补 ref
+// 需要先确认每个仓库对应哪个 commit，属于独立的一件事，不该和「新增一个源」
+// 混在同一个改动里。
 function materializeGithub(entry, staging) {
   const gh = GH_SOURCES[entry.name];
   if (!gh) die(`catalog github 来源缺少 GH_SOURCES 映射: ${entry.name}`);
+  const ref = gh.ref;
+  if (!ref) {
+    log(`WARN ${entry.name} 未钉 ref：产物跟随上游默认分支，不可复现`);
+    const cloneDir = path.join(CACHE, gh.dir);
+    if (!fs.existsSync(path.join(cloneDir, 'package.json'))) {
+      log(`git clone --depth 1 ${gh.url}`);
+      sh(`git clone --depth 1 ${gh.url} ${q(cloneDir)}`);
+    }
+    copyTree(cloneDir, staging);
+    return;
+  }
   const cloneDir = path.join(CACHE, gh.dir);
-  if (!fs.existsSync(path.join(cloneDir, 'package.json'))) {
-    log(`git clone --depth 1 ${gh.url}`);
-    sh(`git clone --depth 1 ${gh.url} ${q(cloneDir)}`);
+  const stamp = path.join(cloneDir, '.repack-ref');
+  const current = fs.existsSync(stamp) ? fs.readFileSync(stamp, 'utf8').trim() : '';
+  if (!fs.existsSync(path.join(cloneDir, 'package.json')) || current !== ref) {
+    rmRf(cloneDir);
+    fs.mkdirSync(path.dirname(cloneDir), { recursive: true });
+    log(`git clone ${gh.url} @ ${ref}`);
+    try {
+      // tag / 分支名走 --branch；40 位 SHA 不被 --branch 接受，故全克隆后 checkout。
+      sh(`git clone --depth 1 --branch ${q(ref)} ${gh.url} ${q(cloneDir)}`);
+    } catch {
+      rmRf(cloneDir);
+      sh(`git clone ${gh.url} ${q(cloneDir)}`);
+      sh(`git -C ${q(cloneDir)} checkout --detach ${q(ref)}`);
+    }
+    const head = execSync(`git -C ${q(cloneDir)} rev-parse HEAD`, { encoding: 'utf8' }).trim();
+    if (!(head === ref || head.startsWith(ref))) {
+      die(`github 源钉点不符 ${entry.name}: 期望 ${ref}, 实际 HEAD ${head}`);
+    }
+    fs.writeFileSync(stamp, ref + '\n');
   }
   copyTree(cloneDir, staging);
 }
@@ -346,6 +452,12 @@ function ensureAttributionFiles(pkg, staging) {
   return added;
 }
 
+// 补丁重建出的文件必须能过 npm pack 的 `files` 白名单。有 `files` 的包只发布
+// 白名单命中的路径 —— 补丁新建的 lib/settings-compat.js 若不在白名单里会被
+// **静默丢弃**（tgz 里没有，但 repack 全绿），运行期才炸。
+// 实现抽到 ./package-files.mjs，好处是 suite/test 能直接对同一份代码做单元
+// 测试，不必跑完整条 300 MB 的打包管线。
+
 function sha256(file) {
   return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 }
@@ -399,11 +511,18 @@ for (const entry of entries) {
     if (!Object.keys(pkg.scripts).length) delete pkg.scripts;
   }
   const addedFiles = ensureAttributionFiles(pkg, staging);
-  if (override || changes.length || addedFiles.length || strippedScripts.length) {
+  // 兜底与越界必须留痕：正常情况下 addedPatched 是精确路径；若补丁路径本身
+  // 含 glob 元字符（如新建 `lib/[id].js`），精确条目在 npm 眼里无效，模块会
+  // 改用目录条目兜住并写入 warnings。越出包根的路径也会进 warnings。
+  const fileWarnings = [];
+  const addedPatched = ensurePatchedFiles(pkg, appliedSourcePatches, { warnings: fileWarnings });
+  for (const w of fileWarnings) log(`  files: ⚠ ${w}`);
+  if (override || changes.length || addedFiles.length || addedPatched.length || strippedScripts.length) {
     fs.writeFileSync(pkgFile, JSON.stringify(pkg, null, 2) + '\n');
     for (const c of changes) log(`  peer: ${c}`);
     if (strippedScripts.length) log(`  scripts-= ${strippedScripts.join(', ')}`);
-    if (addedFiles.length) log(`  files+= ${addedFiles.join(', ')}`);
+    const filesAdded = [...addedFiles, ...addedPatched];
+    if (filesAdded.length) log(`  files+= ${filesAdded.join(', ')}`);
   }
 
   const packOut = JSON.parse(
@@ -426,7 +545,12 @@ for (const entry of entries) {
     ...(appliedSourcePatches.length
       ? {
           locallyRepacked: true,
-          repackNote: appliedSourcePatches.map((p) => p.note).filter(Boolean).join(' '),
+          // 有包级 summary 时用它（多文件补丁的 per-file note 拼起来会很长，
+          // 1367 字符会把 index.json 撑大约 7%，而这些细节更适合留在
+          // patches/source-patches.json 里给维护者看）；否则回退拼 per-file note
+          // 以保持既有包的行为不变。
+          repackNote: appliedSourcePatches[0]?.summary
+            ?? appliedSourcePatches.map((p) => p.note).filter(Boolean).join(' '),
         }
       : {}),
   });
@@ -470,4 +594,73 @@ for (const name of fs.readdirSync(DIST)) {
   } catch { /* delete-pending：报告但不阻塞 */ }
 }
 if (orphans) log(`清理孤儿 tgz：${orphans} 个`);
+
+// 自动补齐 `dsh.bundle` 声明（ensure-bundles）。
+//
+// 为什么必须自动做：清空 dist 全量重建后，**产物里没有 `dsh.bundle`**，
+// 而 seed 的 `dsh.profile.bundles` 又把这些包列进了启动清单。
+// 内核加载 bundle 行时要求包自带 `dsh.bundle` 声明，缺失就**静默跳过**：
+//
+//   dsh: skipping profile bundle "@deepseek-ai/dsh-balance":
+//     Error: profile bundle ... declares no dsh.bundle in its package.json
+//
+// 实测清空 dist 重建后，62 个 seed bundle 里 **16 个**被跳过 —— 包括
+// balance / conversation-tweaks / prompt-custom / openclaw-bridge /
+// settings-groups 这些补丁包。它们的设置面和功能会全部消失，而启动审计
+// 只在最后给一行 `1 entry did not activate`，极难归因。
+//
+// `ensure-bundles.mjs` 会扫 dist、给缺声明的包补 `dsh.bundle.patch` 并重打 tgz；
+// 实测补了 23 个包。它原先只能手工跑，属于「只有本机作者知道的一步」。
+//
+// 顺序很重要：**先 ensure-bundles，再 sync-bootstrap** —— 前者会改 tgz 字节，
+// 后者才能把新 hash 写进 bootstrap.json。
+if (!MERGE_MODE) {
+  try {
+    execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'repack', 'ensure-bundles.mjs')], {
+      cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8', windowsHide: true,
+    });
+    // ensure-bundles 会重写 index.json，重新读一遍
+    finalIndex = JSON.parse(fs.readFileSync(path.join(DIST, 'index.json'), 'utf8'));
+    log('已补齐 dsh.bundle 声明（ensure-bundles）');
+  } catch (err) {
+    const out = err && (err.stdout || err.stderr) ? String(err.stdout || err.stderr) : '';
+    log(`WARN 补齐 dsh.bundle 失败：${(err.message || '').split('\n')[0]}`);
+    if (out) log('  ' + out.trim().split('\n').slice(-3).join('\n  '));
+    log('  → 产物已生成；请手动运行 node scripts/repack/ensure-bundles.mjs');
+  }
+} else {
+  log('（--only 模式跳过 ensure-bundles：它需要完整 dist 才能判定 bundle 清单）');
+}
+
+
+// 自动同步 suite/assets/bootstrap.json 里与本轮重建相关的条目。
+//
+// 为什么必须自动做：`full-package.test.mjs` 有一条断言「manifest hash must
+// match dist」。repack 改变 tgz 字节后若不回写 bootstrap，这条就会红 ——
+// 而这个同步原先只是 `.cache/` 里的一个 gitignored 一次性脚本，
+// 等于「只有本机作者知道的一步」。实测踩过：重打包 4 个 create 包做回归，
+// 之后测试报 `@deepseek-ai/dsh-conversation-tweaks: manifest hash must match dist`，
+// 排查一轮才想起要手动跑那个脚本。
+//
+// 同步范围刻意收窄（与 sync-bootstrap.mjs 一致）：
+//   · 全量模式：只同步 manifest.patches 里登记过的包；
+//   · --only 模式：只同步**本轮重建**且**已登记在 manifest** 的包，
+//     避免单包重打包时顺手改到别人的条目。
+try {
+  const { syncBootstrapEntries } = await import('./sync-bootstrap.mjs');
+  const manifestPath = path.join(ROOT, 'patches', 'source-patches.json');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  const touchable = new Set(manifest.patches.map((p) => p.name));
+  const scope = MERGE_MODE
+    ? index.filter((e) => touchable.has(e.name)).map((e) => e.name)
+    : undefined; // undefined = 全量：同步所有已登记补丁包
+  const changed = syncBootstrapEntries({ names: scope, log });
+  if (changed) log(`同步 bootstrap.json：${changed} 条`);
+} catch (err) {
+  // 不因同步失败而判定整轮 repack 失败 —— 产物本身是对的，bootstrap 可以事后补。
+  // 但必须响亮提示，否则又是"静默漏了一步"。
+  log(`WARN 同步 suite/assets/bootstrap.json 失败：${err && err.message ? err.message : err}`);
+  log('  → 产物已生成；请手动运行 node scripts/repack/sync-bootstrap.mjs');
+}
+
 log(`完成：dist/ 共 ${finalIndex.length} 个 tgz + index.json + SHA256SUMS${MERGE_MODE ? `（合并模式，本轮重建 ${index.length} 个）` : ''}`);

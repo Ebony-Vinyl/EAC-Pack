@@ -127,6 +127,35 @@ for (const line of sums) {
 }
 ok('SHA256SUMS 一致性完成');
 
+// (f) 内核导出兼容：产物里的服务端源码不得 import 内核已删除的具名导出。
+// 单列成模块是因为它需要静态解析内核包导出集合，比上面几项重得多；
+// 内核目录默认取并排检出的 Desktop，可用 --kernel <dir> 或 $DSH_KERNEL_ROOT 覆盖。
+// 找不到内核时**不算失败**（只跳过并提示）—— CI 里 Pack 与 Desktop 未必同装。
+try {
+  const { checkKernelCompat, formatReport, guessKernelRoot } = await import('./kernel-compat.mjs');
+  // 与 kernel-compat.mjs 的 main() 保持同一套参数优先级：显式 --kernel 优先，
+  // 其次 $DSH_KERNEL_ROOT，最后按目录布局猜。verify.mjs 也要认 --kernel，
+  // 否则文档里写的覆盖方式在这条调用路径上是空的。
+  const kernelArgIdx = process.argv.indexOf('--kernel');
+  const kernelArg = kernelArgIdx !== -1
+    && process.argv[kernelArgIdx + 1]
+    && !process.argv[kernelArgIdx + 1].startsWith('--')
+    ? process.argv[kernelArgIdx + 1]
+    : undefined;
+  const kernelRoot = kernelArg ? path.resolve(kernelArg) : guessKernelRoot();
+  const result = checkKernelCompat({ kernelRoot });
+  if (!result.kernelExists) {
+    warn(`内核目录不存在，跳过导出兼容校验（用 --kernel <dir> 或 DSH_KERNEL_ROOT 指定；试过 ${kernelRoot ?? '(无候选路径)'}）`);
+  } else if (result.ok) {
+    ok(`内核导出兼容：${result.stats.packageCount} 个产物 / ${result.stats.refCount} 处具名导入全部可解析`);
+  } else {
+    console.error(formatReport(result));
+    failures += result.hits.length;
+  }
+} catch (err) {
+  warn(`内核导出兼容校验无法执行: ${String(err && err.message ? err.message : err)}`);
+}
+
 if (failures) {
   console.error(`\n[verify] 结果：FAIL（${failures} 项不合格）`);
   process.exit(1);

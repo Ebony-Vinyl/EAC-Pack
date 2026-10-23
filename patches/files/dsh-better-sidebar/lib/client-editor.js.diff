@@ -1,0 +1,13 @@
+diff --git a/lib/client-editor.js b/lib/client-editor.js
+index 8cfe24d..a8e5e70 100644
+--- a/lib/client-editor.js
++++ b/lib/client-editor.js
+@@ -34411,7 +34411,7 @@ globalThis.__dshChunks__["editor"] = (require) => {
+ 						"aria-label": t("save"),
+ 						title: `${t("save")} (Ctrl/Cmd+S)`,
+ 						onClick: save,
+-						children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCheckOutline16, {})
++						children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCheckOutlineMedium, {})
+ 					}),
+ 					saveLabel !== "" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+ 						className: clsx(sidebar_module_css_default.editorStatus, saveState === "failed" && sidebar_module_css_default.editorStatusError),
