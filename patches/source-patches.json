@@ -250,14 +250,14 @@
       "name": "dsh-webui-prompt-optimizer",
       "version": "0.1.0",
       "source": "eac-tag",
-      "summary": "prompt-optimizer 的客户端引用了 primitives 的两个旧图标名 IconLoadingOutline16 / IconSparkle16；0.2.x 只导出 <Name>Regular / <Name>Medium 两种变体。不改则 jsx(undefined) → React #130，conversation.input.right 槽位条目崩掉。",
+      "summary": "Two client fixes: primitives icon names updated to the 0.2.x <Name>Medium variants (old names were undefined → React #130), and an unguarded modelDirectories.directoryFor() call during early boot no longer throws \"remote.session without inject\" and blanks the input row.",
       "files": [
         {
           "path": "lib/client.js",
           "diff": "files/dsh-webui-prompt-optimizer/lib/client.js.diff",
           "inputSha256": "e912eda5758853362b0ccd05f072aa2c2b0e832d73a48561dff9ecdc606005c7",
-          "outputSha256": "8d423833d9b362a7735b63a04f4e0e10d3519fb0f97af6be165aa5aeec048583",
-          "note": "The client referenced two primitives icons by old size-suffixed names (IconLoadingOutline16 / IconSparkle16). 0.2.x exports only <Name>Regular and <Name>Medium variants, so those lookups are undefined and jsx(undefined) throws React #130, crashing the conversation.input.right seat."
+          "outputSha256": "9a91f6a3c54aa2c01c0d3bae080654ed7730905f819ae2c41409ee161deb2804",
+          "note": "Two fixes. (1) The client referenced two primitives icons by old size-suffixed names (IconLoadingOutline16 / IconSparkle16); 0.2.x exports only <Name>Regular / <Name>Medium, so those lookups are undefined and jsx(undefined) throws React #130, crashing the conversation.input.right seat. (2) The seat\"s inject called modelDirectories.directoryFor() unguarded; during early boot the remote.session namespace is not mounted yet, so it throws \"cannot get property \"remote.session\" without inject\" (measured once, ~2.2s after navigation, never again) and takes down the whole input row for that frame. Now caught and degraded to available:false with an inert placeholder store, because the component subscribes to directory before its available:false early-return."
         }
       ]
     },

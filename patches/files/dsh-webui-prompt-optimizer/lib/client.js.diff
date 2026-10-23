@@ -20,3 +20,35 @@ index 7d80c04..d1bc287 100644
  							}),
  							busy && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
  								type: "button",
+@@ -700,7 +700,30 @@ window.__ModuleLoader__.load({
+ 					id: "dsh-webui-prompt-optimizer",
+ 					order: 5,
+ 					inject: (sessionId) => {
+-						const directory = models.directoryFor(sessionId);
++						// 启动早期 remote.session 命名空间还没挂载完成，directoryFor 会在内部
++						// 访问 ctx.remote.session 时抛
++						//   cannot get property "remote.session" without inject
++						// 实测该异常在启动后约 2.2s 出现一次、之后不再复现 —— 是瞬态竞态，
++						// 不是能力缺失。降级为「本帧不可用」，等依赖就绪后由内核重渲染。
++						//
++						// 注意 available: false 的 return null 在 useSyncExternalStore **之后**
++						// （PromptOptimizeButton 首行就订阅 directory），所以降级时仍要给一个
++						// 惰性占位对象，否则只是把「一个异常」换成「另一个异常」。
++						let directory;
++						try {
++							directory = models.directoryFor(sessionId);
++						} catch {
++							const idle = () => () => {};
++							return {
++								available: false,
++								directory: {
++									subscribe: idle,
++									getSnapshot: () => void 0,
++									store: { subscribe: idle, getSnapshot: () => void 0 }
++								},
++								sessionId
++							};
++						}
+ 						return {
+ 							available: sessions.subagentAddress(sessionId) === void 0,
+ 							directory: directory.store,

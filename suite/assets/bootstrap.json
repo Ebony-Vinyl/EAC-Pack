@@ -1588,16 +1588,16 @@
         "eac"
       ],
       "file": "dsh-webui-prompt-optimizer-0.1.0.tgz",
-      "sha256": "7c999aa14522a57b1f0dd5c6d92280fe0730b90bc46adea600622e26d06ddcc4",
-      "bytes": 36605,
+      "sha256": "33d80426b653fedda92976c60e4df22f710c037509ff33118ee651756ba01dab",
+      "bytes": 37020,
       "source": "eac-tag",
       "locallyRepacked": true,
-      "repackNote": "prompt-optimizer 的客户端引用了 primitives 的两个旧图标名 IconLoadingOutline16 / IconSparkle16；0.2.x 只导出 <Name>Regular / <Name>Medium 两种变体。不改则 jsx(undefined) → React #130，conversation.input.right 槽位条目崩掉。",
+      "repackNote": "Two client fixes: primitives icon names updated to the 0.2.x <Name>Medium variants (old names were undefined → React #130), and an unguarded modelDirectories.directoryFor() call during early boot no longer throws \"remote.session without inject\" and blanks the input row.",
       "parts": [
         {
           "file": "dsh-webui-prompt-optimizer-0.1.0.tgz",
-          "bytes": 36605,
-          "sha256": "7c999aa14522a57b1f0dd5c6d92280fe0730b90bc46adea600622e26d06ddcc4"
+          "bytes": 37020,
+          "sha256": "33d80426b653fedda92976c60e4df22f710c037509ff33118ee651756ba01dab"
         }
       ]
     },
