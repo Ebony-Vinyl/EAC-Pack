@@ -560,6 +560,17 @@ async function runStep(job, entry) {
         return { id: entry.id, ok: false, error: message2 }
       }
     }
+    // The kernel refuses a duplicate install with ManagementFailure
+    // ("already-installed"). That is the normal steady state of a pack whose
+    // items are all present — reporting it as a red failure made every
+    // back-to-back pack run look like a mass outage ("ok=5 failed=43" with
+    // zero real failures). Count it as a skipped success instead, matching the
+    // compat/kernel-provided skips above.
+    if (job.type !== 'uninstall' && /already-installed/i.test(message)) {
+      emit({ type: 'step-warn', jobId: job.id, id: entry.id, message: 'already installed' })
+      appendJobLog(job.id, `skip ${entry.name}: already-installed`)
+      return { id: entry.id, ok: true, skipped: 'already-installed' }
+    }
     emit({ type: 'step-fail', jobId: job.id, id: entry.id, message })
     appendJobLog(job.id, `FAIL ${entry.name}@${entry.version}: ${message}`)
     return { id: entry.id, ok: false, error: message }
@@ -1239,6 +1250,61 @@ function json(res, status, payload) {
   res.end(body)
 }
 
+/**
+ * Enable/disable one catalog entry with the guards the HTTP route enforces.
+ *
+ * Skin mutual exclusion lives here (and only here): the catalogs declare it on
+ * every skins-pack row (`mutexZh`/`mutexEn` — "client-ui skins are mutually
+ * exclusive, do not stack"), but nothing used to enforce it, so enabling a
+ * second skin stacked two global stylesheets and two decoration layers on top
+ * of each other and garbled the official web UI. Enabling a skins-pack entry
+ * now switches: every other enabled skins-pack bundle is disabled first and
+ * reported in `switchedOff`. `force: true` keeps the old stacking behavior for
+ * debugging. Non-skin entries are untouched by the sweep.
+ */
+async function enableEntry(body) {
+  const catalog = state.catalog
+  const all = [...catalog.packs.eac, ...catalog.packs.aio, ...catalog.packs.skins]
+  const entry = all.find((e) => e.id === body.id || e.name === body.id)
+  if (!entry) return { status: 404, payload: { error: 'unknown id' } }
+  // Enable-time guard (issue #1): install-time skips are not enough —
+  // the kernel's own plugin page can still flip these on. The suite at
+  // least refuses to be the one that bricks the app.
+  if (entry.compat === 'eac-fork' && body.force !== true) {
+    return {
+      status: 409,
+      payload: {
+        error: `${entry.name} requires the EAC fork kernel (service settingsScope) — enabling it on the official kernel blocks app boot (issue #1 defect 1)`,
+        compat: 'eac-fork',
+      },
+    }
+  }
+  if (entry.kernelProvided && body.force !== true) {
+    return {
+      status: 409,
+      payload: {
+        error: `${entry.name} is built into the kernel — enabling a repackaged copy shadows the official one and breaks session resume (issue #1 defect 2); uninstall it instead`,
+        kernelProvided: true,
+      },
+    }
+  }
+  const enabling = body.enabled !== false
+  const switchedOff = []
+  if (enabling && body.force !== true && entry.packs?.includes('skins')) {
+    const status = await buildStatus()
+    const others = (status.bundles ?? []).filter(
+      (b) => b.enabled === true && b.name !== entry.name && catalog.packs.skins.some((s) => s.name === b.name),
+    )
+    for (const bundle of others) {
+      const other = catalog.packs.skins.find((s) => s.name === bundle.name)
+      await syncEnabled(state.pm, other, false)
+      switchedOff.push(other.name)
+    }
+  }
+  await syncEnabled(state.pm, entry, enabling)
+  return { status: 200, payload: { ok: true, ...(switchedOff.length ? { switchedOff } : {}) } }
+}
+
 function createApiHandler(ctx) {
   return async function handler(req, res) {
     const url = new URL(req.url ?? '/', 'http://localhost')
@@ -1290,27 +1356,25 @@ function createApiHandler(ctx) {
           return json(res, 202, { jobId: job.id })
         }
         if (routePath === '/enable') {
+          const result = await enableEntry(body)
+          return json(res, result.status, result.payload)
+        }
+        if (routePath === '/skins/reset') {
+          // Escape hatch for a wedged skin stack: disable every enabled
+          // skins-pack bundle at once and report the names, so the official
+          // default look is one click away even when the settings page itself
+          // is buried under stacked skin chrome (see the mutex guard above).
           const catalog = state.catalog
-          const all = [...catalog.packs.eac, ...catalog.packs.aio, ...catalog.packs.skins]
-          const entry = all.find((e) => e.id === body.id || e.name === body.id)
-          if (!entry) return json(res, 404, { error: 'unknown id' })
-          // Enable-time guard (issue #1): install-time skips are not enough —
-          // the kernel's own plugin page can still flip these on. The suite at
-          // least refuses to be the one that bricks the app.
-          if (entry.compat === 'eac-fork' && body.force !== true) {
-            return json(res, 409, {
-              error: `${entry.name} requires the EAC fork kernel (service settingsScope) — enabling it on the official kernel blocks app boot (issue #1 defect 1)`,
-              compat: 'eac-fork',
-            })
+          const skins = catalog.packs.skins
+          const status = await buildStatus()
+          const enabled = (status.bundles ?? []).filter((b) => b.enabled === true && skins.some((s) => s.name === b.name))
+          const switchedOff = []
+          for (const bundle of enabled) {
+            const entry = skins.find((s) => s.name === bundle.name)
+            await syncEnabled(state.pm, entry, false)
+            switchedOff.push(entry.name)
           }
-          if (entry.kernelProvided && body.force !== true) {
-            return json(res, 409, {
-              error: `${entry.name} is built into the kernel — enabling a repackaged copy shadows the official one and breaks session resume (issue #1 defect 2); uninstall it instead`,
-              kernelProvided: true,
-            })
-          }
-          await syncEnabled(state.pm, entry, body.enabled !== false)
-          return json(res, 200, { ok: true })
+          return json(res, 200, { ok: true, switchedOff })
         }
         if (routePath === '/channel/check') {
           await probeChannel()
