@@ -364,25 +364,6 @@
       ]
     },
     {
-      "id": "prompt-custom",
-      "name": "@deepseek-ai/dsh-prompt-custom",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "@deepseek-ai_dsh-prompt-custom-0.1.0.tgz",
-      "sha256": "f6de797b9d12456668f487760da5342bfcb681fc3a8d401d279879e50670dffd",
-      "bytes": 6423,
-      "source": "eac-tag",
-      "parts": [
-        {
-          "file": "@deepseek-ai_dsh-prompt-custom-0.1.0.tgz",
-          "bytes": 6423,
-          "sha256": "f6de797b9d12456668f487760da5342bfcb681fc3a8d401d279879e50670dffd"
-        }
-      ]
-    },
-    {
       "id": "skin-switch",
       "name": "@deepseek-ai/dsh-skin-switch",
       "version": "0.1.0",
@@ -783,25 +764,6 @@
       ]
     },
     {
-      "id": "auto-compact",
-      "name": "dsh-auto-compact",
-      "version": "0.1.0",
-      "packs": [
-        "aio"
-      ],
-      "file": "dsh-auto-compact-0.1.0.tgz",
-      "sha256": "4d42dbaa229cde82e0ef2fe5e320a721baac8f8e30e926e71c1ce12c9952c748",
-      "bytes": 6002,
-      "source": "eac-tag",
-      "parts": [
-        {
-          "file": "dsh-auto-compact-0.1.0.tgz",
-          "bytes": 6002,
-          "sha256": "4d42dbaa229cde82e0ef2fe5e320a721baac8f8e30e926e71c1ce12c9952c748"
-        }
-      ]
-    },
-    {
       "id": "liang",
       "name": "dsh-client-liang-intensity-skin",
       "version": "0.1.7",
@@ -989,25 +951,6 @@
           "file": "dsh-font-custom-0.1.0.tgz",
           "bytes": 8957,
           "sha256": "b81f785f829adea4f438eaaa1331602279531f2c08c15a753aaaee7603d1286c"
-        }
-      ]
-    },
-    {
-      "id": "image-paste",
-      "name": "dsh-image-paste",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "dsh-image-paste-0.1.0.tgz",
-      "sha256": "c9c13cf10fed1b318144fe36ff37ebfc8a6c5b3a99821aa292f519655b06e559",
-      "bytes": 4621,
-      "source": "eac-tag",
-      "parts": [
-        {
-          "file": "dsh-image-paste-0.1.0.tgz",
-          "bytes": 4621,
-          "sha256": "c9c13cf10fed1b318144fe36ff37ebfc8a6c5b3a99821aa292f519655b06e559"
         }
       ]
     },

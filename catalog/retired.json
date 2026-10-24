@@ -218,6 +218,26 @@
       "reason": "用户裁决（2026-10-18）：按 Desktop 立账的迁移目标退役 —— 功能并入官方 plugin-manager 体系（内核 dsh-plugin-manager + dsh-client-ui-plugin-manager 已提供完整启停能力）。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除。",
       "titleZh": "增强功能开关",
       "titleEn": "Feature Toggles"
+    },
+    {
+      "id": "dsh-image-paste",
+      "name": "dsh-image-paste",
+      "version": "0.1.0",
+      "retiredFrom": "eac",
+      "evidence": "内核实物核验（2026-10-18）：dsh-client-ui-conversation/lib/client.js:16717-16739 注册的 registerCommand 直接遍历 clipboardData.items 取 file，交给 handlers.intakeFiles —— 与拖放共用同一条入库路径；dsh-attachment-local/lib/index.js:998-1010 声明接受 image/png、image/jpeg、image/webp、image/gif，上限单图 20 MiB / 单条 20 张 / 总计 200 MiB。官方是真附件（缩略图 + 视觉通道），本地实现是把图片写到 %TEMP%\\dsh-paste 再往输入框注入路径字符串交给 read_image，属于退化的替代路径。本地仅多支持 BMP/AVIF/ICO/TIFF 四种官方不接受的格式。",
+      "reason": "用户裁决（2026-10-18）：官方原生能力更强且走标准附件通道，退役本地副本。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除。",
+      "titleZh": "图片粘贴发送",
+      "titleEn": "Image Paste"
+    },
+    {
+      "id": "dsh-prompt-custom",
+      "name": "@deepseek-ai/dsh-prompt-custom",
+      "version": "0.1.0",
+      "retiredFrom": "eac",
+      "evidence": "源码自述核验（2026-10-18）：其 lib/index.js 头注释写明「不修改任何官方包，仅通过官方 systemPrompt.section() 与 dsh-settings 能力注入」，实现方式为注册 deployment:persona（order 0）遮蔽预设实现 replace、注册 dsh:custom-prompt（order 1）实现 append —— 与 dsh-system-prompt README 公开的 section()/personaPrefix/personaSuffix 完全同一套能力，本身不含内核未提供的机制。另：其 import 的 settingsNamespace 与 PERSONA_ORDER 在内核 0.2.0-rc.2 中已不存在，导入即失败。",
+      "reason": "用户裁决（2026-10-18）：功能为官方 API 的 UI 包装，且该包装在当前内核已无法加载；需要该行为时可在预设合成中直接用 systemPrompt.section() 表达。退役本地副本。",
+      "titleZh": "自定义注入提示词",
+      "titleEn": "Prompt Custom"
     }
   ]
 }

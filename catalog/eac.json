@@ -58,25 +58,6 @@
     "notes": "EAC 随包 private 包，npm 无发布。离开 EAC 桌面壳时浮窗 IPC 不可用，网页端无浮窗能力（插件不致崩溃）。"
   },
   {
-    "id": "prompt-custom",
-    "name": "@deepseek-ai/dsh-prompt-custom",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/@deepseek-ai_dsh-prompt-custom-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": true,
-    "titleZh": "自定义注入提示词",
-    "titleEn": "Prompt Custom",
-    "descZh": "在设置页自定义官方内核注入的提示词（替换整体/追加，应用到 standard 预设）。",
-    "descEn": "Customize the official injected persona/system prompt from settings (replace or append, applied to the standard preset).",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 随包 private 包，npm 无发布。"
-  },
-  {
     "id": "openclaw-bridge",
     "name": "@deepseek-ai/dsh-openclaw-bridge",
     "version": "0.7.0",
@@ -671,25 +652,6 @@
     "license": "MIT",
     "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
     "notes": "EAC 自研（private），npm 无发布；在 HEAD 树。"
-  },
-  {
-    "id": "image-paste",
-    "name": "dsh-image-paste",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/dsh-image-paste-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": false,
-    "titleZh": "图片粘贴发送",
-    "titleEn": "Image Paste",
-    "descZh": "Ctrl/Cmd+V 粘贴剪贴板图片 → 保存临时目录 → 注入完整路径提示（配合 inspect_image 视觉工具），多图合并提示。",
-    "descEn": "Paste clipboard images (Ctrl/Cmd+V): save to temp dir and inject full-path hints for the inspect_image vision tool.",
-    "license": "MIT",
-    "upstream": "https://github.com/myYangyunfan/dsh_desktop",
-    "notes": "EAC 注册表默认 disabled:true —— 与内置 picturereader「粘贴即用/图片桥自动分析」语义重叠，避免重复/竞争注入。npm 无发布。"
   },
   {
     "id": "webui-prompt-optimizer",

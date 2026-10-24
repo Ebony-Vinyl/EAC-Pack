@@ -8,7 +8,7 @@
 
 ## 0.2.4：安装阶段级联取得完整资源
 
-Git 仅保留组合包入口、host/client、目录与固定摘要清单。必选依赖 **`eac-plugin-suite-assets@0.2.4`** 提供全部 64 个基线子插件 tarball、30 张皮肤预览和 10 组 Prompt；不是 optional/peer，也不是启用后下载。
+Git 仅保留组合包入口、host/client、目录与固定摘要清单。必选依赖 **`eac-plugin-suite-assets@0.2.4`** 提供全部 61 个基线子插件 tarball、30 张皮肤预览和 10 组 Prompt；不是 optional/peer，也不是启用后下载。
 
 正常安装事务会同时安装入口和资源依赖。启用后仅在本地校验与拼接；没有 prepare/install/postinstall 下载器，不需要关闭 pnpm 安全策略。资源包是纯数据，不能单独作为 Desktop 插件添加。
 
@@ -32,7 +32,7 @@ github:DSH-EAC/EAC-Pack
 
 ## 完整性与故障处理
 
-`suite/assets/bootstrap.json` 固定资源包身份与版本，以及 64 个 tarball、分块、gallery/preview/Prompt 的大小和 SHA256。通过 Node 标准依赖解析找到资源包，不依赖 `.pnpm` 路径。缺依赖、错版本、清单不匹配或摘要失败会明确报错；不回退上游/latest、不用旧缓存掩盖不完整安装、不在启动后补下载。
+`suite/assets/bootstrap.json` 固定资源包身份与版本，以及 61 个 tarball、分块、gallery/preview/Prompt 的大小和 SHA256。通过 Node 标准依赖解析找到资源包，不依赖 `.pnpm` 路径。缺依赖、错版本、清单不匹配或摘要失败会明确报错；不回退上游/latest、不用旧缓存掩盖不完整安装、不在启动后补下载。
 
 失败时重新安装整合包及其必选依赖，检查 registry、代理与发布同步；不要关闭供应链安全策略。完整 Release 可作为单文件备用入口。
 
@@ -46,7 +46,7 @@ github:DSH-EAC/EAC-Pack
 
 ## 构建与验收
 
-需要完整、合法的 `dist/index.json`、64 个 canonical tarball，以及 `.cache/asset-input/` 中的 gallery、previews、prompts。这些输入不是 Git 安装时的构建步骤，也不入 Git。
+需要完整、合法的 `dist/index.json`、61 个 canonical tarball，以及 `.cache/asset-input/` 中的 gallery、previews、prompts。这些输入不是 Git 安装时的构建步骤，也不入 Git。
 
 ```powershell
 node scripts/repack/repack.mjs

@@ -19,25 +19,6 @@
     "notes": "AIO 独有（EAC 主线无）。@dsh-external/dsh-webui 与 @ha-na-bi/dsh-client-ui-custom 的 peerDependencies 精确依赖 dsh-aio-ui-compat@1.0.0 —— 三者必须同装。 D9 实测：RC2 兼容。"
   },
   {
-    "id": "auto-compact",
-    "name": "dsh-auto-compact",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/dsh-auto-compact-0.1.0.tgz",
-    "packs": [
-      "aio"
-    ],
-    "tier": "core",
-    "defaultEnabled": true,
-    "titleZh": "自动压缩（AIO 保留版）",
-    "titleEn": "Auto Compact (AIO)",
-    "descZh": "AIO 独有保留的自动压缩插件（main 线已于 5.x 退役，AIO 在役）。",
-    "descEn": "Auto-compaction plugin retained by AIO only (retired from the EAC main line but still in service on AIO).",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (branch aio-v1, assets/plugins/dsh-auto-compact)",
-    "notes": "AIO 独有。同名项在 EAC 主线注册表 RETIRED_BUILTIN_PLUGINS（head 版）中列退役 —— 两包定位不同，勿混用清单。 D9 实测：RC2 兼容。"
-  },
-  {
     "id": "balance",
     "name": "@deepseek-ai/dsh-balance",
     "version": "0.1.0",

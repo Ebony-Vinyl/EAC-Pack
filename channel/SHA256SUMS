@@ -3,7 +3,6 @@
 2501b40d04bec08fb0e0fd21724bb263c430734c7a2b17050d71c3a3d76e2a4c  @deepseek-ai_dsh-file-changes-0.1.0.tgz
 48679db7c9193718cf33c07c8970ecfd639fa2468a61d49baa1664a49ea9e90c  @deepseek-ai_dsh-float-window-0.1.0.tgz
 e27ffe1f64a4c1b4d5638b581bb552a8c101b826c533997e3f0be8fd9c495aef  @deepseek-ai_dsh-openclaw-bridge-0.7.0.tgz
-f6de797b9d12456668f487760da5342bfcb681fc3a8d401d279879e50670dffd  @deepseek-ai_dsh-prompt-custom-0.1.0.tgz
 d0a6755ba5803ab19e8117af6dd8a8a5ca6a61a33a0113e09254543653471178  @deepseek-ai_dsh-skin-switch-0.1.0.tgz
 3266ccc7b6628fa51160cecf12741dc029e2f9cc5cf41bd233b9782ac8ca4802  @dsh-external_dsh-client-ui-skin-deep-whale-day-night-0.1.12.tgz
 3fc8badb3752405d38510b071faf40231c071ea2b8fc13a639e477c50f131d7e  @dsh-external_dsh-side-session-0.2.8.tgz
@@ -25,7 +24,6 @@ a0d44cd9cf9ad3b346ca3f9dd99f55b708d13ea14c9b86a4ce333f487bb41293  @smalltailqwq_
 16cfb013b4db97e061375d9e481ae75885cf95f13bb7ea361b4c04c46d9590c6  @vlln_dsh-navbar-0.4.0.tgz
 5d5ef7e332dfdf54361811e603f7d8f7af818aae0b720b0982edcc99a08bb955  computer-user-0.3.6.tgz
 9df4247b06bf70f9cce2f36625ae7e91f0ec77123d60203b11178e0ac2f59e94  dsh-aio-ui-compat-1.0.0.tgz
-4d42dbaa229cde82e0ef2fe5e320a721baac8f8e30e926e71c1ce12c9952c748  dsh-auto-compact-0.1.0.tgz
 c7cf46ccad31d0d1eb5024f8234ee8ca40df1c97af7d156a6ed2aceccdcc3eca  dsh-client-liang-intensity-skin-0.1.7.tgz
 d08df7a3cf88dadf08069a6f021a36665ae7540a04e8cab4dfd16cfd3d0ea553  dsh-compact-1.0.1.tgz
 7095e75b4e297d74772deae3ec526592373607c3a50a3db5732438335d9b1a3c  dsh-composer-dynamic-island-2.1.0.tgz
@@ -36,7 +34,6 @@ abdd2bf93a5f19da8c2837ece38fb89f29c25fc7d6024b869c346b7c8dcf974d  dsh-eac-core-b
 2131d2adc3a150c78934904b4ccc4825c7d5d5d5e1fc4f913fee9788797bb188  dsh-file-drop-eac-0.1.0.tgz
 0ee79eacb5b02010fb19b37a27f3972fc4359653105f37517c6afce6cc771df0  dsh-find-plugin-0.4.0.tgz
 b81f785f829adea4f438eaaa1331602279531f2c08c15a753aaaee7603d1286c  dsh-font-custom-0.1.0.tgz
-c9c13cf10fed1b318144fe36ff37ebfc8a6c5b3a99821aa292f519655b06e559  dsh-image-paste-0.1.0.tgz
 daaf02ef2635040e6bb87577c27afd11773a5da348047cc0a21614bba174e76f  dsh-meme-0.1.44.tgz
 f2a5a5d968a1a8500840fde9453b2e1d85b969648811a3935cad199bd1b65468  dsh-message-rewind-0.1.0.tgz
 f8e4b495d6679ad32b93402d76ac60d439d0a2260fc33efc6b2342ddc7c064ed  dsh-offpeak-9.9.9.tgz
