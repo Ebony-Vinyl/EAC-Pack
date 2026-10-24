@@ -103,6 +103,12 @@ window.__ModuleLoader__.load({
         'gallery.unsafeBtn': '在 RC2 上不可用',
         'gallery.unsafeTitle': '实测启用本皮肤会导致官方 v0.2.0-rc.2 Web UI 崩溃，已禁用启用按钮',
         'gallery.disable': '禁用',
+        'gallery.enabledCount': '当前启用 {n} 张皮肤',
+        'gallery.mutexWarn': '皮肤互斥，请先停用多余的',
+        'gallery.resetDefault': '恢复默认外观',
+        'gallery.resetDone': '已停用 {n} 张皮肤，恢复官方默认外观',
+        'gallery.resetNone': '当前没有启用的皮肤',
+        'gallery.switchedOff': '已自动停用 {n} 张此前启用的皮肤',
         'gallery.installed': '已启用',
         'gallery.disabled': '已装未启用',
         'gallery.missing': '未安装',
@@ -259,6 +265,12 @@ window.__ModuleLoader__.load({
         'gallery.unsafeBtn': 'Unavailable on RC2',
         'gallery.unsafeTitle': 'Enabling this skin crashed the official v0.2.0-rc.2 web UI in real-machine testing; the enable button is disabled',
         'gallery.disable': 'Disable',
+        'gallery.enabledCount': '{n} skin(s) enabled',
+        'gallery.mutexWarn': 'skins are mutually exclusive — disable the extra ones',
+        'gallery.resetDefault': 'Restore default look',
+        'gallery.resetDone': 'Disabled {n} skin(s); back to the official default look',
+        'gallery.resetNone': 'No skin is currently enabled',
+        'gallery.switchedOff': 'Auto-disabled {n} previously enabled skin(s)',
         'gallery.installed': 'Enabled',
         'gallery.disabled': 'Installed, disabled',
         'gallery.missing': 'Not installed',
@@ -1350,12 +1362,15 @@ window.__ModuleLoader__.load({
         return null
       }, [events])
       // failures count for the latest job only (the ring keeps older jobs)
+      // "already installed" warnings are the skip marker, not a failure — they
+      // must not feed the error ring or the job-failure count in the header.
       const lastStartIdx = useMemo(() => {
         for (let i = events.length - 1; i >= 0; i--) if (events[i].type === 'job-start') return i
         return -1
       }, [events])
       const failedAny = useMemo(
-        () => events.slice(lastStartIdx + 1).some(e => e.type === 'step-fail'),
+        () => events.slice(lastStartIdx + 1).some(e => e.type === 'step-fail'
+          && !(e.message && /already-installed/i.test(e.message))),
         [events, lastStartIdx])
       const lastIsDone = last?.type === 'job-done'
       const running = Boolean(job)
@@ -1624,11 +1639,23 @@ window.__ModuleLoader__.load({
         try {
           if (action === 'install') await api('/install', POST_JSON({ ids: [skin.id] }))
           else if (action === 'update') await api('/update', POST_JSON({ ids: [skin.id] }))
-          else if (action === 'enable') await api('/enable', POST_JSON({ id: skin.id, enabled: true }))
-          else if (action === 'disable') {
+          else if (action === 'enable') {
+            const r = await api('/enable', POST_JSON({ id: skin.id, enabled: true }))
+            // The server switched skins (mutex): say which cards it turned off.
+            if (Array.isArray(r?.switchedOff) && r.switchedOff.length) setNotice({ kind: 'ok', text: fmt(tr('gallery.switchedOff'), { n: r.switchedOff.length }) })
+          } else if (action === 'disable') {
             await api('/enable', POST_JSON({ id: skin.id, enabled: false }))
             await load()
           }
+        } catch (err) { setNotice({ kind: 'err', text: String(err.message ?? err) }) }
+      })
+      const resetSkins = () => withSkin('__reset__', async () => {
+        setNotice(null)
+        try {
+          const r = await api('/skins/reset', POST_JSON({}))
+          if (Array.isArray(r?.switchedOff) && r.switchedOff.length) setNotice({ kind: 'ok', text: fmt(tr('gallery.resetDone'), { n: r.switchedOff.length }) })
+          else setNotice({ kind: 'ok', text: tr('gallery.resetNone') })
+          await load()
         } catch (err) { setNotice({ kind: 'err', text: String(err.message ?? err) }) }
       })
 
@@ -1733,6 +1760,16 @@ window.__ModuleLoader__.load({
                     h(Timeline, { events, t: tr }))),
 
             tab === 'gallery' && h(Fragment, null,
+              gallery.phase === 'ready' && gallery.data?.skins?.length && (() => {
+                // Skin stack health strip: n enabled / mutex warning / one-click
+                // escape hatch back to the official default look.
+                const enabledSkins = gallery.data.skins.filter(s => { const e = skinById.get(s.id); return e?.installed && e?.enabled !== false })
+                const over = enabledSkins.length > 1
+                return h('div', { className: 'suite-toolbar' + (over ? ' warn' : '') },
+                  h('span', { className: 'suite-count' },
+                    over ? `⚠ ${fmt(tr('gallery.enabledCount'), { n: enabledSkins.length })} · ${tr('gallery.mutexWarn')}` : fmt(tr('gallery.enabledCount'), { n: enabledSkins.length })),
+                  enabledSkins.length > 0 && h('button', { type: 'button', className: 'suite-btn' + (over ? ' danger' : ''), onClick: resetSkins, disabled: skinBusy.has('__reset__') }, tr('gallery.resetDefault')))
+              })(),
               gallery.phase === 'loading' && h('div', { className: 'skin-grid' },
                 [0, 1, 2, 3, 4, 5].map(i => h('div', { key: i, className: 'suite-skel', style: { height: 190, animationDelay: `${i * 60}ms` } }))),
               gallery.phase === 'error' && h('div', { className: 'suite-errbox' },
