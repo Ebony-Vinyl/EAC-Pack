@@ -223,9 +223,11 @@ function materializeNpm(entry, staging) {
   let tgz = path.join(NPM_TGZ, tgzName);
   if (!fs.existsSync(tgz)) {
     log(`npm pack ${entry.name}@${entry.version}`);
-    const out = JSON.parse(
+    const outRaw = JSON.parse(
       sh(`npm pack ${entry.name}@${entry.version} --pack-destination ${q(NPM_TGZ)} --json`),
     );
+    // npm <=10: array; npm >=11: object keyed by package name.
+    const out = Array.isArray(outRaw) ? outRaw : Object.values(outRaw);
     tgz = path.join(NPM_TGZ, out[0].filename);
     const expected = path.join(NPM_TGZ, tgzName);
     if (path.resolve(tgz) !== path.resolve(expected)) fs.renameSync(tgz, expected); // 统一命名便于缓存复用

@@ -14,21 +14,55 @@ export function npm(args, cwd) {
     : fs.realpathSync(execFileSync('which', ['npm'], { encoding: 'utf8' }).trim()))
   return execFileSync(process.execPath, [command, ...args], { cwd, encoding: 'utf8', windowsHide: true, maxBuffer: 16 * 1024 * 1024 })
 }
+/**
+ * npm <=10 prints `[{...}]` for `pack --json`; npm >=11 prints an object keyed by
+ * package name. Prepack scripts may also print non-JSON to stdout first, and npm
+ * may append summary lines afterwards, so scan every balanced `{...}`/`[...]`
+ * candidate and keep the last one that parses to a pack result with a filename.
+ */
+export function parsePackJson(text) {
+  const candidates = []
+  for (let i = 0; i < text.length; i++) {
+    const open = text[i]
+    if (open !== '{' && open !== '[') continue
+    let depth = 0, inString = false, escaped = false, j = i
+    for (; j < text.length; j++) {
+      const ch = text[j]
+      if (inString) {
+        if (escaped) escaped = false
+        else if (ch === '\\') escaped = true
+        else if (ch === '"') inString = false
+        continue
+      }
+      if (ch === '"') { inString = true; continue }
+      if (ch === '{' || ch === '[') depth++
+      else if (ch === '}' || ch === ']') { depth--; if (depth === 0) break }
+    }
+    if (depth === 0) candidates.push(text.slice(i, j + 1))
+  }
+  for (let k = candidates.length - 1; k >= 0; k--) {
+    let parsed
+    try { parsed = JSON.parse(candidates[k]) } catch { continue }
+    const results = Array.isArray(parsed) ? parsed : Object.values(parsed)
+    if (Array.isArray(results) && results.length && results[0]?.filename) return results
+  }
+  throw new Error('npm returned no package metadata')
+}
 export function pack(dir, label) {
   const destination = path.join(output, label)
   fs.mkdirSync(destination, { recursive: true })
   const text = npm(['pack', '--json', '--pack-destination', destination], dir)
-  const start = text.search(/\[\s*\{\s*\"id\"/); if (start < 0) throw new Error('npm returned no package metadata')
-  const results = JSON.parse(text.slice(start))
+  const results = parsePackJson(text)
   return { ...results[0], file: path.join(destination, results[0].filename) }
 }
+const fwd = (p) => String(p).replace(/\\/g, '/')
 export function unpack(file, destination) {
-  const listing = execFileSync('tar', ['-tf', file], { encoding: 'utf8', windowsHide: true }).trim().split(/\r?\n/)
+  const listing = execFileSync('tar', ['--force-local', '-tf', fwd(file)], { encoding: 'utf8', windowsHide: true }).trim().split(/\r?\n/)
   for (const entry of listing) if (!entry.startsWith('package/') || entry.includes('..') || /[\\:]/.test(entry)) throw new Error('unsafe archive path: ' + entry)
-  const verbose = execFileSync('tar', ['-tvf', file], { encoding: 'utf8', windowsHide: true })
+  const verbose = execFileSync('tar', ['--force-local', '-tvf', fwd(file)], { encoding: 'utf8', windowsHide: true })
   if (verbose.split(/\r?\n/).some(line => line && !['-', 'd'].includes(line[0]))) throw new Error('archive links or special files are not allowed')
   fs.mkdirSync(destination, { recursive: true })
-  execFileSync('tar', ['-xf', file, '-C', destination], { windowsHide: true })
+  execFileSync('tar', ['--force-local', '-xf', fwd(file), '-C', fwd(destination)], { windowsHide: true })
   return path.join(destination, 'package')
 }
 export async function verifyInstalledAssets(directory, manifest) {

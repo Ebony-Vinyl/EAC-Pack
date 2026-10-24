@@ -14,7 +14,7 @@ test('publication rejects plain plugin tarballs and requires the declared patch 
   const expected = { name: 'fixture-plugin', version: '1.0.0', file: 'fixture-plugin-1.0.0.tgz' }
   const pkg = { name: expected.name, version: expected.version }
   const file = path.join(root, expected.file)
-  const pack = () => { fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg)); execFileSync('tar', ['-czf', file, '-C', root, 'package'], { windowsHide: true }) }
+  const pack = () => { fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg)); execFileSync('tar', ['--force-local', '-czf', file.replace(/\\/g, '/'), '-C', root.replace(/\\/g, '/'), 'package'], { windowsHide: true }) }
   pack()
   assert.throws(() => assertResourceBundle(file, expected), /declares no safe dsh.bundle.patch/)
   pkg.dsh = { bundle: { patch: './cordis.patch.yml' } }

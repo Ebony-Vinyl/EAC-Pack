@@ -31,7 +31,7 @@ const manifest = readJson(path.join(ROOT, 'patches', 'source-patches.json'))
 const hasDist = fs.existsSync(path.join(ROOT, 'dist', 'index.json'))
 const distIndex = hasDist ? readJson(path.join(ROOT, 'dist', 'index.json')) : []
 const extract = (tgz, inner) =>
-  execFileSync('tar', ['-xOf', tgz, inner], { maxBuffer: 128 * 1024 * 1024 })
+  execFileSync('tar', ['--force-local', '-xOf', String(tgz).replace(/\\/g, '/'), inner], { maxBuffer: 128 * 1024 * 1024 })
 
 test('source-patch manifest is well formed and every diff file exists', () => {
   assert.equal(manifest.schemaVersion, 1)

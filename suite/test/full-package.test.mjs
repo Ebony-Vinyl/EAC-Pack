@@ -16,7 +16,7 @@ function fixture(t) {
   const item = { id: 'fixture', name: 'fixture-plugin', version: '1.0.0', file: 'fixture-plugin-1.0.0.tgz' }
   fs.writeFileSync(path.join(root, 'source/package/package.json'), JSON.stringify({ name: item.name, version: item.version, dsh: { bundle: { patch: './cordis.patch.yml' } } }))
   fs.writeFileSync(path.join(root, 'source/package/cordis.patch.yml'), '- insert:\n    - id: fixture\n      name: fixture-plugin\n')
-  execFileSync('tar', ['-czf', path.join(root, 'dist', item.file), '-C', path.join(root, 'source'), 'package'], { windowsHide: true })
+  execFileSync('tar', ['--force-local', '-czf', path.join(root, 'dist', item.file).replace(/\\/g, '/'), '-C', path.join(root, 'source').replace(/\\/g, '/'), 'package'], { windowsHide: true })
   const body = fs.readFileSync(path.join(root, 'dist', item.file)); Object.assign(item, { bytes: body.length, sha256: crypto.createHash('sha256').update(body).digest('hex') })
   const version = '1.2.3', pkg = { name: 'eac-plugin-suite', version, dependencies: { 'eac-plugin-suite-assets': version }, dsh: { bundle: { patch: './cordis.patch.yml' } } }
   fs.writeFileSync(path.join(root, 'suite/package.json'), JSON.stringify(pkg))
