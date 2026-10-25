@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "resourceVersion": "0.2.4",
+  "resourceVersion": "0.3.0-beta.0",
   "assetPackage": {
     "name": "eac-plugin-suite-assets",
-    "version": "0.2.4"
+    "version": "0.3.0-beta.0"
   },
   "extraFiles": [
     {
       "file": "gallery.json",
-      "bytes": 21342,
-      "sha256": "c259e1e11601e0555486eaa37f2c598bace73ab6aad5e692102ecb44f9516c3b"
+      "bytes": 20906,
+      "sha256": "9df6e809bb8366ffd0b3f1a2d7ed695707502b71746be57191b9467678f465e8"
     },
     {
       "file": "previews/blue-fantasy/dark.png",
@@ -23,13 +23,13 @@
     },
     {
       "file": "previews/deep-whale-day-night/dark.png",
-      "bytes": 1984956,
-      "sha256": "8bc5c844223a532e6b9c821d5ca8f70ff506db6a6dca073cf8a33ce9a87ae972"
+      "bytes": 8970,
+      "sha256": "6e62e5b0d7a7eda460df09cc55b3993f7819a413864c9cfeb044b3d0a554a232"
     },
     {
       "file": "previews/deep-whale-day-night/light.png",
-      "bytes": 2259565,
-      "sha256": "9e842ec80f90a48f438fcf254de416c08c8d72105a89a33a76edce4e4108bb51"
+      "bytes": 8970,
+      "sha256": "6e62e5b0d7a7eda460df09cc55b3993f7819a413864c9cfeb044b3d0a554a232"
     },
     {
       "file": "previews/deep-whale-manager/dark.png",
@@ -272,16 +272,16 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-balance-0.1.0.tgz",
-      "sha256": "55ab2f12bbf06ab71ce56ecfe247ba244e5544d8ce294606105c2058cd7bda40",
-      "bytes": 5344,
+      "sha256": "8c782442e2f1ee160d6d2d009965858cab2d4c187a9358e0315d27f6026a0cc2",
+      "bytes": 5347,
       "source": "eac-tag",
       "locallyRepacked": true,
       "repackNote": "Drops the 价格设置 settings section and its now-unreachable implementation: its balancePrices/balanceModels/refreshBalance bridge is retired by ADR 0006, so the section could only ever render a misleading \"桥接不可用\" error. The composer dock is unchanged.",
       "parts": [
         {
           "file": "@deepseek-ai_dsh-balance-0.1.0.tgz",
-          "bytes": 5344,
-          "sha256": "55ab2f12bbf06ab71ce56ecfe247ba244e5544d8ce294606105c2058cd7bda40"
+          "bytes": 5347,
+          "sha256": "8c782442e2f1ee160d6d2d009965858cab2d4c187a9358e0315d27f6026a0cc2"
         }
       ]
     },
@@ -312,18 +312,16 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-file-changes-0.1.0.tgz",
-      "sha256": "2501b40d04bec08fb0e0fd21724bb263c430734c7a2b17050d71c3a3d76e2a4c",
-      "bytes": 7797,
+      "sha256": "e616e5e4a979eccce05c5dc799095a5616f4a53f4912f4d6a89e3d21a6922f19",
+      "bytes": 6834,
       "source": "eac-tag",
       "parts": [
         {
           "file": "@deepseek-ai_dsh-file-changes-0.1.0.tgz",
-          "bytes": 7797,
-          "sha256": "2501b40d04bec08fb0e0fd21724bb263c430734c7a2b17050d71c3a3d76e2a4c"
+          "bytes": 6834,
+          "sha256": "e616e5e4a979eccce05c5dc799095a5616f4a53f4912f4d6a89e3d21a6922f19"
         }
-      ],
-      "locallyRepacked": true,
-      "repackNote": "Auth-fence defect (BUG-AUTH-FENCE-HANDOVER-20261017): the kernel authentication gate is itself a route on /api and webServer matches the LONGEST prefix first, so mounting /api/dsh-files/* silently bypasses it — register() adds no fence of its own. Every route (the 4 JSON endpoints plus the /dsh-files/static/ preview prefix) now asks the kernel connection.requestRejection() before doing any work, and FAILS CLOSED (503) when that service is unreachable instead of letting the request through. The service is resolved with ctx.get('connection'), NOT Reflect.get: a real cordis Context is a Proxy that throws for services not declared in inject, which would turn every request into a 503."
+      ]
     },
     {
       "id": "float-window",
@@ -333,14 +331,14 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-float-window-0.1.0.tgz",
-      "sha256": "48679db7c9193718cf33c07c8970ecfd639fa2468a61d49baa1664a49ea9e90c",
-      "bytes": 6376,
+      "sha256": "110ea46b8db78f5d094768e10811bf1083d79bf22de6976aeb11d2b118bd55c6",
+      "bytes": 6201,
       "source": "eac-tag",
       "parts": [
         {
           "file": "@deepseek-ai_dsh-float-window-0.1.0.tgz",
-          "bytes": 6376,
-          "sha256": "48679db7c9193718cf33c07c8970ecfd639fa2468a61d49baa1664a49ea9e90c"
+          "bytes": 6201,
+          "sha256": "110ea46b8db78f5d094768e10811bf1083d79bf22de6976aeb11d2b118bd55c6"
         }
       ]
     },
@@ -352,34 +350,16 @@
         "eac"
       ],
       "file": "@deepseek-ai_dsh-openclaw-bridge-0.7.0.tgz",
-      "sha256": "e27ffe1f64a4c1b4d5638b581bb552a8c101b826c533997e3f0be8fd9c495aef",
-      "bytes": 43561,
+      "sha256": "227fb33c3daed144e53c2eee7c3d00090ae42a2064ea8d4b916353cf0bbb02e8",
+      "bytes": 47540,
       "source": "eac-tag",
+      "locallyRepacked": true,
+      "repackNote": "openclaw-bridge: settingsNamespace/installSettingsSection 具名导出与 settingsScope 服务在 0.2.x 均退役，且设置表单改由 Config schema 派生。本补丁补齐三处；桥接路由与微信区块不受影响。",
       "parts": [
         {
           "file": "@deepseek-ai_dsh-openclaw-bridge-0.7.0.tgz",
-          "bytes": 43561,
-          "sha256": "e27ffe1f64a4c1b4d5638b581bb552a8c101b826c533997e3f0be8fd9c495aef"
-        }
-      ]
-    },
-    {
-      "id": "skin-switch",
-      "name": "@deepseek-ai/dsh-skin-switch",
-      "version": "0.1.0",
-      "packs": [
-        "aio",
-        "eac"
-      ],
-      "file": "@deepseek-ai_dsh-skin-switch-0.1.0.tgz",
-      "sha256": "d0a6755ba5803ab19e8117af6dd8a8a5ca6a61a33a0113e09254543653471178",
-      "bytes": 12757,
-      "source": "eac-tag",
-      "parts": [
-        {
-          "file": "@deepseek-ai_dsh-skin-switch-0.1.0.tgz",
-          "bytes": 12757,
-          "sha256": "d0a6755ba5803ab19e8117af6dd8a8a5ca6a61a33a0113e09254543653471178"
+          "bytes": 47540,
+          "sha256": "227fb33c3daed144e53c2eee7c3d00090ae42a2064ea8d4b916353cf0bbb02e8"
         }
       ]
     },
@@ -422,25 +402,6 @@
       ]
     },
     {
-      "id": "client-ui-custom",
-      "name": "@ha-na-bi/dsh-client-ui-custom",
-      "version": "0.1.0-rc.6",
-      "packs": [
-        "aio"
-      ],
-      "file": "@ha-na-bi_dsh-client-ui-custom-0.1.0-rc.6.tgz",
-      "sha256": "cd4881340acfd8f5ce506e29f57d0e9605478c488be55c4f6fb2ebfb5b891e1c",
-      "bytes": 95915,
-      "source": "eac-tag",
-      "parts": [
-        {
-          "file": "@ha-na-bi_dsh-client-ui-custom-0.1.0-rc.6.tgz",
-          "bytes": 95915,
-          "sha256": "cd4881340acfd8f5ce506e29f57d0e9605478c488be55c4f6fb2ebfb5b891e1c"
-        }
-      ]
-    },
-    {
       "id": "blue-fantasy",
       "name": "@linxin666/dsh-client-ui-skin-blue-fantasy",
       "version": "0.2.0",
@@ -448,14 +409,14 @@
         "skins"
       ],
       "file": "@linxin666_dsh-client-ui-skin-blue-fantasy-0.2.0.tgz",
-      "sha256": "44236cfd09daaa3a00999bcbfcdf081c2a21db015671ad75eee161ab1de690da",
-      "bytes": 5312560,
+      "sha256": "d2704d65bad570753d75e913d5e399a30521e35bd183e110b59ed7d56bed60a0",
+      "bytes": 5315942,
       "source": "npm",
       "parts": [
         {
           "file": "@linxin666_dsh-client-ui-skin-blue-fantasy-0.2.0.tgz",
-          "bytes": 5312560,
-          "sha256": "44236cfd09daaa3a00999bcbfcdf081c2a21db015671ad75eee161ab1de690da"
+          "bytes": 5315942,
+          "sha256": "d2704d65bad570753d75e913d5e399a30521e35bd183e110b59ed7d56bed60a0"
         }
       ]
     },
@@ -638,14 +599,16 @@
         "eac"
       ],
       "file": "@nanmicoder_dsh-agent-teams-0.1.13-eac.3.tgz",
-      "sha256": "76631f392e8d335aa99293576dcb3a13f62b3c7737ab834676bafd2ca65fabc5",
-      "bytes": 1809882,
+      "sha256": "ae8b19ef70287fb27e5f1ded6ee1af6a86dbb002c0fc68007a4cee7c59b38b6b",
+      "bytes": 1810644,
       "source": "eac-tag",
+      "locallyRepacked": true,
+      "repackNote": "agent-teams 在 0.2.x 上因 ctx.subagents.registerContinuableSetup 被退役（改 provider 模式）而在 apply 期抛 TypeError，整个插件不激活、8 个 agent_teams_* 工具全丢。本补丁改为存在性探测 + 降级：缺该钩子时成员模型选择的持久化/冷恢复降级，建队/任务 DAG/派活/消息/状态照常可用。",
       "parts": [
         {
           "file": "@nanmicoder_dsh-agent-teams-0.1.13-eac.3.tgz",
-          "bytes": 1809882,
-          "sha256": "76631f392e8d335aa99293576dcb3a13f62b3c7737ab834676bafd2ca65fabc5"
+          "bytes": 1810644,
+          "sha256": "ae8b19ef70287fb27e5f1ded6ee1af6a86dbb002c0fc68007a4cee7c59b38b6b"
         }
       ]
     },
@@ -657,14 +620,16 @@
         "skins"
       ],
       "file": "@smalltailqwq_dsh-client-ui-skin-deep-whale-manager-0.1.6.tgz",
-      "sha256": "5c368c6b3b0ab81826510c8591ee9f89b9708ec8133d5ebd0c47be789103826b",
-      "bytes": 63278,
+      "sha256": "147420897134f045a151b74196dbb04802274479cf6232cfb145369caa8fb138",
+      "bytes": 63312,
       "source": "npm",
+      "locallyRepacked": true,
+      "repackNote": "Settings panel gained a second, page-level scrollbar on the Skins section. Cause: the visually-hidden import file input (.orL4ja_fileInput) is position:absolute with no left/top and its container .orL4ja_backupActions is not positioned, so its containing block resolves all the way up to the settings dialog (JPxlLa_panel, position:relative, overflow:auto). The 1px input then lands below the panel and inflates the panel scrollHeight by 104px; scrolling the panel drags the whole nav rail out of view. Fix: give .orL4ja_backupActions position:relative so the input is contained by its own button row. Verified by three independent probes (hiding the input / adding relative to the options scroller / adding relative to the parent all drop the panel overflow 104px -> 0), and the hidden input still fires clicks so import keeps working. 另修：皮肤卡片高度参差 —— .orL4ja_skinTile 的 versionRow 可换行导致同一行卡片底部错位（112/134/114.5px 三种），视觉上互相压边。统一 tile min-height:132px 并让 versionRow 不换行+省略；实测 12 个 tile 高度全部一致、零裁字。",
       "parts": [
         {
           "file": "@smalltailqwq_dsh-client-ui-skin-deep-whale-manager-0.1.6.tgz",
-          "bytes": 63278,
-          "sha256": "5c368c6b3b0ab81826510c8591ee9f89b9708ec8133d5ebd0c47be789103826b"
+          "bytes": 63312,
+          "sha256": "147420897134f045a151b74196dbb04802274479cf6232cfb145369caa8fb138"
         }
       ]
     },
@@ -676,14 +641,14 @@
         "skins"
       ],
       "file": "@smalltailqwq_dsh-client-ui-skin-maid-atelier-0.1.7.tgz",
-      "sha256": "416a7c7603498c6f69edc24809236a2efac162007e091e584432c2b747746c8d",
-      "bytes": 7101649,
+      "sha256": "cfa94e7b009d45dd65cdf63aa91710ba2c7bde17928c1b5ac083a00b65fa4054",
+      "bytes": 7103337,
       "source": "npm",
       "parts": [
         {
           "file": "@smalltailqwq_dsh-client-ui-skin-maid-atelier-0.1.7.tgz",
-          "bytes": 7101649,
-          "sha256": "416a7c7603498c6f69edc24809236a2efac162007e091e584432c2b747746c8d"
+          "bytes": 7103337,
+          "sha256": "cfa94e7b009d45dd65cdf63aa91710ba2c7bde17928c1b5ac083a00b65fa4054"
         }
       ]
     },
@@ -728,19 +693,21 @@
     {
       "id": "computer-user",
       "name": "computer-user",
-      "version": "0.3.6",
+      "version": "0.3.7",
       "packs": [
         "eac"
       ],
-      "file": "computer-user-0.3.6.tgz",
-      "sha256": "5d5ef7e332dfdf54361811e603f7d8f7af818aae0b720b0982edcc99a08bb955",
-      "bytes": 40528,
+      "file": "computer-user-0.3.7.tgz",
+      "sha256": "f07cd2ad42e120cc33ce0c9c682c0a11fd0ffac385e8dced425ece1c374cebd6",
+      "bytes": 44585,
       "source": "npm",
+      "locallyRepacked": true,
+      "repackNote": "Expose Config on the default export (the loader unwraps to default, so a named export alone is dropped), mark its fields volatile, and swap the retired settingsScope inject for a dual-generation configForms probe. Upstream 0.3.7 is maintained but targets the 0.1.3 kernel; drop these patches once it ships a 0.2.x release.",
       "parts": [
         {
-          "file": "computer-user-0.3.6.tgz",
-          "bytes": 40528,
-          "sha256": "5d5ef7e332dfdf54361811e603f7d8f7af818aae0b720b0982edcc99a08bb955"
+          "file": "computer-user-0.3.7.tgz",
+          "bytes": 44585,
+          "sha256": "f07cd2ad42e120cc33ce0c9c682c0a11fd0ffac385e8dced425ece1c374cebd6"
         }
       ]
     },
@@ -752,14 +719,14 @@
         "aio"
       ],
       "file": "dsh-aio-ui-compat-1.0.0.tgz",
-      "sha256": "9df4247b06bf70f9cce2f36625ae7e91f0ec77123d60203b11178e0ac2f59e94",
-      "bytes": 6451,
+      "sha256": "910d693f164011cb52dbfe11c30617222ecbf6a5fb75896430eb6a6f9420709a",
+      "bytes": 6449,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-aio-ui-compat-1.0.0.tgz",
-          "bytes": 6451,
-          "sha256": "9df4247b06bf70f9cce2f36625ae7e91f0ec77123d60203b11178e0ac2f59e94"
+          "bytes": 6449,
+          "sha256": "910d693f164011cb52dbfe11c30617222ecbf6a5fb75896430eb6a6f9420709a"
         }
       ]
     },
@@ -790,14 +757,14 @@
         "eac"
       ],
       "file": "dsh-compact-1.0.1.tgz",
-      "sha256": "d08df7a3cf88dadf08069a6f021a36665ae7540a04e8cab4dfd16cfd3d0ea553",
-      "bytes": 14663,
+      "sha256": "e3cd7dd5ed198d2b24556b4e3a9ac79d79bf7f425f26c8ae4fe37f6286e169d7",
+      "bytes": 14643,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-compact-1.0.1.tgz",
-          "bytes": 14663,
-          "sha256": "d08df7a3cf88dadf08069a6f021a36665ae7540a04e8cab4dfd16cfd3d0ea553"
+          "bytes": 14643,
+          "sha256": "e3cd7dd5ed198d2b24556b4e3a9ac79d79bf7f425f26c8ae4fe37f6286e169d7"
         }
       ]
     },
@@ -810,14 +777,14 @@
         "eac"
       ],
       "file": "dsh-composer-dynamic-island-2.1.0.tgz",
-      "sha256": "7095e75b4e297d74772deae3ec526592373607c3a50a3db5732438335d9b1a3c",
-      "bytes": 18512,
+      "sha256": "df32899da434168c607b4f8e95d4f746df93da4fca1bac8db5924424ca1436d7",
+      "bytes": 18493,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-composer-dynamic-island-2.1.0.tgz",
-          "bytes": 18512,
-          "sha256": "7095e75b4e297d74772deae3ec526592373607c3a50a3db5732438335d9b1a3c"
+          "bytes": 18493,
+          "sha256": "df32899da434168c607b4f8e95d4f746df93da4fca1bac8db5924424ca1436d7"
         }
       ]
     },
@@ -829,14 +796,16 @@
         "eac"
       ],
       "file": "dsh-dock-settings-0.1.0.tgz",
-      "sha256": "e3059cea7737a18b52cb66f465aae247ac6988df5e1c682dd2a79ea378085147",
-      "bytes": 13645,
+      "sha256": "0a788999bce2354e20243fe21679eb05c0379912f6f1ef0fa76e8ef369cb01cd",
+      "bytes": 13638,
       "source": "eac-tag",
+      "locallyRepacked": true,
+      "repackNote": "Skills 与 MCP：选中页签 / 主按钮把“背景层色变量”当“文字色变量”用（color: var(--dsw-alias-bg-layer-3)），在亮色与深色主题下文字对比度仅 1.0~1.1，呈现为纯黑块看不见字。改用配对的 label-primary-foreground，并把 hover 的 opacity 从 .85 提到 .9。",
       "parts": [
         {
           "file": "dsh-dock-settings-0.1.0.tgz",
-          "bytes": 13645,
-          "sha256": "e3059cea7737a18b52cb66f465aae247ac6988df5e1c682dd2a79ea378085147"
+          "bytes": 13638,
+          "sha256": "0a788999bce2354e20243fe21679eb05c0379912f6f1ef0fa76e8ef369cb01cd"
         }
       ]
     },
@@ -867,14 +836,14 @@
         "eac"
       ],
       "file": "dsh-eac-core-bridge-1.0.0.tgz",
-      "sha256": "abdd2bf93a5f19da8c2837ece38fb89f29c25fc7d6024b869c346b7c8dcf974d",
-      "bytes": 4608,
+      "sha256": "d3357e603fc9c0217642d381760769d0ae490e745b0ebe607ae8e1fcd1a99e58",
+      "bytes": 4463,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-eac-core-bridge-1.0.0.tgz",
-          "bytes": 4608,
-          "sha256": "abdd2bf93a5f19da8c2837ece38fb89f29c25fc7d6024b869c346b7c8dcf974d"
+          "bytes": 4463,
+          "sha256": "d3357e603fc9c0217642d381760769d0ae490e745b0ebe607ae8e1fcd1a99e58"
         }
       ]
     },
@@ -886,14 +855,14 @@
         "eac"
       ],
       "file": "dsh-eac-locale-compat-1.0.0.tgz",
-      "sha256": "83b0202784b5b1cd775f63d110d690a49d7dc37572b766a6a47c216a113f07a3",
-      "bytes": 16720,
+      "sha256": "59fa7236e518e4f73c9a676dc801ecd2fcfe0a40da4dea45e5a97fc664f71040",
+      "bytes": 16559,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-eac-locale-compat-1.0.0.tgz",
-          "bytes": 16720,
-          "sha256": "83b0202784b5b1cd775f63d110d690a49d7dc37572b766a6a47c216a113f07a3"
+          "bytes": 16559,
+          "sha256": "59fa7236e518e4f73c9a676dc801ecd2fcfe0a40da4dea45e5a97fc664f71040"
         }
       ]
     },
@@ -905,14 +874,14 @@
         "eac"
       ],
       "file": "dsh-file-drop-eac-0.1.0.tgz",
-      "sha256": "2131d2adc3a150c78934904b4ccc4825c7d5d5d5e1fc4f913fee9788797bb188",
-      "bytes": 8267,
+      "sha256": "af1d04b6599f61d32dff9f46084ec0b1fa78e7fc739ac4586ed10926e1da1a4f",
+      "bytes": 8049,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-file-drop-eac-0.1.0.tgz",
-          "bytes": 8267,
-          "sha256": "2131d2adc3a150c78934904b4ccc4825c7d5d5d5e1fc4f913fee9788797bb188"
+          "bytes": 8049,
+          "sha256": "af1d04b6599f61d32dff9f46084ec0b1fa78e7fc739ac4586ed10926e1da1a4f"
         }
       ]
     },
@@ -943,14 +912,14 @@
         "eac"
       ],
       "file": "dsh-font-custom-0.1.0.tgz",
-      "sha256": "b81f785f829adea4f438eaaa1331602279531f2c08c15a753aaaee7603d1286c",
-      "bytes": 8957,
+      "sha256": "dcf8c7530b43d612b435d0e0454c75369093d9419ade088029e8e6fdd4c6e955",
+      "bytes": 8774,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-font-custom-0.1.0.tgz",
-          "bytes": 8957,
-          "sha256": "b81f785f829adea4f438eaaa1331602279531f2c08c15a753aaaee7603d1286c"
+          "bytes": 8774,
+          "sha256": "dcf8c7530b43d612b435d0e0454c75369093d9419ade088029e8e6fdd4c6e955"
         }
       ]
     },
@@ -962,14 +931,16 @@
         "aio"
       ],
       "file": "dsh-meme-0.1.44.tgz",
-      "sha256": "daaf02ef2635040e6bb87577c27afd11773a5da348047cc0a21614bba174e76f",
-      "bytes": 4395454,
+      "sha256": "a824db209992b542b1fcd1f5af0141b9d826d368e35a491ca99f18f0ae1cbd7d",
+      "bytes": 4395457,
       "source": "npm",
+      "locallyRepacked": true,
+      "repackNote": "表情包选择器：选中标签 .mp-tag.on 以品牌色为底、却把背景层色变量当文字色用（color: var(--dsw-alias-bg-layer-1)），文字与底几乎无对比。改用 label-primary-foreground。",
       "parts": [
         {
           "file": "dsh-meme-0.1.44.tgz",
-          "bytes": 4395454,
-          "sha256": "daaf02ef2635040e6bb87577c27afd11773a5da348047cc0a21614bba174e76f"
+          "bytes": 4395457,
+          "sha256": "a824db209992b542b1fcd1f5af0141b9d826d368e35a491ca99f18f0ae1cbd7d"
         }
       ]
     },
@@ -981,33 +952,14 @@
         "eac"
       ],
       "file": "dsh-message-rewind-0.1.0.tgz",
-      "sha256": "f2a5a5d968a1a8500840fde9453b2e1d85b969648811a3935cad199bd1b65468",
-      "bytes": 8558,
+      "sha256": "08bcc3bf4f05d3cca06567dd27523f5c5cebf899a3bfb15195e6159265587768",
+      "bytes": 8542,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-message-rewind-0.1.0.tgz",
-          "bytes": 8558,
-          "sha256": "f2a5a5d968a1a8500840fde9453b2e1d85b969648811a3935cad199bd1b65468"
-        }
-      ]
-    },
-    {
-      "id": "offpeak",
-      "name": "dsh-offpeak",
-      "version": "9.9.9",
-      "packs": [
-        "eac"
-      ],
-      "file": "dsh-offpeak-9.9.9.tgz",
-      "sha256": "f8e4b495d6679ad32b93402d76ac60d439d0a2260fc33efc6b2342ddc7c064ed",
-      "bytes": 22825,
-      "source": "eac-tag",
-      "parts": [
-        {
-          "file": "dsh-offpeak-9.9.9.tgz",
-          "bytes": 22825,
-          "sha256": "f8e4b495d6679ad32b93402d76ac60d439d0a2260fc33efc6b2342ddc7c064ed"
+          "bytes": 8542,
+          "sha256": "08bcc3bf4f05d3cca06567dd27523f5c5cebf899a3bfb15195e6159265587768"
         }
       ]
     },
@@ -1062,14 +1014,16 @@
         "eac"
       ],
       "file": "dsh-pet-settings-0.1.0.tgz",
-      "sha256": "d556c6300489e98e1ed6870262cbabe1bbb56dc3a136e86c0d882764bb2301c9",
-      "bytes": 4344,
+      "sha256": "ed324a3846e7fe7c253b48aa1a5e868c9382af025802b6257b714c4526190f9a",
+      "bytes": 4278,
       "source": "eac-tag",
+      "locallyRepacked": true,
+      "repackNote": "桌宠图标设置：同样依赖不存在的 window.dshDesktop.pluginManager，红字「插件管理桥不可用」。文案同步改为内测限制说明。",
       "parts": [
         {
           "file": "dsh-pet-settings-0.1.0.tgz",
-          "bytes": 4344,
-          "sha256": "d556c6300489e98e1ed6870262cbabe1bbb56dc3a136e86c0d882764bb2301c9"
+          "bytes": 4278,
+          "sha256": "ed324a3846e7fe7c253b48aa1a5e868c9382af025802b6257b714c4526190f9a"
         }
       ]
     },
@@ -1101,14 +1055,14 @@
         "eac"
       ],
       "file": "dsh-plugin-shield-0.1.0.tgz",
-      "sha256": "8172c09d72aaa069db49bd9f8522630575e3be969b5d10c2f63881ad9bd534f9",
-      "bytes": 5929,
+      "sha256": "e0866b793951bd7953414ccac9dffe6ca0d717c5674a2831bcd32b4243477c26",
+      "bytes": 5828,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-plugin-shield-0.1.0.tgz",
-          "bytes": 5929,
-          "sha256": "8172c09d72aaa069db49bd9f8522630575e3be969b5d10c2f63881ad9bd534f9"
+          "bytes": 5828,
+          "sha256": "e0866b793951bd7953414ccac9dffe6ca0d717c5674a2831bcd32b4243477c26"
         }
       ]
     },
@@ -1124,7 +1078,7 @@
       "bytes": 3529607,
       "source": "npm",
       "locallyRepacked": true,
-      "repackNote": "Update-notice button contrast: pin light values (outline 1.10:1 -> 3.11:1, label 1.06:1 -> 4.95:1) on the dark glass card.",
+      "repackNote": "Update-notice button contrast: pin light values (outline 1.10:1 -> 3.11:1, label 1.06:1 -> 4.95:1) on the dark glass card. Regenerated for 1.3.3 (anchor line moved 4795 -> 4721; upstream still ships align-self: flex-end unchanged).",
       "parts": [
         {
           "file": "dsh-plugin-wallpaper-engine-1.3.3.tgz",
@@ -1141,14 +1095,14 @@
         "eac"
       ],
       "file": "dsh-raw-html-0.6.2.tgz",
-      "sha256": "a320245871e4b471da2c0397e1051518ab57100c5c75b841a83c682bc3d36e19",
-      "bytes": 9104769,
+      "sha256": "748602685f0f6e4029bb4f2659fc897ed8d640819676ed8fc8f007bad7a4f244",
+      "bytes": 9104718,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-raw-html-0.6.2.tgz",
-          "bytes": 9104769,
-          "sha256": "a320245871e4b471da2c0397e1051518ab57100c5c75b841a83c682bc3d36e19"
+          "bytes": 9104718,
+          "sha256": "748602685f0f6e4029bb4f2659fc897ed8d640819676ed8fc8f007bad7a4f244"
         }
       ]
     },
@@ -1160,14 +1114,16 @@
         "eac"
       ],
       "file": "dsh-session-manager-0.1.0.tgz",
-      "sha256": "f9b588bca237f56f5e8989d6da7e3fd598724fad18a12c9c2f8c8707768a458c",
-      "bytes": 12462,
+      "sha256": "a6a28293467894eed1094dc7ec077601be1aa4b884a6a0a0eadfcc25eca786d6",
+      "bytes": 12472,
       "source": "npm",
+      "locallyRepacked": true,
+      "repackNote": "session-manager 的客户端引用了 primitives 的两个图标旧名 IconArchiveOutline20 / IconWarningOutline16；0.2.x 已改名为去后缀的 IconArchiveOutline / IconWarningOutline（尺寸由 size prop 控制，本就传了）。不改则 h(undefined) → React #130，sidebar.footer.action 槽位整个消失。",
       "parts": [
         {
           "file": "dsh-session-manager-0.1.0.tgz",
-          "bytes": 12462,
-          "sha256": "f9b588bca237f56f5e8989d6da7e3fd598724fad18a12c9c2f8c8707768a458c"
+          "bytes": 12472,
+          "sha256": "a6a28293467894eed1094dc7ec077601be1aa4b884a6a0a0eadfcc25eca786d6"
         }
       ]
     },
@@ -1179,16 +1135,16 @@
         "eac"
       ],
       "file": "dsh-settings-groups-0.1.0.tgz",
-      "sha256": "75b56ccd2e1d5f27fd4d0e9b734318116d97e769a08432e6b5e8750974cd652c",
-      "bytes": 5894,
+      "sha256": "8344841ac874acaf8e9b6f90c864130189f4a6ef9807ecab393ec317b5f5398b",
+      "bytes": 5897,
       "source": "eac-tag",
       "locallyRepacked": true,
       "repackNote": "General-settings collapser: real rows are the slot wrapper children, not the wrapper itself (the whole page used to be hidden as a single \"advanced\" row).",
       "parts": [
         {
           "file": "dsh-settings-groups-0.1.0.tgz",
-          "bytes": 5894,
-          "sha256": "75b56ccd2e1d5f27fd4d0e9b734318116d97e769a08432e6b5e8750974cd652c"
+          "bytes": 5897,
+          "sha256": "8344841ac874acaf8e9b6f90c864130189f4a6ef9807ecab393ec317b5f5398b"
         }
       ]
     },
@@ -1200,14 +1156,14 @@
         "eac"
       ],
       "file": "dsh-settings-scroll-fix-2.0.2.tgz",
-      "sha256": "39711cadbe8143803ac4b18d6e248793ead1bae06463e8279fe1cb66a759b847",
-      "bytes": 9772,
+      "sha256": "037221c05a880760cdb62e6400e607e476ac2d587e5e107a547d6bfb9a409057",
+      "bytes": 9754,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-settings-scroll-fix-2.0.2.tgz",
-          "bytes": 9772,
-          "sha256": "39711cadbe8143803ac4b18d6e248793ead1bae06463e8279fe1cb66a759b847"
+          "bytes": 9754,
+          "sha256": "037221c05a880760cdb62e6400e607e476ac2d587e5e107a547d6bfb9a409057"
         }
       ]
     },
@@ -1257,14 +1213,14 @@
         "skins"
       ],
       "file": "dsh-theme-endfield-1.1.5.tgz",
-      "sha256": "0d63e00fb2259a31ae4706f3258799fcc29c9c48f62704207548ee1532f266cb",
-      "bytes": 554493,
+      "sha256": "9cb124624f3f47e613bae02ce2cd02e93294a92af46b9fa5ef5ff94b076d89e2",
+      "bytes": 549285,
       "source": "github-repo",
       "parts": [
         {
           "file": "dsh-theme-endfield-1.1.5.tgz",
-          "bytes": 554493,
-          "sha256": "0d63e00fb2259a31ae4706f3258799fcc29c9c48f62704207548ee1532f266cb"
+          "bytes": 549285,
+          "sha256": "9cb124624f3f47e613bae02ce2cd02e93294a92af46b9fa5ef5ff94b076d89e2"
         }
       ]
     },
@@ -1296,14 +1252,14 @@
         "eac"
       ],
       "file": "dsh-undo-savepoint-0.3.4.tgz",
-      "sha256": "798b1ef39e8fc04e50ca0d3da335246d471aab59977ac60c2315ccc56e250d5a",
-      "bytes": 42722,
+      "sha256": "49d6dcf3e9a87282e3814f643ab298d819c03c811fb4d3cf0b8f75aa575e052b",
+      "bytes": 42702,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-undo-savepoint-0.3.4.tgz",
-          "bytes": 42722,
-          "sha256": "798b1ef39e8fc04e50ca0d3da335246d471aab59977ac60c2315ccc56e250d5a"
+          "bytes": 42702,
+          "sha256": "49d6dcf3e9a87282e3814f643ab298d819c03c811fb4d3cf0b8f75aa575e052b"
         }
       ]
     },
@@ -1315,14 +1271,16 @@
         "eac"
       ],
       "file": "dsh-unified-market-0.4.1.tgz",
-      "sha256": "21d0c6d52e37a828a6371df09f9cd1146cf8dbb8f50346136410fbfd20da7c27",
-      "bytes": 111762,
+      "sha256": "58a6f1b75aadd38cc8cb8cb9da4d09ae223672d793c9ffc709263451a2a65e50",
+      "bytes": 111773,
       "source": "npm",
+      "locallyRepacked": true,
+      "repackNote": "内置插件页：「安装」主按钮、精选/来源选中胶囊、排序选中项、插件头像把背景层色变量当文字色用（color: var(--dsw-alias-bg-layer-3)），亮色与深色下对比度仅 1.0~1.1，呈纯黑块。统一改用与 label-primary 配对的 label-primary-foreground；头像底色为蓝紫渐变，同样改用该前景色。",
       "parts": [
         {
           "file": "dsh-unified-market-0.4.1.tgz",
-          "bytes": 111762,
-          "sha256": "21d0c6d52e37a828a6371df09f9cd1146cf8dbb8f50346136410fbfd20da7c27"
+          "bytes": 111773,
+          "sha256": "58a6f1b75aadd38cc8cb8cb9da4d09ae223672d793c9ffc709263451a2a65e50"
         }
       ]
     },
@@ -1334,14 +1292,14 @@
         "eac"
       ],
       "file": "dsh-viewport-lock-1.0.1.tgz",
-      "sha256": "b523935cd0fb85444441a8995743b2e9fa3fe52e9fc8c287637817fcc3638a05",
-      "bytes": 5001,
+      "sha256": "dcab5b37ffbf20275b8df95f803b0eb51dd0cb01e43d9634df1a7074f3c6dbf3",
+      "bytes": 4879,
       "source": "eac-tag",
       "parts": [
         {
           "file": "dsh-viewport-lock-1.0.1.tgz",
-          "bytes": 5001,
-          "sha256": "b523935cd0fb85444441a8995743b2e9fa3fe52e9fc8c287637817fcc3638a05"
+          "bytes": 4879,
+          "sha256": "dcab5b37ffbf20275b8df95f803b0eb51dd0cb01e43d9634df1a7074f3c6dbf3"
         }
       ]
     },
@@ -1372,14 +1330,16 @@
         "eac"
       ],
       "file": "dsh-webui-prompt-optimizer-0.1.0.tgz",
-      "sha256": "ffbeaffe931964b04f0881a08ccd7cd01c34679197e01760fbcaed90d444a1b3",
-      "bytes": 36625,
+      "sha256": "33d80426b653fedda92976c60e4df22f710c037509ff33118ee651756ba01dab",
+      "bytes": 37020,
       "source": "eac-tag",
+      "locallyRepacked": true,
+      "repackNote": "Two client fixes: primitives icon names updated to the 0.2.x <Name>Medium variants (old names were undefined → React #130), and an unguarded modelDirectories.directoryFor() call during early boot no longer throws \"remote.session without inject\" and blanks the input row.",
       "parts": [
         {
           "file": "dsh-webui-prompt-optimizer-0.1.0.tgz",
-          "bytes": 36625,
-          "sha256": "ffbeaffe931964b04f0881a08ccd7cd01c34679197e01760fbcaed90d444a1b3"
+          "bytes": 37020,
+          "sha256": "33d80426b653fedda92976c60e4df22f710c037509ff33118ee651756ba01dab"
         }
       ]
     },
@@ -1425,19 +1385,19 @@
     {
       "id": "picturereader",
       "name": "picturereader",
-      "version": "3.3.1",
+      "version": "3.5.0",
       "packs": [
         "eac"
       ],
-      "file": "picturereader-3.3.1.tgz",
-      "sha256": "6db6246aba1cdaa5a426df6353c6bbc983549d531b99ae012897dfdc5bcf0157",
-      "bytes": 133657,
-      "source": "npm",
+      "file": "picturereader-3.5.0.tgz",
+      "sha256": "bcc453665ff3b63c63b299f6d62296c1d131e888e31ee7794f1885e8ad8d8a54",
+      "bytes": 156405,
+      "source": "github",
       "parts": [
         {
-          "file": "picturereader-3.3.1.tgz",
-          "bytes": 133657,
-          "sha256": "6db6246aba1cdaa5a426df6353c6bbc983549d531b99ae012897dfdc5bcf0157"
+          "file": "picturereader-3.5.0.tgz",
+          "bytes": 156405,
+          "sha256": "bcc453665ff3b63c63b299f6d62296c1d131e888e31ee7794f1885e8ad8d8a54"
         }
       ]
     }

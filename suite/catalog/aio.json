@@ -79,26 +79,6 @@
     "notes": "共享插件：两包同版本 0.1.0。条目主记录在 catalog/eac.json，版本以 EAC 包为准。"
   },
   {
-    "id": "skin-switch",
-    "name": "@deepseek-ai/dsh-skin-switch",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/@deepseek-ai_dsh-skin-switch-0.1.0.tgz",
-    "packs": [
-      "eac",
-      "aio"
-    ],
-    "tier": "visual",
-    "defaultEnabled": true,
-    "titleZh": "皮肤切换",
-    "titleEn": "Skin Switch",
-    "descZh": "设置页「皮肤」tab：列出并切换内置皮肤。",
-    "descEn": "Settings skins tab to list and switch bundled skins.",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC",
-    "notes": "共享插件：两包同版本 0.1.0。AIO v1.2.0 曾移除、aio-v1 分支已恢复。条目主记录在 catalog/eac.json，版本以 EAC 包为准。"
-  },
-  {
     "id": "undo-savepoint",
     "name": "dsh-undo-savepoint",
     "version": "0.3.4",
@@ -136,26 +116,6 @@
     "license": "BSD-3-Clause",
     "upstream": "https://github.com/Nagi-ovo/dsh-visualize",
     "notes": "aio-v1 seed 以 git+https 引用，写名为 @dsh-external/dsh-visualize；上游仓库已改名 @nagi-ovo/dsh-visualize（HEAD 0.1.4；本机 AIO 6.9.3 旧副本为 @dsh-external 0.1.2）。Host 写 bundles/patch 行须用新名 @nagi-ovo/dsh-visualize。在 AIO seed bundles 列表内。 D9 实测：RC2 兼容。 上游已由 @dsh-external 改名 @nagi-ovo；整合包带 0.1.4（新于 AIO 6.9.3 内置的 0.1.2）。"
-  },
-  {
-    "id": "client-ui-custom",
-    "name": "@ha-na-bi/dsh-client-ui-custom",
-    "version": "0.1.0-rc.6",
-    "source": "eac-tag",
-    "spec": "file:dist/@ha-na-bi_dsh-client-ui-custom-0.1.0-rc.6.tgz",
-    "packs": [
-      "aio"
-    ],
-    "tier": "visual",
-    "defaultEnabled": false,
-    "compat": "eac-fork",
-    "titleZh": "客制化 DSH（壁纸/快捷键）",
-    "titleEn": "Client UI Custom",
-    "descZh": "web 表面主题化（壁纸/毛玻璃/强调色/半透明表面）、可配置快捷键、应用用量面板与入场动效；零 shell 改动。",
-    "descEn": "Web-surface theming (wallpaper, frosted glass, accent, translucent surfaces), configurable shortcuts, usage panel and entrance motion; zero shell edits.",
-    "license": "MIT",
-    "upstream": "https://github.com/ha-na-bi/dsh-client-ui-custom",
-    "notes": "D9 实测：同 webui，settingsScope 依赖，官方 RC2 上阻塞 web boot。默认关闭。 D9 实测：启用等待 EAC 专有服务 settingsScope，官方 RC2 上阻塞 web boot（issue #1 缺陷1 同族）。0.2.1 起整合包拦截其安装与启用（compat=eac-fork）。"
   },
   {
     "id": "drag-and-drop",

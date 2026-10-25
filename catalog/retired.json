@@ -238,6 +238,16 @@
       "reason": "用户裁决（2026-10-18）：功能为官方 API 的 UI 包装，且该包装在当前内核已无法加载；需要该行为时可在预设合成中直接用 systemPrompt.section() 表达。退役本地副本。",
       "titleZh": "自定义注入提示词",
       "titleEn": "Prompt Custom"
+    },
+    {
+      "id": "client-ui-custom",
+      "name": "@ha-na-bi/dsh-client-ui-custom",
+      "version": "0.1.0-rc.6",
+      "retiredFrom": "aio",
+      "evidence": "内核导出兼容门禁（2026-10-25）：lib/client.js 顶层 import { MessageText } from \"@deepseek-ai/dsh-client-ui-primitives\"，而内核 0.2.0-rc.2 的该包不导出 MessageText（现有导出：BrandWordmark/Button/Checkbox/CodeBlock/DiffBlock/DisclosureRow 等）。ESM 链接期即失败，会拖垮整棵插件树。此前 catalog 还误标 source=eac-tag 且 upstream 写成 ha-na-bi（实际仓库是 yoli-mi/dsh-client-ui-custom）。",
+      "reason": "与内核不兼容且无可用上游版本：catalog 备注本已写明 compat=eac-fork（依赖 EAC 专有 settingsScope）、defaultEnabled=false、官方 RC2 上阻塞 web boot。既然默认关闭又要靠门禁拦截，不如直接从 AIO 包退役，避免 0.1.0-rc.6 随包分发后在启用时炸掉整棵插件树。",
+      "titleZh": "客制化 DSH（壁纸/快捷键）",
+      "titleEn": "Client UI Custom"
     }
   ]
 }

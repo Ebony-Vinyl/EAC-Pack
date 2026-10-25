@@ -77,26 +77,6 @@
     "notes": "EAC 随包 private 包，npm 无发布。外部集成类，重资源。"
   },
   {
-    "id": "skin-switch",
-    "name": "@deepseek-ai/dsh-skin-switch",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/@deepseek-ai_dsh-skin-switch-0.1.0.tgz",
-    "packs": [
-      "eac",
-      "aio"
-    ],
-    "tier": "visual",
-    "defaultEnabled": true,
-    "titleZh": "皮肤切换",
-    "titleEn": "Skin Switch",
-    "descZh": "设置页「皮肤」tab：列出并切换内置皮肤，host 半边以 Typert Remote 重写 cordis.patch.yml 的 ui-skin-* 激活行。",
-    "descEn": "Settings skins tab: list and switch bundled skins by rewriting ui-skin-* activation rows in cordis.patch.yml.",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 随包 private 包，npm 无发布；在 HEAD 树。AIO(aio-v1) 同版本 0.1.0 共享（AIO v1.2.0 曾移除、现分支恢复），版本以 EAC 包为准。需与 catalog/skins.json 皮肤包配合。 D8 实测：RC2 上 remote face mount 失败（typert strict codec 无 create 工厂），皮肤管理 tab 可能不可用，但不阻塞启动。"
-  },
-  {
     "id": "easy-setup",
     "name": "@deepseek-ai/dsh-easy-setup",
     "version": "0.1.0",
@@ -157,9 +137,9 @@
   {
     "id": "picturereader",
     "name": "picturereader",
-    "version": "3.3.1",
-    "source": "npm",
-    "spec": "picturereader@3.3.1",
+    "version": "3.5.0",
+    "source": "github",
+    "spec": "git+https://github.com/jing-hy/picturereader.git#ebbb2f098ecf3fe18a47eaaa361ae157d31272cc",
     "packs": [
       "eac"
     ],
@@ -171,14 +151,14 @@
     "descEn": "Unified image understanding: visual twin adapter for native thumbnails, auto-analysis on text-only models, local tools (scan/OCR x4/crop/palette/compare/batch), document-to-image, local photo editing, optional external VLM bridge.",
     "license": "MIT",
     "upstream": "https://github.com/jing-hy/picturereader",
-    "notes": "目录名 picturereader。D10 实测：3.3.3 在官方 RC2 上等待 EAC 分叉版专有 settingsScope 服务 → web boot 门禁拒绝启动（1 entry did not activate）；3.3.1 在 RC2 稳定（D9/D10 验证）。锁定 3.3.1，等上游出 RC2 版再直升。"
+    "notes": "目录名 picturereader。升至 3.5.0（钉上游 commit ebbb2f098ecf3fe18a47eaaa361ae157d31272cc）—— 目前唯一两端都适配 0.2.x 内核的版本：客户端不再 inject 已移除的 settingsScope，改为运行时探测后走 configForms，并带自建 loopback 路由兜底；宿主半不再 import 已删除的 settingsNamespace，且 settings.register 缺失时降级到自有配置覆盖层而非抛 TypeError。3.5.0 既无 npm 发布也无 git tag（npm 最新仅 3.3.3），故 source 由 npm 改为 github 并在 repack.mjs 的 GH_SOURCES 里钉 ref。此前「3.3.1 在 RC2 稳定」的记录有误：npm 上的 3.3.1 真实状态是坏的 —— 宿主半 import 不存在的导出，ESM 链接期即崩，那条结论只验了浏览器侧没验宿主半。"
   },
   {
     "id": "computer-user",
     "name": "computer-user",
-    "version": "0.3.6",
+    "version": "0.3.7",
     "source": "npm",
-    "spec": "computer-user@0.3.6",
+    "spec": "computer-user@0.3.7",
     "packs": [
       "eac"
     ],
@@ -190,7 +170,7 @@
     "descEn": "Codex-style computer use: read the screen and drive mouse & keyboard, pairing with picturereader for the look-act-verify loop (Windows).",
     "license": "MIT",
     "upstream": "https://github.com/jing-hy/computer-user",
-    "notes": "npm 锁定 EAC 随包版本 0.3.6（上游 npm latest 0.3.7）。重资源/系统级自动化。 D10 上游普查直升（见 reports/D10-final-test-report.md）。 D10：0.3.7 与 picturereader 3.3.3 同日发布（EAC 分叉线），存在同款 settingsScope 陷阱风险，回退锁定 0.3.6（RC2 验证版）。"
+    "notes": "npm 锁定 0.3.7（上游仍在维护，0.3.7 发布于 2026-10-01，npm 未弃用）。重资源/系统级自动化（Windows）。0.3.7 相对 0.3.6 修复了宿主半的 settingsNamespace 导入（改走内嵌 src/settings-compat.js 垫片，内核 0.1.3 起 dsh-settings 不再导出该品牌函数）、scope 写回改用 update、手动批准判定改为会话标识集合，并对 settings 注册失败做降级 —— 但该版仍针对 0.1.x 设定；EAC 内核已到 0.2.0-rc.2，0.2.x 上还有两处面未适配：① 宿主入口未 re-export Config schema，而 0.2.x 的 configForms 表单由 entry.fiber.runtime.Config 派生 → 设置卡拿不到表单；② 客户端 client.js 仍 inject 'settingsScope' 并调用 ctx.settingsScope.bind()，该服务在 0.1.7-rc.2 已移除 → 客户端 fiber 永久停在 waitingFor。本仓以 patches/ 三处补丁补齐 0.2.x 适配（见 patches/source-patches.json），后续上游发布 0.2.x 适配版时可撤补丁直升。"
   },
   {
     "id": "soul-md",
@@ -571,30 +551,11 @@
     "defaultEnabled": true,
     "titleZh": "桌宠设置分区",
     "titleEn": "Pet Settings",
-    "descZh": "设置页「桌宠」分区：集中管理页面桌宠（dsh-pet）；大肥鱼桌面伴侣（dsh-dafeiyu）已退役，其鱼形卡片仅在市场另行安装该插件时可用。",
-    "descEn": "Settings pets section for the web pet (dsh-pet); the BigFish companion (dsh-dafeiyu) is retired, so its fish card only works if that plugin is installed separately from the market.",
+    "descZh": "设置页「桌宠」分区：集中管理页面桌宠（dsh-pet）与大肥鱼桌面伴侣（dsh-dafeiyu config 端点即时生效）。",
+    "descEn": "Settings pets section managing the web pet (dsh-pet) and the BigFish companion via dsh-dafeiyu config endpoints.",
     "license": "MIT",
     "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 自研，npm 无发布。EAC 注册表行 id: dsh-pet-settings。大肥鱼（dsh-dafeiyu）退役后，本包 FishCard 走 /plugins/dsh-dafeiyu/config 的路径在未装该插件时会显示「未启用」——属预期，非缺陷。"
-  },
-  {
-    "id": "offpeak",
-    "name": "dsh-offpeak",
-    "version": "9.9.9",
-    "source": "eac-tag",
-    "spec": "file:dist/dsh-offpeak-9.9.9.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "core",
-    "defaultEnabled": true,
-    "titleZh": "峰谷价格卫士",
-    "titleEn": "Off-peak Guard",
-    "descZh": "DeepSeek 峰谷定价高峰时段（北京时间 9-12/14-18 点）发送前拦截提醒，可一键继续或定时到闲时价自动执行。",
-    "descEn": "Intercepts sends during DeepSeek peak-price hours (Beijing 9-12/14-18) with one-click proceed or scheduled off-peak execution.",
-    "license": "MIT",
-    "upstream": "https://github.com/christophersmith2737-commits/OffPeak",
-    "notes": "EAC 随包副本 package.json 版本号为 9.9.9 占位；npm 无此包（404），上游 GitHub 仓库可达（未发布 npm）。按任务约定采用 EAC 随包副本重打包，保留 9.9.9 占位版本号。"
+    "notes": "EAC 自研，npm 无发布。EAC 注册表行 id: dsh-pet-settings。"
   },
   {
     "id": "file-drop-eac",
@@ -723,8 +684,8 @@
     "defaultEnabled": true,
     "titleZh": "免费模型（Our Free Model）",
     "titleEn": "Our Free Model",
-    "descZh": "免登录、免注册、免 API Key 直接使用前沿模型（含 DeepSeek V4.1 Flash、Kimi K3）；集成 Jet Hub 十三个账号渠道（CodeArts、CodeBuddy、WorkBuddy、LobsterAI、Qoder、TRAE、Cline、Loomy、Raccoon、MiniMax、ZCode、Gemini），提供账号池、积分领取、本地 OpenAI 网关与局域网转发、数据看板与运行日志，并保留匿名免费通道。",
-    "descEn": "Use frontier models (including DeepSeek V4.1 Flash and Kimi K3) without login, signup or API keys; folds in Jet Hub with thirteen account channels (CodeArts, CodeBuddy, WorkBuddy, LobsterAI, Qoder, TRAE, Cline, Loomy, Raccoon, MiniMax, ZCode, Gemini) plus an account pool, quota claiming, a local OpenAI gateway with LAN forwarding, dashboard and runtime logs, while keeping the anonymous free channel.",
+    "descZh": "免登录、免注册、免 API Key 直接使用前沿模型（含 DeepSeek V4.1 Flash、Kimi K3）；2.0 起集成 Jet Hub 十三个账号渠道（CodeArts、CodeBuddy、WorkBuddy、LobsterAI、Qoder、TRAE、Cline、Loomy、Raccoon、MiniMax、ZCode、Gemini），提供账号池、积分领取、本地 OpenAI 网关与局域网转发、数据看板与运行日志，并保留匿名免费通道。",
+    "descEn": "Use frontier models (including DeepSeek V4.1 Flash and Kimi K3) without login, signup or API keys; 2.0 folds in Jet Hub with thirteen account channels (CodeArts, CodeBuddy, WorkBuddy, LobsterAI, Qoder, TRAE, Cline, Loomy, Raccoon, MiniMax, ZCode, Gemini) plus an account pool, quota claiming, a local OpenAI gateway with LAN forwarding, dashboard and runtime logs, while keeping the anonymous free channel.",
     "license": "MIT",
     "upstream": "https://github.com/Ebony-Vinyl/dsh-our-free-model",
     "notes": "npm 精确版 2.5.6（2026-10-19 发布，GitHub Release 资产 dsh-our-free-model-2.5.6.tgz，1336573 B，sha256 2d7e8bc2…6cb18，已核对 release digest）。从 2.0.0 升到 2.5.6 跨 5 个小版本：免费模型与 EAC 模型页统一展示北辰 API 赞助卡片、优惠文案更新、移除赞助商广告导航与详情路由（保留卡片与查看链接）、修复部分路径下热重载依赖未刷新导致旧模块继续运行。零 dependencies；peer 要求 @deepseek-ai/dsh-commands / dsh-credentials / dsh-llm ^0.1.2-rc.1 || ^0.1.7-rc.2 || ^0.2.0-rc.1 与 @deepseek-ai/cordis ^4.0.2，EAC 内核 0.2.0-rc.2 + cordis 4.0.4 实测全部满足。source 由 github-repo 改为 github-tgz：原配置依赖 GH_SOURCES 映射但 repack 里并无该包，materializeGithub 会直接 die；改锁 release 资产 URL 后重打包可复现。"

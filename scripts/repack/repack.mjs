@@ -85,6 +85,18 @@ const GH_SOURCES = {
     dir: 'picturereader-src',
     ref: 'ebbb2f098ecf3fe18a47eaaa361ae157d31272cc',
   },
+  // @ha-na-bi/dsh-client-ui-custom：catalog 原先误标 source=eac-tag，但该包从未
+  // 进过 EAC 仓库（v5.3.6 与 aio-v1 的 assets/plugins 下都没有），upstream 也误写
+  // 成 ha-na-bi。实际仓库是 yoli-mi/dsh-client-ui-custom（tag v0.1.0-rc.6）。
+  // 不改为 github 源，全量 repack 会在 source-patches 之后 die：
+  //   「eac-tag 源目录缺 package.json: ...DSHEAC AIO/.../dsh-client-ui-custom」
+  // 钉完整 SHA 保证可复现；包名带 @ha-na-bi scope 而仓库在 yoli-mi 名下属历史遗留，
+  // 以 tgz 内 package.json 的 name 为准（catalog 期望 0.1.0-rc.6 与之相符）。
+  '@ha-na-bi/dsh-client-ui-custom': {
+    url: 'https://github.com/yoli-mi/dsh-client-ui-custom.git',
+    dir: 'client-ui-custom-src',
+    ref: '66c17fd0af92206170059e68e19840a82342f833',
+  },
 };
 
 // github-tgz 源：社区作者经 GitHub Release 分发的 npm-pack 形态 tgz。
