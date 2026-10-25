@@ -1,23 +1,22 @@
 diff --git a/lib/client.js b/lib/client.js
-index 189760a..4beaeb1 100644
 --- a/lib/client.js
 +++ b/lib/client.js
-@@ -4795,7 +4795,17 @@ window.__ModuleLoader__.load({
- 		  .we-update-notice__body { font-size: 0.82em; line-height: 1.5; opacity: 0.92; }
- 		  .we-update-notice__body p { margin: 0 0 6px; }
- 		  .we-update-notice__hint { font-size: 0.78em; opacity: 0.6; }
--		  .we-update-notice__btn { align-self: flex-end; }
-+		  /* The notice is a DARK glass card, but .we-picker__btn inherits light-theme
-+		     tokens (--dsw-alias-border-l2 / --dsw-alias-label-secondary). On the dark card
-+		     those render as near-black: measured 1.10:1 for the outline and 1.06:1 for the
-+		     label, so the button looked like floating, unreadable text. Pin light values
-+		     here so the control stays legible whatever the theme tokens resolve to.
-+		     Measured after fix: outline 3.11:1, label 4.95:1 (WCAG 4.5 text / 3.0 non-text). */
-+		  .we-update-notice__btn {
-+		    align-self: flex-end;
-+		    color: rgba(255, 255, 255, 0.92);
-+		    border-color: rgba(255, 255, 255, 0.6);
-+		  }
- 		  @media (prefers-reduced-motion: reduce) { .we-update-notice { animation: none !important; } }
- 
- 		  /* Glass repo side panel — docked right, locked to 1/4 of the viewport,
+@@ -4721,7 +4721,17 @@ window.__ModuleLoader__.load({
+ 				  .we-update-notice__body { font-size: 0.82em; line-height: 1.5; opacity: 0.92; }
+ 				  .we-update-notice__body p { margin: 0 0 6px; }
+ 				  .we-update-notice__hint { font-size: 0.78em; opacity: 0.6; }
+-				  .we-update-notice__btn { align-self: flex-end; }
++				  /* The notice is a DARK glass card, but .we-picker__btn inherits light-theme
++				     tokens (--dsw-alias-border-l2 / --dsw-alias-label-secondary). On the dark card
++				     those render as near-black: measured 1.10:1 for the outline and 1.06:1 for the
++				     label, so the button looked like floating, unreadable text. Pin light values
++				     here so the control stays legible whatever the theme tokens resolve to.
++				     Measured after fix: outline 3.11:1, label 4.95:1 (WCAG 4.5 text / 3.0 non-text). */
++				  .we-update-notice__btn {
++				    align-self: flex-end;
++				    color: rgba(255, 255, 255, 0.92);
++				    border-color: rgba(255, 255, 255, 0.6);
++				  }
+ 				  /* 公告配图：随包 JPEG，/about-qr 路由直出。方图不能全宽吃满 600px 面板（正文条目加起来
+ 				     已经很高，小窗口会顶出视口）——限高 26vh、宽度跟随、居中（用户口径：38vh 在 1080p 下
+ 				     ≈410px，几乎独占半屏，压到 26vh 给正文让位）。发丝边 + 投影让它贴着玻璃面板的既有语言，

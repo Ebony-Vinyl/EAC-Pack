@@ -39,15 +39,15 @@
     },
     {
       "name": "dsh-plugin-wallpaper-engine",
-      "version": "0.6.7",
+      "version": "1.3.3",
       "source": "npm",
       "files": [
         {
           "path": "lib/client.js",
           "diff": "files/dsh-plugin-wallpaper-engine/lib/client.js.diff",
-          "inputSha256": "0f845de6960fadaceebe22329ae9b4302893b791c45b32207c915a766810442f",
-          "outputSha256": "932fbdd1ef44638f01b055b16abab08bad705ff2bcaa167b11b0a83ece33e45d",
-          "note": "Update-notice button contrast: pin light values (outline 1.10:1 -> 3.11:1, label 1.06:1 -> 4.95:1) on the dark glass card."
+          "inputSha256": "4fa3eafe920d37d0d9cbb379db944728fccc484e51437a00c93218f07f9dd284",
+          "outputSha256": "34195665400e9f8baa47bfc1873a2c87ccca5e425b22a4993c2082168cf4339d",
+          "note": "Update-notice button contrast: pin light values (outline 1.10:1 -> 3.11:1, label 1.06:1 -> 4.95:1) on the dark glass card. Regenerated for 1.3.3 (anchor line moved 4795 -> 4721; upstream still ships align-self: flex-end unchanged)."
         }
       ]
     },
