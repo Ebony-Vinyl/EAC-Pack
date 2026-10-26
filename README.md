@@ -6,9 +6,9 @@
 
 **交接状态（2026-10-05）：本次推送仅交接源码，资源依赖尚未公开发布，暂不可作为正式 Git 安装入口。接手步骤及必须另行移交的资源见 `docs/HANDOFF-CASCADE-INSTALL-2026-10-05.md`。**
 
-## 0.2.3：安装阶段级联取得完整资源
+## 0.2.4：安装阶段级联取得完整资源
 
-Git 仅保留组合包入口、host/client、目录与固定摘要清单。必选依赖 **`eac-plugin-suite-assets@0.2.3`** 提供全部 72 个基线子插件 tarball、30 张皮肤预览和 10 组 Prompt；不是 optional/peer，也不是启用后下载。
+Git 仅保留组合包入口、host/client、目录与固定摘要清单。必选依赖 **`eac-plugin-suite-assets@0.2.4`** 提供全部 72 个基线子插件 tarball、30 张皮肤预览和 10 组 Prompt；不是 optional/peer，也不是启用后下载。
 
 正常安装事务会同时安装入口和资源依赖。启用后仅在本地校验与拼接；没有 prepare/install/postinstall 下载器，不需要关闭 pnpm 安全策略。资源包是纯数据，不能单独作为 Desktop 插件添加。
 
@@ -26,7 +26,7 @@ github:DSH-EAC/EAC-Pack
 
 ## 完整 Release
 
-完整单文件 `eac-plugin-suite-0.2.3.tgz` 使用 npm 标准 `bundleDependencies` 内置同一资源依赖，可在没有 registry 连接时安装整合包本身。正式 Release 或本地构建的 **release/** 产物才是完整包；**git/** 下的小 tarball 是轻入口，不可混用。
+完整单文件 `eac-plugin-suite-0.2.4.tgz` 使用 npm 标准 `bundleDependencies` 内置同一资源依赖，可在没有 registry 连接时安装整合包本身。正式 Release 或本地构建的 **release/** 产物才是完整包；**git/** 下的小 tarball 是轻入口，不可混用。
 
 `dist-artifacts-*.tar.gz` 是构建归档，不是 Desktop 插件安装包。历史 v0.2.1 及更早版本仍使用旧包名，不应只替换下载 URL 文件名。
 
