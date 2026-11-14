@@ -461,25 +461,6 @@
     "notes": "D8 实测：同 easy-setup，等待 settingsScope 服务（官方 RC2 全树 0 命中）。D11 复测（2026-10-08，放开 disabled 行重启）：实例仍正常 READY，未阻塞 web boot —— 表现为「pending / 功能不可用」，不是启动阻断。0.2.1 起整合包直接拦截其安装与启用（compat=eac-fork，issue #1 缺陷1）；其 bundle 补丁已固定 disabled:true，即使被手工加回 dsh.profile.bundles 也不会阻塞启动。如确需在 EAC 内核使用，走 /install、/enable 的 force 参数。"
   },
   {
-    "id": "phone",
-    "name": "dsh-phone",
-    "version": "0.1.0",
-    "source": "eac-tag",
-    "spec": "file:dist/dsh-phone-0.1.0.tgz",
-    "packs": [
-      "eac"
-    ],
-    "tier": "heavy",
-    "defaultEnabled": true,
-    "titleZh": "手机连接",
-    "titleEn": "Phone Connect",
-    "descZh": "LAN 扫码配对 + 完整 Web UI 反向代理（设置页「连接手机」）；桥本体在 EAC 桌面壳 sidecar（phone-bridge.js）。",
-    "descEn": "LAN QR pairing with a full Web UI reverse proxy (Connect Phone in settings); bridge lives in the desktop shell sidecar.",
-    "license": "MIT",
-    "upstream": "https://github.com/DSH-EAC/DSH-Desktop-EAC (tag v5.3.6)",
-    "notes": "EAC 自研（private），npm 无发布。重外部集成：无 EAC 壳 sidecar 时配对/代理不可用。"
-  },
-  {
     "id": "whale-widget",
     "name": "dsh-whale-widget",
     "version": "0.3.17",

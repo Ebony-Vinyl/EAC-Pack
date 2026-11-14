@@ -238,6 +238,16 @@
       "reason": "用户裁决（2026-10-18）：功能为官方 API 的 UI 包装，且该包装在当前内核已无法加载；需要该行为时可在预设合成中直接用 systemPrompt.section() 表达。退役本地副本。",
       "titleZh": "自定义注入提示词",
       "titleEn": "Prompt Custom"
+    },
+    {
+      "id": "phone",
+      "name": "dsh-phone",
+      "version": "0.1.0",
+      "retiredFrom": "eac",
+      "evidence": "EAC 仓库 #504（2026-11）：LAN 桥 phone-bridge 早已退役（verify-staged-runtime.mjs RETIRED_PATHS、ADR 0006 判定不装配），dsh-phone 插件只剩空 host（apply(){}）与空客户端，设置页没有任何可连能力。companion-sync.ts 的 RETIRED_BUILTIN_PLUGINS 已保留清理项，老 profile 升级时删除包副本与 patch 行。",
+      "reason": "用户裁决（2026-11）：功能整体移除；移动端访问改由 ds-harness-remote（端到端加密 WebRTC）承载，不再提供 LAN 扫码配对 + Web UI 反向代理。从 catalog 与 dist 移除，并从 bootstrap 随包清单剔除。",
+      "titleZh": "手机连接",
+      "titleEn": "Phone Connect"
     }
   ]
 }

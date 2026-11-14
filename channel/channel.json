@@ -513,18 +513,6 @@
       "source": "eac-tag"
     },
     {
-      "id": "phone",
-      "name": "dsh-phone",
-      "version": "0.1.0",
-      "packs": [
-        "eac"
-      ],
-      "file": "dsh-phone-0.1.0.tgz",
-      "sha256": "592c84bb8b934b10da9841be40821e2e57caccb907528c316f5e0959bc85e4e3",
-      "bytes": 19239,
-      "source": "eac-tag"
-    },
-    {
       "id": "plugin-shield",
       "name": "dsh-plugin-shield",
       "version": "0.1.0",
