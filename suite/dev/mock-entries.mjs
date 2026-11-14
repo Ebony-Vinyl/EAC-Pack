@@ -48,20 +48,6 @@ export const ENTRIES = {
       "notes": "EAC 随包 private 包，npm 无发布。离开 EAC 桌面壳时浮窗 IPC 不可用，网页端无浮窗能力（插件不致崩溃）。"
     },
     {
-      "id": "prompt-custom",
-      "name": "@deepseek-ai/dsh-prompt-custom",
-      "version": "0.1.0",
-      "tier": "core",
-      "defaultEnabled": true,
-      "titleZh": "自定义注入提示词",
-      "titleEn": "Prompt Custom",
-      "descZh": "在设置页自定义官方内核注入的提示词（替换整体/追加，应用到 standard 预设）。",
-      "descEn": "Customize the official injected persona/system prompt from settings (replace or append, applied to the standard preset).",
-      "license": "MIT",
-      "source": "eac-tag",
-      "notes": "EAC 随包 private 包，npm 无发布。"
-    },
-    {
       "id": "openclaw-bridge",
       "name": "@deepseek-ai/dsh-openclaw-bridge",
       "version": "0.7.0",
@@ -300,20 +286,6 @@ export const ENTRIES = {
       "notes": "D8 实测：同 easy-setup，等待 settingsScope 服务（官方 RC2 全树 0 命中）。D11 复测（2026-10-08，放开 disabled 行重启）：实例仍正常 READY，未阻塞 web boot —— 表现为「pending / 功能不可用」，不是启动阻断。0.2.1 起整合包直接拦截其安装与启用（compat=eac-fork，issue #1 缺陷1）；其 bundle 补丁已固定 disabled:true，即使被手工加回 dsh.profile.bundles 也不会阻塞启动。如确需在 EAC 内核使用，走 /install、/enable 的 force 参数。"
     },
     {
-      "id": "phone",
-      "name": "dsh-phone",
-      "version": "0.1.0",
-      "tier": "heavy",
-      "defaultEnabled": true,
-      "titleZh": "手机连接",
-      "titleEn": "Phone Connect",
-      "descZh": "LAN 扫码配对 + 完整 Web UI 反向代理（设置页「连接手机」）；桥本体在 EAC 桌面壳 sidecar（phone-bridge.js）。",
-      "descEn": "LAN QR pairing with a full Web UI reverse proxy (Connect Phone in settings); bridge lives in the desktop shell sidecar.",
-      "license": "MIT",
-      "source": "eac-tag",
-      "notes": "EAC 自研（private），npm 无发布。重外部集成：无 EAC 壳 sidecar 时配对/代理不可用。"
-    },
-    {
       "id": "whale-widget",
       "name": "dsh-whale-widget",
       "version": "0.3.17",
@@ -412,20 +384,6 @@ export const ENTRIES = {
       "notes": "自 myYangyunfan/dsh_desktop 移植，EAC 随包 private，npm 无发布。"
     },
     {
-      "id": "image-paste",
-      "name": "dsh-image-paste",
-      "version": "0.1.0",
-      "tier": "core",
-      "defaultEnabled": false,
-      "titleZh": "图片粘贴发送",
-      "titleEn": "Image Paste",
-      "descZh": "Ctrl/Cmd+V 粘贴剪贴板图片 → 保存临时目录 → 注入完整路径提示（配合 inspect_image 视觉工具），多图合并提示。",
-      "descEn": "Paste clipboard images (Ctrl/Cmd+V): save to temp dir and inject full-path hints for the inspect_image vision tool.",
-      "license": "MIT",
-      "source": "eac-tag",
-      "notes": "EAC 注册表默认 disabled:true —— 与内置 picturereader「粘贴即用/图片桥自动分析」语义重叠，避免重复/竞争注入。npm 无发布。"
-    },
-    {
       "id": "webui-prompt-optimizer",
       "name": "dsh-webui-prompt-optimizer",
       "version": "0.1.0",
@@ -456,7 +414,7 @@ export const ENTRIES = {
     {
       "id": "our-free-model",
       "name": "dsh-our-free-model",
-      "version": "2.5.2",
+      "version": "2.5.6",
       "tier": "heavy",
       "defaultEnabled": true,
       "titleZh": "免费模型（Our Free Model）",
@@ -465,7 +423,7 @@ export const ENTRIES = {
       "descEn": "Use frontier models (including DeepSeek V4.1 Flash and Kimi K3) without login, signup or API keys; folds in Jet Hub with thirteen account channels (CodeArts, CodeBuddy, WorkBuddy, LobsterAI, Qoder, TRAE, Cline, Loomy, Raccoon, MiniMax, ZCode, Gemini) plus an account pool, quota claiming, a local OpenAI gateway with LAN forwarding, dashboard and runtime logs, while keeping the anonymous free channel.",
       "license": "MIT",
       "source": "github-tgz",
-      "notes": "2.5.2 起改由 GitHub Release 官方预构建 tgz 获取（source=github-tgz，锁定 release 资产 URL v2.5.2，sha256 e7d02ad9…21682c，1323263 B），不再用 github-repo 的 git clone --depth 1；重打包可复现。此前 PR #4 记录的「github-repo 无 GH_SOURCES 映射、且 materializeGithub 未钉 commit」风险据此消除。2026-10-08 裁决：默认启用且不携带 config（overlay 行只在 defaultEnabled=false 时生成，带 config 会被 assertConfigPassthrough 拒绝）。2026-10-18 更新：该插件已同时提升为 Lite builtin（见 EAC-Desktop .sync/plugin-distribution.json）。注意 full 与 lite 是两条独立分发通道，本条目仍会随 full 装配出货，二者不做去重：装配阶段（repack.mjs）按 source 分别取材，github-tgz 分支只解包 tgz 进 staging，不读 EAC 的 assets/plugins，故不存在「同名优先取 builtin」的逻辑。落点重叠只发生在运行期 profile：Pack 装到 <dsh-home>/profiles/<profile>/node_modules，Desktop builtin 由 copyPluginPackage 拷到同一路径，靠 .eac-copy-stamp.json 内容指纹比对决定是否覆盖（同版本同内容则跳过）。两条通道各自手工跟版本，不会自动同步。"
+      "notes": "npm 精确版 2.5.6（2026-10-19 发布，GitHub Release 资产 dsh-our-free-model-2.5.6.tgz，1336573 B，sha256 2d7e8bc2…6cb18，已核对 release digest）。从 2.0.0 升到 2.5.6 跨 5 个小版本：免费模型与 EAC 模型页统一展示北辰 API 赞助卡片、优惠文案更新、移除赞助商广告导航与详情路由（保留卡片与查看链接）、修复部分路径下热重载依赖未刷新导致旧模块继续运行。零 dependencies；peer 要求 @deepseek-ai/dsh-commands / dsh-credentials / dsh-llm ^0.1.2-rc.1 || ^0.1.7-rc.2 || ^0.2.0-rc.1 与 @deepseek-ai/cordis ^4.0.2，EAC 内核 0.2.0-rc.2 + cordis 4.0.4 实测全部满足。source 由 github-repo 改为 github-tgz：原配置依赖 GH_SOURCES 映射但 repack 里并无该包，materializeGithub 会直接 die；改锁 release 资产 URL 后重打包可复现。"
     }
   ],
   "aio": [
@@ -660,7 +618,6 @@ export const INITIAL_STATE = {
   "installed": [
     "balance",
     "file-changes",
-    "prompt-custom",
     "skin-switch",
     "easy-setup",
     "eac-locale-compat",
@@ -677,7 +634,6 @@ export const INITIAL_STATE = {
     "pet",
     "whale-widget",
     "float-window",
-    "image-paste",
     "skin-aurora"
   ],
   "installedVersions": {
