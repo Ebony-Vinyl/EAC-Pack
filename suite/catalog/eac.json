@@ -728,5 +728,25 @@
     "license": "MIT",
     "upstream": "https://github.com/Ebony-Vinyl/dsh-our-free-model",
     "notes": "npm 精确版 2.5.6（2026-10-19 发布，GitHub Release 资产 dsh-our-free-model-2.5.6.tgz，1336573 B，sha256 2d7e8bc2…6cb18，已核对 release digest）。从 2.0.0 升到 2.5.6 跨 5 个小版本：免费模型与 EAC 模型页统一展示北辰 API 赞助卡片、优惠文案更新、移除赞助商广告导航与详情路由（保留卡片与查看链接）、修复部分路径下热重载依赖未刷新导致旧模块继续运行。零 dependencies；peer 要求 @deepseek-ai/dsh-commands / dsh-credentials / dsh-llm ^0.1.2-rc.1 || ^0.1.7-rc.2 || ^0.2.0-rc.1 与 @deepseek-ai/cordis ^4.0.2，EAC 内核 0.2.0-rc.2 + cordis 4.0.4 实测全部满足。source 由 github-repo 改为 github-tgz：原配置依赖 GH_SOURCES 映射但 repack 里并无该包，materializeGithub 会直接 die；改锁 release 资产 URL 后重打包可复现。"
+  },
+  {
+    "id": "deep-whale-manager",
+    "name": "@smalltailqwq/dsh-client-ui-skin-deep-whale-manager",
+    "version": "0.1.6",
+    "source": "npm",
+    "spec": "@smalltailqwq/dsh-client-ui-skin-deep-whale-manager@0.1.6",
+    "packs": [
+      "eac",
+      "skins"
+    ],
+    "tier": "visual",
+    "defaultEnabled": true,
+    "titleZh": "皮肤管理（深鲸管理器）",
+    "titleEn": "Skin Manager",
+    "descZh": "深鲸系列皮肤切换管理器（社区 @smalltailqwq 版），在设置侧栏提供「皮肤管理」入口：列出已装皮肤、一键切换并调各皮肤自带选项。",
+    "descEn": "Deep-whale skin manager (community edition by @smalltailqwq) adding a Skin Manager section under Settings: lists installed skins, switches between them and edits each skin's own options.",
+    "license": "MIT",
+    "upstream": "https://www.npmjs.com/package/@smalltailqwq/dsh-client-ui-skin-deep-whale-manager",
+    "notes": "同一 npm 包在 catalog/community.json 也有一条（仅 skins 套餐）；本条目把它并入 eac 套餐，装 EAC 套餐即恢复设置侧栏「皮肤管理」。repack 按包名合并 packs，只产出一个 tarball。管理器自带 dsh.bundle.patch，只能经 dsh.profile.bundles 加载，不可同时登记为 companion 行（否则内核报 duplicate exact route \"/api/dsh/skins\"）。npm 锁定 0.1.6。"
   }
 ]
